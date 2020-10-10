@@ -1,4 +1,5 @@
 import 'package:agent_second/constants/colors.dart';
+import 'package:agent_second/constants/config.dart';
 import 'package:agent_second/constants/styles.dart';
 import 'package:agent_second/localization/trans.dart';
 import 'package:agent_second/models/ben.dart';
@@ -56,7 +57,8 @@ class _PaymentScreenState extends State<PaymentScreen> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.green,
-        title: Text(trans(context, 'altariq'), style: styles.appBar),
+        title:Text(config.companyName, style: styles.appBar),
+        // Text(trans(context, 'altariq'), style: styles.appBar),
         centerTitle: true,
       ),
       body: ListView(

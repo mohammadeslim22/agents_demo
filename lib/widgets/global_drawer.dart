@@ -3,6 +3,7 @@ import 'package:agent_second/localization/trans.dart';
 import 'package:agent_second/util/data.dart';
 import 'package:flutter/material.dart';
 import 'package:agent_second/util/dio.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:location/location.dart';
 import 'package:agent_second/constants/colors.dart';
 
@@ -55,20 +56,20 @@ class _GlobalDrawerState extends State<GlobalDrawer> {
                     Text(agentName, style: styles.underHeadwhite),
                   ],
                 ),
-                ClipRRect(
-                    borderRadius: BorderRadius.circular(80.0),
-                    child: CircleAvatar(
-                      maxRadius: 45,
-                      minRadius: 30,
-                      backgroundColor: colors.white,
-                      child: Image.asset('assets/images/logo.png',
-                          width: 80.0, height: 80.0),
-                    )),
+                SvgPicture.asset('assets/images/company_logo.svg',
+                    width: 80.0, height: 80.0),
+                // ClipRRect(
+                //     borderRadius: BorderRadius.circular(80.0),
+                //     child: CircleAvatar(
+                //       maxRadius: 45,
+                //       minRadius: 30,
+                //       backgroundColor: colors.white,
+                //       child: Image.asset('assets/images/company_logo.svg',
+                //           width: 80.0, height: 80.0),
+                //     )),
               ],
             ),
-            decoration: const BoxDecoration(
-              color: Colors.blue,
-            ),
+            decoration: const BoxDecoration(color: Colors.blue),
           ),
           ListTile(
             onTap: () {

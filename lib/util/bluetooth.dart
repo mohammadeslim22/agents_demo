@@ -249,14 +249,13 @@ class _MyAppState extends State<Bluetooth> {
 
   Future<void> _tesPrint(Transaction transaction) async {
     getIt<Auth>().bluetooth.isConnected.then((bool isConnected) {
-       double taxMony = 0.0;
       if (isConnected) {
         getIt<Auth>().bluetooth.printImage("asstes/images/logo_trans.svg");
         getIt<Auth>().bluetooth.printCustom("AL SAHARI BAKERY", 1, 1);
 
         getIt<Auth>()
             .bluetooth
-            .printCustom("MD BIN SALEM STREET RAK.UAE ", 1, 1);
+            .printCustom(config.address, 1, 1);
         getIt<Auth>()
             .bluetooth
             .printCustom("Tel:072226355 ,Mob: 0544117087", 1, 1);

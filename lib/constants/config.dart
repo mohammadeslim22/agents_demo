@@ -10,8 +10,8 @@ class Config {
 
   static final Config _config = Config._internal();
 
-  String baseUrl = "http://sahary.agentsmanage.com/api/";
-  // String baseUrl = "http://192.168.0.25:8000/api/";
+  String baseUrl = "http://demo.agentsmanage.com/api/";
+  String imageUrl = "http://demo.agentsmanage.com/image/";
   int agentId;
   bool looded = false;
   final TextEditingController locationController = TextEditingController();
@@ -25,6 +25,10 @@ class Config {
   String companyName;
   double tax;
   String trn;
+  String address;
+  String mobileNo;
+  String telephoneNo;
+  String logo;
 }
 
 final Config config = Config();

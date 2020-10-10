@@ -211,23 +211,22 @@ class _LoginScreenState extends State<LoginScreen>
                       child: ListView(
                         shrinkWrap: true,
                         children: <Widget>[
-                        ClipRRect(
-                                borderRadius: BorderRadius.circular(80.0),
-                                child: CircleAvatar(
-                                  maxRadius: 45,
-                                  minRadius: 30,
-                                  backgroundColor: colors.white,
-                                  child: SvgPicture.asset(
-                                      'assets/images/drawer_logo.svg',
-                                      width: 80.0,
-                                      height: 80.0),
-                                )),
+                          SvgPicture.asset('assets/images/company_logo.svg',
+                              width: 80.0, height: 80.0),
+                          // ClipRRect(
+                          //         borderRadius: BorderRadius.circular(80.0),
+                          //         child: CircleAvatar(
+                          //           maxRadius: 45,
+                          //           minRadius: 30,
+                          //           backgroundColor: colors.white,
+                          //           child: SvgPicture.asset(
+                          //               'assets/images/company_logo.svg',
+                          //               width: 80.0,
+                          //               height: 80.0),
+                          //         )),
                           const SizedBox(height: 64),
-                          SvgPicture.asset(
-                            'assets/images/mainLogo.svg',
-                            width: 240.0,
-                            height: 240.0,
-                          ),
+                          SvgPicture.asset('assets/images/mainLogo.svg',
+                              width: 240.0, height: 240.0),
                         ],
                       ),
                     ),

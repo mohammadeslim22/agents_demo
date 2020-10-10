@@ -1,4 +1,5 @@
 import 'package:agent_second/constants/colors.dart';
+import 'package:agent_second/constants/config.dart';
 import 'package:agent_second/constants/styles.dart';
 import 'package:agent_second/localization/trans.dart';
 import 'package:agent_second/models/Items.dart';
@@ -10,9 +11,8 @@ import 'package:agent_second/widgets/text_form_input.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_cache_manager/src/result/download_progress.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cached_network_image/cached_network_image.dart' ;
 import 'package:provider/provider.dart';
 import 'package:agent_second/providers/order_provider.dart';
 import 'package:giffy_dialog/giffy_dialog.dart';
@@ -95,10 +95,10 @@ class _OrderScreenState extends State<OrderScreen> {
               width: 60,
               height: 40,
               imageUrl: (item.image != "null")
-                  ? "http://sahary.agentsmanage.com/image/${item.image}"
+                  ?config.imageUrl+"${item.image}"
                   : "",
               progressIndicatorBuilder: (BuildContext context, String url,
-                      DownloadProgress downloadProgress) =>
+                       downloadProgress) =>
                   CircularProgressIndicator(value: downloadProgress.progress),
               errorWidget: (BuildContext context, String url, dynamic error) =>
                   const Icon(Icons.error),
@@ -147,7 +147,8 @@ class _OrderScreenState extends State<OrderScreen> {
         backgroundColor: !widget.isAgentOrder
             ? isORderOrReturn ? colors.blue : colors.red
             : colors.blue,
-        title: Text(trans(context, "altariq"), style: styles.appBar),
+        title: Text(config.companyName, style: styles.appBar),
+        //Text(trans(context, "altariq"), style: styles.appBar),
         centerTitle: true,
         actions: <Widget>[
           IconButton(
@@ -452,12 +453,12 @@ class _OrderScreenState extends State<OrderScreen> {
           children: <Widget>[
             CachedNetworkImage(
               imageUrl: (item.image != "null")
-                  ? "http://edisagents.altariq.ps/public/image/${item.image}"
+                  ? config.imageUrl+"${item.image}"
                   : "",
               height: 30,
               width: 50,
               progressIndicatorBuilder: (BuildContext context, String url,
-                      DownloadProgress downloadProgress) =>
+                        downloadProgress) =>
                   CircularProgressIndicator(value: downloadProgress.progress),
               errorWidget: (BuildContext context, String url, dynamic error) =>
                   const Icon(Icons.error),
@@ -501,7 +502,7 @@ class _OrderScreenState extends State<OrderScreen> {
                         child: CachedNetworkImage(
                           fit: BoxFit.cover,
                           imageUrl: (item.image != "null")
-                              ? "http://sahary.agentsmanage.com/image/${item.image}"
+                              ? config.imageUrl+"${item.image}"
                               : "",
                           errorWidget: (BuildContext c, String a, dynamic d) {
                             return Container();

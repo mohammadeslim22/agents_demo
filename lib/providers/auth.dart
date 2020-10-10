@@ -35,14 +35,17 @@ class Auth with ChangeNotifier {
           dio.options.headers['authorization'] =
               'Bearer ${value.data['api_token']}';
           config.verchilId = value.data['vehicle_board_no'].toString();
-          data.setData(
-              "verchil_id", value.data['vehicle_board_no'].toString());
+          data.setData("verchil_id", value.data['vehicle_board_no'].toString());
           data.setData("agent_id", value.data['id'].toString());
           data.setData("company_name", value.data['company_name'].toString());
           data.setData("agent_name", value.data['username'].toString());
           data.setData("tax", value.data['tax'].toString());
           data.setData("trn", value.data['trn'].toString());
           config.companyName = value.data['company_name'].toString();
+          config.address = value.data['settings']['company_name'].toString();
+          config.mobileNo = value.data['settings']['mobile'].toString();
+          config.logo =
+              config.imageUrl + value.data['settings']['logo'].toString();
           config.trn = value.data['trn'].toString();
           config.tax = double.parse(value.data['tax'].toString());
           data.setData("agent_email", value.data['email'].toString());

@@ -190,7 +190,8 @@ class _DashBoardState extends State<DashBoard> {
             key: _scaffoldKey,
             resizeToAvoidBottomInset: false,
             appBar: AppBar(
-                title: Text(trans(context, "altariq"), style: styles.appBar),
+                title: Text(config.companyName, style: styles.appBar),
+                //Text(trans(context, "altariq"), style: styles.appBar),
                 centerTitle: true),
             // drawer: GlobalDrawer(sourceContext: context),
             body: Row(
@@ -209,15 +210,17 @@ class _DashBoardState extends State<DashBoard> {
                                 Text("agentName", style: styles.underHeadwhite),
                               ],
                             ),
-                            ClipRRect(
-                                borderRadius: BorderRadius.circular(80.0),
-                                child: CircleAvatar(
-                                  maxRadius: 45,
-                                  minRadius: 30,
-                                  backgroundColor: colors.white,
-                                  child: Image.asset('assets/images/logo.png',
-                                      width: 80.0, height: 80.0),
-                                ))
+                            SvgPicture.asset('assets/images/company_logo.svg',
+                                width: 80.0, height: 80.0),
+                            // ClipRRect(
+                            //     borderRadius: BorderRadius.circular(80.0),
+                            //     child: CircleAvatar(
+                            //       maxRadius: 45,
+                            //       minRadius: 30,
+                            //       backgroundColor: colors.white,
+                            //       child: Image.asset('assets/images/company_logo.svg',
+                            //           width: 80.0, height: 80.0),
+                            //     ))
                           ],
                         ),
                         decoration: const BoxDecoration(
