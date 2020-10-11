@@ -364,14 +364,14 @@ class _MyAppState extends State<Bluetooth> {
     //     "tax money ${taxMony.toStringAsFixed(2)}  total: ${totalfterReturn.toStringAsFixed(2)}");
     getIt<Auth>().bluetooth.isConnected.then((bool isConnected) {
       if (isConnected) {
-        getIt<Auth>().bluetooth.printCustom("AL SAHARI BAKERY", 1, 1);
+        getIt<Auth>().bluetooth.printCustom("DEMO STORE", 1, 1);
 
         getIt<Auth>()
             .bluetooth
-            .printCustom("MD BIN SALEM STREET RAK.UAE ", 1, 1);
+            .printCustom("DEMO STORE ADDRESS", 1, 1);
         getIt<Auth>()
             .bluetooth
-            .printCustom("Tel: 072226355 ,Mob: 0544117087", 1, 1);
+            .printCustom("Tel: 2865899 ,Mob: 05993337775", 1, 1);
         getIt<Auth>().bluetooth.printNewLine();
         getIt<Auth>().bluetooth.printCustom("TRN : ${config.trn}", 1, 1);
         getIt<Auth>().bluetooth.printNewLine();
