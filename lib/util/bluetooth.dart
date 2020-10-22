@@ -145,18 +145,11 @@ class _MyAppState extends State<Bluetooth> {
                 child: RaisedButton(
                   color: colors.blue,
                   onPressed: () async {
-                    if (getIt<TransactionProvider>()
-                            .printingOrdersDataArrived &&
-                        getIt<TransactionProvider>()
-                            .printingReturnsDataArrived) {
+                  
                       printTodayTransactions(
                           getIt<TransactionProvider>().ordersToPrint,
                           getIt<TransactionProvider>().returnsToPrint);
-                    } else {
-                      await getIt<TransactionProvider>()
-                          .getTransactionsToPrint(transaction.beneficiaryId);
-                      Fluttertoast.showToast(msg: "Failed to get data");
-                    }
+            
                   },
                   child: Text(trans(context, 'print_today_invoices'),
                       style: TextStyle(color: colors.white)),

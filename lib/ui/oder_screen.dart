@@ -12,7 +12,7 @@ import 'package:dotted_border/dotted_border.dart';
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:cached_network_image/cached_network_image.dart' ;
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:provider/provider.dart';
 import 'package:agent_second/providers/order_provider.dart';
 import 'package:giffy_dialog/giffy_dialog.dart';
@@ -92,16 +92,15 @@ class _OrderScreenState extends State<OrderScreen> {
             const SizedBox(height: 2),
             CachedNetworkImage(
               fit: BoxFit.cover,
-              width: 60,
-              height: 40,
               imageUrl: (item.image != "null")
-                  ?config.imageUrl+"${item.image}"
+                  ? config.imageUrl + "${item.image}"
                   : "",
-              progressIndicatorBuilder: (BuildContext context, String url,
-                       downloadProgress) =>
-                  CircularProgressIndicator(value: downloadProgress.progress),
+              placeholder: (BuildContext context, String url) =>
+                  const CircularProgressIndicator(),
               errorWidget: (BuildContext context, String url, dynamic error) =>
                   const Icon(Icons.error),
+              width: 60,
+              height: 40,
             ),
             const SizedBox(height: 2),
             Expanded(
@@ -452,16 +451,16 @@ class _OrderScreenState extends State<OrderScreen> {
         feedback: Column(
           children: <Widget>[
             CachedNetworkImage(
+              fit: BoxFit.cover,
               imageUrl: (item.image != "null")
-                  ? config.imageUrl+"${item.image}"
+                  ? config.imageUrl + "${item.image}"
                   : "",
-              height: 30,
-              width: 50,
-              progressIndicatorBuilder: (BuildContext context, String url,
-                        downloadProgress) =>
-                  CircularProgressIndicator(value: downloadProgress.progress),
+              placeholder: (BuildContext context, String url) =>
+                  const CircularProgressIndicator(),
               errorWidget: (BuildContext context, String url, dynamic error) =>
                   const Icon(Icons.error),
+              width: 60,
+              height: 40,
             ),
             Material(
                 color: Colors.transparent,
@@ -502,11 +501,15 @@ class _OrderScreenState extends State<OrderScreen> {
                         child: CachedNetworkImage(
                           fit: BoxFit.cover,
                           imageUrl: (item.image != "null")
-                              ? config.imageUrl+"${item.image}"
+                              ? config.imageUrl + "${item.image}"
                               : "",
-                          errorWidget: (BuildContext c, String a, dynamic d) {
-                            return Container();
-                          },
+                          placeholder: (BuildContext context, String url) =>
+                              const CircularProgressIndicator(),
+                          errorWidget: (BuildContext context, String url,
+                                  dynamic error) =>
+                              const Icon(Icons.error),
+                          width: 60,
+                          height: 40,
                         ),
                       ),
                     ],

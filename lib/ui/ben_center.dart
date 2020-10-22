@@ -887,7 +887,8 @@ class _BeneficiaryCenterState extends State<BeneficiaryCenter> {
               onPressed: () async {
                 if (transaction.status == "draft") {
                 } else {
-                  getIt<TransactionProvider>().getTransactionsToPrint(ben.id);
+                  await getIt<TransactionProvider>()
+                      .getTransactionsToPrint(ben.id);
                   Navigator.pushNamed(context, "/Bluetooth",
                       arguments: <String, dynamic>{"transaction": transaction});
                 }

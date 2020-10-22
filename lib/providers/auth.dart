@@ -49,6 +49,37 @@ class Auth with ChangeNotifier {
           config.trn = value.data['trn'].toString();
           config.tax = double.parse(value.data['tax'].toString());
           data.setData("agent_email", value.data['email'].toString());
+          final String customersLastDate =
+              await data.getData("beneficiaries_updated_at");
+          final String itemsLastupDate = await data.getData("items_updated_at");
+          final String benLastDate =
+              value.data['settings']['beneficiaries_updated_at'].toString();
+          final String itemsLastDate =
+              value.data['settings']['items_updated_at'].toString();
+          if (customersLastDate == "" ||
+              customersLastDate == null ||
+              customersLastDate.isEmpty ||
+              customersLastDate.toLowerCase() == "null") {
+            await data.setData("beneficiaries_updated_at", benLastDate);
+            config.dontloadCustomers = true;
+          } else {
+            if (int.parse(customersLastDate) < int.parse(benLastDate)) {
+              config.dontloadCustomers = true;
+              await data.setData("beneficiaries_updated_at", benLastDate);
+            }
+          }
+          if (itemsLastupDate == "" ||
+              itemsLastupDate == null ||
+              itemsLastupDate.isEmpty ||
+              itemsLastupDate.toLowerCase() == "null") {
+            await data.setData("items_updated_at", itemsLastDate);
+            config.dontloadItems = true;
+          } else {
+            if (int.parse(itemsLastupDate) < int.parse(itemsLastDate)) {
+              config.dontloadItems = true;
+              await data.setData("items_updated_at", itemsLastDate);
+            }
+          }
           final GlobalVars globalVarsProv =
               Provider.of<GlobalVars>(context, listen: false);
           cron.schedule(Schedule.parse('*/1 * * * *'), () async {

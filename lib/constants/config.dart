@@ -29,6 +29,8 @@ class Config {
   String mobileNo;
   String telephoneNo;
   String logo;
+    bool dontloadCustomers= false;
+  bool dontloadItems= false;
 }
 
 final Config config = Config();

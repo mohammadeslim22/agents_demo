@@ -1,6 +1,10 @@
+import 'dart:convert';
+
+import 'package:agent_second/constants/config.dart';
 import 'package:agent_second/models/ben.dart';
 import 'package:agent_second/models/transactions.dart';
 import 'package:agent_second/providers/export.dart';
+import 'package:agent_second/util/data.dart';
 import 'package:agent_second/util/dio.dart';
 import 'package:agent_second/util/functions.dart';
 import 'package:agent_second/util/service_locator.dart';
@@ -425,20 +429,49 @@ class OrderListProvider with ChangeNotifier {
       notifyListeners();
     }
   }
-
   Future<void> getItems() async {
     itemsDataLoaded = false;
     indexedStack = 0;
     notifyListeners();
-    await dio.get<dynamic>("items").then((Response<dynamic> value) {
-      itemsList = Items.fromJson(value.data).itemsList;
+    final String items = await data.getData("items");
+
+    if (config.dontloadItems) {
+      print("go after return items ?");
+      await dio.get<dynamic>("items").then((Response<dynamic> value) async {
+        itemsList = Items.fromJson(value.data).itemsList;
+        data.setData("items", jsonEncode(value.data));
+        itemsDataLoaded = true;
+        indexedStack = 1;
+        picksForbringOrderToOrderScreen();
+        notifyListeners();
+      });
+      return 0;
+    } else {
+      final dynamic json = jsonDecode(items);
+      print("enter here ");
+      itemsList = Items.fromJson(json).itemsList;
+      await Future<void>.delayed(const Duration(seconds: 3), () {});
       itemsDataLoaded = true;
       indexedStack = 1;
       picksForbringOrderToOrderScreen();
       notifyListeners();
-      return null;
-    });
+
+      return 0;
+    }
   }
+  // Future<void> getItems() async {
+  //   itemsDataLoaded = false;
+  //   indexedStack = 0;
+  //   notifyListeners();
+  //   await dio.get<dynamic>("items").then((Response<dynamic> value) {
+  //     itemsList = Items.fromJson(value.data).itemsList;
+  //     itemsDataLoaded = true;
+  //     indexedStack = 1;
+  //     picksForbringOrderToOrderScreen();
+  //     notifyListeners();
+  //     return null;
+  //   });
+  // }
 
   // Future<void> getPricesForBen(int benId) async {
   //   final Response<dynamic> response = await dio.get<dynamic>("item_caps",
