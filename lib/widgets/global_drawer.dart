@@ -1,6 +1,9 @@
+import 'package:agent_second/constants/colors.dart';
+import 'package:agent_second/constants/config.dart';
 import 'package:agent_second/constants/styles.dart';
 import 'package:agent_second/localization/trans.dart';
 import 'package:agent_second/util/data.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:agent_second/util/dio.dart';
 import 'package:flutter_svg/svg.dart';
@@ -55,17 +58,16 @@ class _GlobalDrawerState extends State<GlobalDrawer> {
                     Text(agentName, style: styles.underHeadwhite),
                   ],
                 ),
-                SvgPicture.asset('assets/images/company_logo.svg',
-                    width: 80.0, height: 80.0),
-                // ClipRRect(
-                //     borderRadius: BorderRadius.circular(80.0),
-                //     child: CircleAvatar(
-                //       maxRadius: 45,
-                //       minRadius: 30,
-                //       backgroundColor: colors.white,
-                //       child: Image.asset('assets/images/company_logo.svg',
-                //           width: 80.0, height: 80.0),
-                //     )),
+                // CachedNetworkImage(imageUrl: config.logo),
+                // SvgPicture.asset('assets/images/company_logo.svg',
+                //     width: 80.0, height: 80.0),
+                ClipRRect(
+                    borderRadius: BorderRadius.circular(100.0),
+                    child: CircleAvatar(
+                      radius: 50,
+                      backgroundColor: colors.trans,
+                      child: CachedNetworkImage(imageUrl: config.logo),
+                    ))
               ],
             ),
             decoration: const BoxDecoration(color: Colors.blue),

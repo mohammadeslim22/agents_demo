@@ -200,6 +200,12 @@ class Styles {
     height: 1.7,
     fontWeight: FontWeight.w200,
   );
+    TextStyle plzWaitLoading = const TextStyle(
+    fontSize: 20.0,
+    height: 1.7,
+    fontWeight: FontWeight.w600,
+    color: Colors.blue
+  );
 
   TextStyle memberShipMessage = TextStyle(fontSize: 15.0, color: colors.green);
 }

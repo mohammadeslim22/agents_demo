@@ -43,8 +43,9 @@ dependencies:
   location: ^3.0.0
   latlong: ^0.6.1
   font_awesome_flutter: ^8.8.1
-  flutter_styled_toast: ^1.3.2  
-  cached_network_image: ^2.0.0
+  flutter_styled_toast: ^1.3.2
+  flutter_cache_manager: ^2.0.0  
+  cached_network_image: ^2.1.0+1
   flutter_pagewise: ^1.2.3
   intl: ^0.16.1
   flutter_slidable: ^0.5.4

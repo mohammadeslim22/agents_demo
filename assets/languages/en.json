@@ -214,5 +214,6 @@
     "vat_amount": "VAT Amount",
     "net_total": "NET TOTAL",
     "salesman": "Sales Man",
-    "signature": "Signature"
+    "signature": "Signature",
+    "please_wait_loading":"Please wait one moment, Loading..."
 }

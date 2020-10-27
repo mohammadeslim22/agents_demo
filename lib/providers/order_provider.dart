@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:agent_second/constants/config.dart';
 import 'package:agent_second/models/ben.dart';
@@ -12,6 +13,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:agent_second/models/Items.dart';
 import 'package:vibration/vibration.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 
 class OrderListProvider with ChangeNotifier {
   List<SingleItemForSend> ordersList = <SingleItemForSend>[];
@@ -29,6 +31,8 @@ class OrderListProvider with ChangeNotifier {
   int howManyscreensToPop;
   List<int> transactionTopAyIds = <int>[];
   double progress = 0.0;
+  double discount = 0.0;
+  double totalAfterDiscount = 0.0;
   String getUnitNme(int itemId, int unitId) {
     String name;
     name = itemsList
@@ -43,17 +47,14 @@ class OrderListProvider with ChangeNotifier {
     return name;
   }
 
-  // void changeProgress(double d) {
-  //   progress = d;
-  //   notifyListeners();
-  // }
-  // void addIdTOTransactionToPayIdsList(int id) {
-  //   transactionTopAyIds.add(id);
-  //   notifyListeners();
-  // }
-
   void setScreensToPop(int x) {
     howManyscreensToPop = x;
+    notifyListeners();
+  }
+
+  void setDiscount(double dis) {
+    discount = dis;
+    totalAfterDiscount = sumTotal * (1 + config.tax / 100) - discount;
     notifyListeners();
   }
 
@@ -71,6 +72,20 @@ class OrderListProvider with ChangeNotifier {
           unitPrice: unitPrice,
           image: image));
       sumTotal += double.parse(unitPrice);
+      totalAfterDiscount = sumTotal * (1 + config.tax / 100) - discount;
+      notifyListeners();
+    }
+  }
+
+  void changePrice(int itemId, double price) {
+    if (double.parse(getPrice(itemId)) > price) {
+      return;
+    }
+    if (config.editPrice == 1) {
+      ordersList.firstWhere((SingleItemForSend element) {
+        return element.id == itemId;
+      }).unitPrice = price.toStringAsFixed(2);
+      getTotla();
       notifyListeners();
     }
   }
@@ -79,7 +94,15 @@ class OrderListProvider with ChangeNotifier {
     ordersList.clear();
     selectedOptions.clear();
     sumTotal = 0.0;
+    totalAfterDiscount = 0.0;
+    discount = 0;
     notifyListeners();
+  }
+
+  String getPrice(int itemId) {
+    return itemsList.firstWhere((SingleItem element) {
+      return element.id == itemId;
+    }).agentPrice;
   }
 
   void changeUnit(int itemId, String unit, int unitId) {
@@ -93,9 +116,9 @@ class OrderListProvider with ChangeNotifier {
   }
 
   void incrementQuantity(int itemId) {
-    final int quantity = ordersList.firstWhere((SingleItemForSend element) {
-      return element.id == itemId;
-    }).queantity;
+    // final int quantity = ordersList.firstWhere((SingleItemForSend element) {
+    //   return element.id == itemId;
+    // }).queantity;
 //  if (checkValidation(itemId, quantity + 1)) {
     ordersList.firstWhere((SingleItemForSend element) {
       return element.id == itemId;
@@ -103,6 +126,8 @@ class OrderListProvider with ChangeNotifier {
     sumTotal += double.parse(ordersList.firstWhere((SingleItemForSend element) {
       return element.id == itemId;
     }).unitPrice);
+    totalAfterDiscount = sumTotal * (1 + config.tax / 100) - discount;
+
     // } else {
     //   Vibration.vibrate(duration: 600);
     // }
@@ -122,6 +147,7 @@ class OrderListProvider with ChangeNotifier {
     sumTotal += double.parse(ordersList.firstWhere((SingleItemForSend element) {
       return element.id == itemId;
     }).unitPrice);
+    totalAfterDiscount = sumTotal * (1 + config.tax / 100) - discount;
 
     // } else {
     //   Vibration.vibrate(duration: 600);
@@ -171,6 +197,7 @@ class OrderListProvider with ChangeNotifier {
           double.parse(ordersList.firstWhere((SingleItemForSend element) {
         return element.id == itemId;
       }).unitPrice);
+      totalAfterDiscount = sumTotal * (1 + config.tax / 100) - discount;
     } else {
       Vibration.vibrate(duration: 600);
     }
@@ -196,9 +223,11 @@ class OrderListProvider with ChangeNotifier {
   double getTotla() {
     void sumtoTotal(double price) {
       sumTotal += price;
+      totalAfterDiscount = sumTotal * (1 + config.tax / 100) - discount;
     }
 
     sumTotal = 0.0;
+    totalAfterDiscount = sumTotal * (1 + config.tax / 100) - discount;
     // ignore: avoid_function_literals_in_foreach_calls
     ordersList.forEach((SingleItemForSend element) {
       sumtoTotal(double.parse(element.unitPrice) * element.queantity);
@@ -220,7 +249,7 @@ class OrderListProvider with ChangeNotifier {
   void bringOrderToOrderScreen(Transaction transaction) {
     clearOrcerList();
     sumTotal = transaction.amount.toDouble();
-
+    totalAfterDiscount = sumTotal * (1 + config.tax / 100) - discount;
     transaction.details.forEach((MiniItems element) {
       print("mini element item ${element.item}");
       selectedOptions.add(element.itemId);
@@ -274,8 +303,8 @@ class OrderListProvider with ChangeNotifier {
     }
   }
 
-  Future<bool> sendOrder(int benId, double ammoutn, int shortage, String type,
-      String status, int fromTransactionId) async {
+  Future<bool> sendOrder(int benId, double ammoutn, double discount,
+      int shortage, String type, String status, int fromTransactionId) async {
     final List<int> itemsId = <int>[];
     final List<int> itemsQuantity = <int>[];
     final List<double> itemsPrice = <double>[];
@@ -297,6 +326,7 @@ class OrderListProvider with ChangeNotifier {
         "type": type,
         "notes": "",
         "amount": ammoutn,
+        "discount": discount,
         "shortage": shortage,
         "item_id": itemsId,
         "item_price": itemsPrice,
@@ -429,26 +459,26 @@ class OrderListProvider with ChangeNotifier {
       notifyListeners();
     }
   }
+
   Future<void> getItems() async {
     itemsDataLoaded = false;
     indexedStack = 0;
     notifyListeners();
     final String items = await data.getData("items");
-
+    if (items == "" ||
+        items == null ||
+        items.isEmpty ||
+        items.toLowerCase() == "null") {
+      await loadItems();
+      return 0;
+    }
     if (config.dontloadItems) {
-      print("go after return items ?");
-      await dio.get<dynamic>("items").then((Response<dynamic> value) async {
-        itemsList = Items.fromJson(value.data).itemsList;
-        data.setData("items", jsonEncode(value.data));
-        itemsDataLoaded = true;
-        indexedStack = 1;
-        picksForbringOrderToOrderScreen();
-        notifyListeners();
-      });
+      // final dynamic json = jsonDecode(items);
+      // itemsList = Items.fromJson(json).itemsList;
+      await loadItems();
       return 0;
     } else {
       final dynamic json = jsonDecode(items);
-      print("enter here ");
       itemsList = Items.fromJson(json).itemsList;
       await Future<void>.delayed(const Duration(seconds: 3), () {});
       itemsDataLoaded = true;
@@ -459,20 +489,69 @@ class OrderListProvider with ChangeNotifier {
       return 0;
     }
   }
-  // Future<void> getItems() async {
-  //   itemsDataLoaded = false;
-  //   indexedStack = 0;
-  //   notifyListeners();
-  //   await dio.get<dynamic>("items").then((Response<dynamic> value) {
-  //     itemsList = Items.fromJson(value.data).itemsList;
-  //     itemsDataLoaded = true;
-  //     indexedStack = 1;
-  //     picksForbringOrderToOrderScreen();
-  //     notifyListeners();
-  //     return null;
-  //   });
-  // }
 
+  Future<void> loadItems() async {
+    await dio.get<dynamic>("items").then((Response<dynamic> value) async {
+      itemsList = Items.fromJson(value.data).itemsList;
+      await cachImages(itemsList);
+      //  removeOldImages(itemsList, olditems);
+      data.setData("items", jsonEncode(value.data));
+      itemsDataLoaded = true;
+      indexedStack = 1;
+      picksForbringOrderToOrderScreen();
+      notifyListeners();
+    });
+  }
+
+  Future<void> cachImages(List<SingleItem> items) async {
+    for (int i = 0; i < items.length; i++) {
+      try {
+        final FileInfo fileInfo = await DefaultCacheManager()
+            .getFileFromCache("${config.imageUrl}${items[i].image}");
+        if (fileInfo == null) {
+          if (items[i].image != "null")
+            await DefaultCacheManager()
+                .downloadFile("${config.imageUrl}${items[i].image}");
+          print("انت بتفوت هنا يا عم ؟");
+        }
+      } catch (err) {
+        print("cach downolad error  $err");
+      }
+    }
+  }
+
+  void removeOldImages(
+      List<SingleItem> newitemsList, List<SingleItem> olditemsList) {
+    if (olditemsList.isNotEmpty) {
+      for (int i = 0; i < olditemsList.length; i++) {
+        if (olditemsList[i].image.compareTo(newitemsList[i].image) != 0) {
+          removeFromCache("${config.imageUrl}${olditemsList[i].image}");
+        }
+      }
+    }
+  }
+
+  void removeFromCache(String image) {
+    DefaultCacheManager().removeFile(image);
+  }
+
+  Future<bool> checkItemsUpdate() async {
+    bool res = false;
+    await dio.get<dynamic>("settings").then((Response<dynamic> value) async {
+      final String itemsLastDate =
+          value.data['data']['items_updated_at'].toString();
+      final String itemsCurrentLastUpdateDate =
+          await data.getData("items_updated_at");
+      if (int.parse(itemsCurrentLastUpdateDate) < int.parse(itemsLastDate)) {
+        config.dontloadItems = true;
+        await data.setData("items_updated_at", itemsLastDate);
+        res = true;
+      } else {
+        res = false;
+      }
+    });
+    return res;
+  }
   // Future<void> getPricesForBen(int benId) async {
   //   final Response<dynamic> response = await dio.get<dynamic>("item_caps",
   //       queryParameters: <String, dynamic>{"beneficiary_id": benId});

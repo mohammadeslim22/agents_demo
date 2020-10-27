@@ -88,8 +88,7 @@ class Ben {
 
     itemsCap.forEach((ItemsCap element) {
       itemsBalances[element.itemId.toString()] = element.balanceCap.toString();
-     itemsPrices[element.itemId.toString()] = element.price.toString();
-
+      //  itemsPrices[element.itemId.toString()] = element.price.toString();
     });
     visited = false;
     orderTransTotal = json['order_trans_total'].toString();
@@ -100,7 +99,7 @@ class Ben {
     returnTransTotal = json['return_trans_total'].toString();
     balance = json['balance'].toString();
     trn = json['trn'].toString();
-    
+
     // totalOrders =double.parse(json['total_confirmed'].toString());
     // totalReturns = double.parse(json['total_returned_confirmed'].toString());
   }
@@ -157,14 +156,14 @@ class City {
 }
 
 class ItemsCap {
-  ItemsCap({this.itemId, this.balanceCap, this.price});
+  ItemsCap({this.itemId, this.balanceCap});
 
   ItemsCap.fromJson(dynamic json) {
     itemId = json['item_id'] as int;
     balanceCap = json['balance_cap'] as int;
-    price = json['price'].toString();
+    // price = json['price'].toString();
   }
   int itemId;
   int balanceCap;
-  String price;
+  // String price;
 }

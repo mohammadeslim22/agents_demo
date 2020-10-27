@@ -1,9 +1,13 @@
 import 'package:agent_second/constants/colors.dart';
+import 'package:agent_second/constants/config.dart';
 import 'package:agent_second/constants/styles.dart';
 import 'package:agent_second/localization/trans.dart';
 import 'package:agent_second/providers/auth.dart';
 import 'package:agent_second/providers/counter.dart';
+import 'package:agent_second/util/dio.dart';
 import 'package:agent_second/widgets/text_form_input.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -211,19 +215,24 @@ class _LoginScreenState extends State<LoginScreen>
                       child: ListView(
                         shrinkWrap: true,
                         children: <Widget>[
-                          SvgPicture.asset('assets/images/company_logo.svg',
-                              width: 80.0, height: 80.0),
-                          // ClipRRect(
-                          //         borderRadius: BorderRadius.circular(80.0),
-                          //         child: CircleAvatar(
-                          //           maxRadius: 45,
-                          //           minRadius: 30,
-                          //           backgroundColor: colors.white,
-                          //           child: SvgPicture.asset(
-                          //               'assets/images/company_logo.svg',
-                          //               width: 80.0,
-                          //               height: 80.0),
-                          //         )),
+                          FutureBuilder<Response<dynamic>>(
+                            future: dio.get<dynamic>("logo"),
+                            builder: (BuildContext context,
+                                AsyncSnapshot<Response<dynamic>> snapshot) {
+                              if (snapshot.hasData) {
+                                return Center(
+                                  child: CircleAvatar(
+                                    radius: 100,
+                                    backgroundImage: CachedNetworkImageProvider(
+                                      config.imageUrl + "${snapshot.data}",
+                                    ),
+                                  ),
+                                );
+                              } else {
+                                return const Icon(Icons.error);
+                              }
+                            },
+                          ),
                           const SizedBox(height: 64),
                           SvgPicture.asset('assets/images/mainLogo.svg',
                               width: 240.0, height: 240.0),

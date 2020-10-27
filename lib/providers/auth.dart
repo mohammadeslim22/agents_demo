@@ -49,6 +49,7 @@ class Auth with ChangeNotifier {
           config.trn = value.data['trn'].toString();
           config.tax = double.parse(value.data['tax'].toString());
           data.setData("agent_email", value.data['email'].toString());
+          config.editPrice = value.data['settings']['edit_price'] as int;
           final String customersLastDate =
               await data.getData("beneficiaries_updated_at");
           final String itemsLastupDate = await data.getData("items_updated_at");
@@ -76,10 +77,16 @@ class Auth with ChangeNotifier {
             config.dontloadItems = true;
           } else {
             if (int.parse(itemsLastupDate) < int.parse(itemsLastDate)) {
+              print("يزم أحااا");
               config.dontloadItems = true;
               await data.setData("items_updated_at", itemsLastDate);
             }
           }
+          print(customersLastDate);
+          print(benLastDate);
+          print(itemsLastDate);
+          print(itemsLastupDate);
+
           final GlobalVars globalVarsProv =
               Provider.of<GlobalVars>(context, listen: false);
           cron.schedule(Schedule.parse('*/1 * * * *'), () async {

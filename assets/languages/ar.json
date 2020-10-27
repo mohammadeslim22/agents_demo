@@ -111,5 +111,6 @@
     "signature":"التوقيع",
     "print_today_invoices":"طباعة فواتير اليوم",
     "invoice_printing":"إدارة طباعة الفواتير",
-    "error_happened":"حدث خطأ!"
+    "error_happened":"حدث خطأ!",
+    "please_wait_loading":"جاري التحميل ..انتظر من فضلك"
 }

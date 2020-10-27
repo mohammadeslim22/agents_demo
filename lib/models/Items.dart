@@ -20,11 +20,7 @@ class SingleItem {
       this.name,
       this.unit,
       this.unitPrice,
-      this.price1,
-      this.price2,
-      this.price3,
-      this.price4,
-      this.price5,
+      this.agentPrice,
       this.balanceInventory,
       this.wholesalePrice,
       this.barcode,
@@ -44,11 +40,8 @@ class SingleItem {
     name = json['name'].toString();
     unit = json['unit'] as int;
     unitPrice = json['unit_price'].toString();
-    price1 = json['price1'].toString();
-    price2 = json['price2'].toString();
-    price3 = json['price3'].toString();
-    price4 = json['price4'].toString();
-    price5 = json['price5'].toString();
+    if (json['agent_price'] != null)
+      agentPrice = json['agent_price'].toString();
     if (json['balance_inventory'] != null)
       balanceInventory = json['balance_inventory'] as int;
     else
@@ -56,7 +49,6 @@ class SingleItem {
     wholesalePrice = json['wholesale_price'].toString();
     barcode = json['barcode'].toString();
     image = json['image'].toString();
-    print("iamge $image");
     vat = json['vat'].toString();
     link = json['link'].toString();
     notes = json['notes'].toString();
@@ -71,45 +63,37 @@ class SingleItem {
     shipmentBalance = json['shipment_balance'] as int;
   }
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['id'] = id;
-    data['item_code'] = itemCode;
-    data['name'] = name;
-    data['unit'] = unit;
-    data['unit_price'] = unitPrice;
-    data['price1'] = price1;
-    data['price2'] = price2;
-    data['price3'] = price3;
-    data['price4'] = price4;
-    data['price5'] = price5;
-    data['balance_inventory'] = balanceInventory;
-    data['wholesale_price'] = wholesalePrice;
-    data['barcode'] = barcode;
-    data['image'] = image;
-    data['vat'] = vat;
-    data['link'] = link;
-    data['notes'] = notes;
-    data['created_at'] = createdAt;
-    data['updated_at'] = updatedAt;
-    data['quantity'] = queantity;
-    if (units != null) {
-      data['units'] = units.map((Units v) => v.toJson()).toList();
-    }
+  // Map<String, dynamic> toJson() {
+  //   final Map<String, dynamic> data = <String, dynamic>{};
+  //   data['id'] = id;
+  //   data['item_code'] = itemCode;
+  //   data['name'] = name;
+  //   data['unit'] = unit;
+  //   data['unit_price'] = unitPrice;
+  //   data['price1'] = price1;
+  //   data['balance_inventory'] = balanceInventory;
+  //   data['wholesale_price'] = wholesalePrice;
+  //   data['barcode'] = barcode;
+  //   data['image'] = image;
+  //   data['vat'] = vat;
+  //   data['link'] = link;
+  //   data['notes'] = notes;
+  //   data['created_at'] = createdAt;
+  //   data['updated_at'] = updatedAt;
+  //   data['quantity'] = queantity;
+  //   if (units != null) {
+  //     data['units'] = units.map((Units v) => v.toJson()).toList();
+  //   }
 
-    return data;
-  }
+  //   return data;
+  // }
 
   int id;
   String itemCode;
   String name;
   int unit;
   String unitPrice;
-  String price1;
-  String price2;
-  String price3;
-  String price4;
-  String price5;
+  String agentPrice = "1.0";
   int balanceInventory;
   String wholesalePrice;
   String barcode;

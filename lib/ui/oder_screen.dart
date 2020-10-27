@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:agent_second/constants/colors.dart';
 import 'package:agent_second/constants/config.dart';
 import 'package:agent_second/constants/styles.dart';
@@ -8,11 +10,12 @@ import 'package:agent_second/providers/export.dart';
 import 'package:agent_second/util/service_locator.dart';
 import 'package:agent_second/widgets/delete_tarnsaction_dialog.dart';
 import 'package:agent_second/widgets/text_form_input.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:provider/provider.dart';
 import 'package:agent_second/providers/order_provider.dart';
 import 'package:giffy_dialog/giffy_dialog.dart';
@@ -45,6 +48,8 @@ class _OrderScreenState extends State<OrderScreen> {
   List<int> prices = <int>[];
   Widget childForDragging(
       SingleItem item, OrderListProvider orsderListProvider) {
+    // final File f = await DefaultCacheManager()
+    //     .getSingleFile("http://dev.agentsmanage.com/image/${item.image}");
     return Card(
       shape: RoundedRectangleBorder(
           side: const BorderSide(width: 1, color: Colors.green),
@@ -62,10 +67,7 @@ class _OrderScreenState extends State<OrderScreen> {
                       item.notes,
                       item.queantity,
                       item.unit,
-                      (ben != null)
-                          ? ben.itemsPrices[item.id.toString()] ??
-                              item.unitPrice.toString()
-                          : item.unitPrice.toString(),
+                      item.agentPrice,
                       item.image);
                   orsderListProvider.selectedOptions.add(item.id);
                 })
@@ -90,18 +92,80 @@ class _OrderScreenState extends State<OrderScreen> {
               ],
             ),
             const SizedBox(height: 2),
-            CachedNetworkImage(
-              fit: BoxFit.cover,
-              imageUrl: (item.image != "null")
-                  ? config.imageUrl + "${item.image}"
-                  : "",
-              placeholder: (BuildContext context, String url) =>
-                  const CircularProgressIndicator(),
-              errorWidget: (BuildContext context, String url, dynamic error) =>
-                  const Icon(Icons.error),
-              width: 60,
-              height: 40,
+            // CachedNetworkImageBuilder(
+            //   url: /*config.imageUrl +*/ "http://dev.agentsmanage.com/image/${item.image}",
+            //   builder: (File image) {
+            //     return Container(
+            //       height: 40,
+            //       width: 60,
+            //       child: Image.file(image));
+            //   },
+
+            //   placeHolder: const CircularProgressIndicator(),
+            //   errorWidget: const Icon(Icons.error),
+            //   // imageExtensions: ['jpg', 'png'],
+            // ),
+            // ImageBuild(itemImage: item.image),
+            // OptimizedCacheImage(
+            //   fit: BoxFit.cover,
+            //   useOldImageOnUrlChange: false,
+            //   imageUrl: /*config.imageUrl +*/ "http://dev.agentsmanage.com/image/${item.image}",
+            //   placeholder: (BuildContext context, String url) =>
+            //       const CircularProgressIndicator(),
+            //   errorWidget: (BuildContext context, String url, dynamic error) =>
+            //       const Icon(Icons.error),
+            //   width: 60,
+            //   height: 40,
+            // ),
+            FutureBuilder<FileInfo>(
+              future: DefaultCacheManager()
+                  .getFileFromCache("${config.imageUrl}${item.image}"),
+              builder:
+                  (BuildContext context, AsyncSnapshot<FileInfo> snapshot) {
+                if (snapshot.hasData) {
+                  return Container(
+                      height: 40,
+                      width: 60,
+                      child: Image.file(snapshot.data.file));
+                } else {
+                  // We can show the loading view until the data comes back.
+                  return const Icon(Icons.error);
+                }
+              },
             ),
+
+            // CachedNetworkImage(
+            //   fit: BoxFit.cover,
+            //   imageUrl: /*config.imageUrl +*/ "http://dev.agentsmanage.com/image/${item.image}",
+            //   placeholder: (BuildContext context, String url) =>
+            //       const CircularProgressIndicator(),
+            //   errorWidget: (BuildContext context, String url, dynamic error) =>
+            //       const Icon(Icons.error),
+            //   width: 60,
+            //   height: 40,
+            // ),
+            // Image(
+            //   fit: BoxFit.cover,
+            //   image: CacheImage(
+            //       (item.image != "null")
+            //           ? config.imageUrl + "${item.image}"
+            //           : "",
+            //       cache: true,
+            //       duration: const Duration(hours: 1)),
+            // ),
+            // CachedNetworkImage(
+            //   fit: BoxFit.cover,
+            //   width: 60,
+            //   height: 40,
+            //   imageUrl: (item.image != "null")
+            //       ? config.imageUrl + "${item.image}"
+            //       : "",
+            //   progressIndicatorBuilder: (BuildContext context, String url,
+            //           DownloadProgress downloadProgress) =>
+            //       CircularProgressIndicator(value: downloadProgress.progress),
+            //   errorWidget: (BuildContext context, String url, dynamic error) =>
+            //       const Icon(Icons.error),
+            // ),
             const SizedBox(height: 2),
             Expanded(
               child: Text(
@@ -110,21 +174,18 @@ class _OrderScreenState extends State<OrderScreen> {
                 textAlign: TextAlign.center,
               ),
             ),
-            Text(
-                (ben != null)
-                    ? ben.itemsPrices[item.id.toString()] ??
-                        item.unitPrice.toString()
-                    : item.unitPrice.toString(),
-                style: styles.mystyle),
+            Text(item.agentPrice, style: styles.mystyle),
           ],
         ),
       ),
     );
   }
 
+  String totalAfterDiscount = "0.0";
   @override
   void initState() {
     super.initState();
+    discountController.text = "0.0";
     isORderOrReturn = widget.isORderOrReturn;
     ben = widget.ben;
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -146,14 +207,16 @@ class _OrderScreenState extends State<OrderScreen> {
         backgroundColor: !widget.isAgentOrder
             ? isORderOrReturn ? colors.blue : colors.red
             : colors.blue,
-        title: Text(config.companyName, style: styles.appBar),
-        //Text(trans(context, "altariq"), style: styles.appBar),
+        title: Text(trans(context, "altariq"), style: styles.appBar),
         centerTitle: true,
         actions: <Widget>[
           IconButton(
             icon: const Icon(Icons.refresh, size: 16),
-            onPressed: () {
-              getIt<OrderListProvider>().getItems();
+            //here
+            onPressed: () async {
+              if (await getIt<OrderListProvider>().checkItemsUpdate()) {
+                getIt<OrderListProvider>().getItems();
+              }
             },
           ),
           Row(
@@ -200,15 +263,22 @@ class _OrderScreenState extends State<OrderScreen> {
                           child: IndexedStack(
                               index: orderProvider.indexedStack,
                               children: <Widget>[
-                                Container(
-                                  width: 600,
-                                  height: 450,
-                                  child: FlareActor(
-                                      "assets/images/analysis_new.flr",
-                                      alignment: Alignment.center,
-                                      fit: BoxFit.cover,
-                                      isPaused: orderProvider.itemsDataLoaded,
-                                      animation: "analysis"),
+                                Column(
+                                  children: [
+                                    Container(
+                                      width: 600,
+                                      height: 450,
+                                      child: FlareActor(
+                                          "assets/images/analysis_new.flr",
+                                          alignment: Alignment.center,
+                                          fit: BoxFit.cover,
+                                          isPaused: orderProvider.itemsDataLoaded,
+                                          animation: "analysis"),
+                                    ),
+
+                                    const SizedBox(height: 25),
+                                    Text(trans(context, "please_wait_loading"),style: styles.plzWaitLoading)
+                                  ],
                                 ),
                                 if (orderProvider.itemsDataLoaded)
                                   GridView.count(
@@ -294,92 +364,10 @@ class _OrderScreenState extends State<OrderScreen> {
                             ],
                           ),
                         ),
-                        if (indexedStackId == 1)
-                          Container(
-                            margin: const EdgeInsets.symmetric(horizontal: 8),
-                            color: Colors.grey[300],
-                            child: Stack(
-                              children: <Widget>[
-                                Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: <Widget>[
-                                    const SizedBox(height: 36),
-                                    Center(
-                                      child: Text(
-                                        trans(context, 'drage_here'),
-                                        style: styles.dargHereStyle,
-                                        textAlign: TextAlign.center,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                AnimatedContainer(
-                                  height: animatedHight,
-                                  duration: const Duration(milliseconds: 900),
-                                  child: DottedBorder(
-                                    color: colors.black,
-                                    borderType: BorderType.RRect,
-                                    strokeWidth: 2,
-                                    child: DragTarget<SingleItem>(
-                                      onWillAccept: (SingleItem data) {
-                                        return true;
-                                      },
-                                      onAccept: (SingleItem value) {
-                                        setState(() {
-                                          getIt<OrderListProvider>()
-                                              .addItemToList(
-                                                  value.id,
-                                                  value.name,
-                                                  value.notes,
-                                                  value.queantity,
-                                                  value.unit,
-                                                  (ben != null)
-                                                      ? ben.itemsPrices[value.id
-                                                              .toString()] ??
-                                                          value.unitPrice
-                                                              .toString()
-                                                      : value.unitPrice
-                                                          .toString(),
-                                                  // value.unitPrice.toString(),
-                                                  value.image);
-                                          getIt<OrderListProvider>()
-                                              .selectedOptions
-                                              .add(value.id);
-                                          indexedStackId = 0;
-                                          animatedHight = 0;
-                                        });
-                                      },
-                                      onLeave: (dynamic value) {},
-                                      builder: (BuildContext context,
-                                          List<SingleItem> candidateData,
-                                          List<dynamic> rejectedData) {
-                                        return Container(
-                                            width: MediaQuery.of(context)
-                                                    .size
-                                                    .width /
-                                                2,
-                                            height: MediaQuery.of(context)
-                                                    .size
-                                                    .width /
-                                                2,
-                                            color: Colors.transparent);
-                                      },
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          )
-                        else
-                          Container(),
+                        if (indexedStackId == 1) dragHere() else Container(),
                         Expanded(
                           child: value.selectedOptions.isNotEmpty
-                              ?
-                              // Consumer<OrderListProvider>(
-                              //     builder: (BuildContext context,
-                              //         OrderListProvider value, Widget child) {
-                              //       return
-                              GridView.count(
+                              ? GridView.count(
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 6, vertical: 2),
                                   physics: const ScrollPhysics(),
@@ -405,17 +393,12 @@ class _OrderScreenState extends State<OrderScreen> {
                                               setState(() {
                                                 value.removeItemFromList(
                                                     item.id);
-                                                // getIt<OrderListProvider>()
-                                                //     .selectedOptions
-                                                //     .remove(item.id);
                                               });
                                             },
                                           ),
                                         ],
                                         child: cartItem(item));
                                   }).toList())
-                              //   },
-                              // )
                               : Container(),
                         ),
                         bottomTotal()
@@ -450,18 +433,16 @@ class _OrderScreenState extends State<OrderScreen> {
         data: item,
         feedback: Column(
           children: <Widget>[
-            CachedNetworkImage(
-              fit: BoxFit.cover,
-              imageUrl: (item.image != "null")
-                  ? config.imageUrl + "${item.image}"
-                  : "",
-              placeholder: (BuildContext context, String url) =>
-                  const CircularProgressIndicator(),
-              errorWidget: (BuildContext context, String url, dynamic error) =>
-                  const Icon(Icons.error),
-              width: 60,
-              height: 40,
-            ),
+            // CachedNetworkImage(
+            //   fit: BoxFit.cover,
+            //   imageUrl: /* config.imageUrl + */ "http://dev.agentsmanage.com/image/${item.image}",
+            //   placeholder: (BuildContext context, String url) =>
+            //       const CircularProgressIndicator(),
+            //   errorWidget: (BuildContext context, String url, dynamic error) =>
+            //       const Icon(Icons.error),
+            //   width: 60,
+            //   height: 40,
+            // ),
             Material(
                 color: Colors.transparent,
                 textStyle: styles.smallItembluestyle,
@@ -498,19 +479,35 @@ class _OrderScreenState extends State<OrderScreen> {
                         decoration: const BoxDecoration(
                             borderRadius:
                                 BorderRadius.all(Radius.circular(120))),
-                        child: CachedNetworkImage(
-                          fit: BoxFit.cover,
-                          imageUrl: (item.image != "null")
-                              ? config.imageUrl + "${item.image}"
-                              : "",
-                          placeholder: (BuildContext context, String url) =>
-                              const CircularProgressIndicator(),
-                          errorWidget: (BuildContext context, String url,
-                                  dynamic error) =>
-                              const Icon(Icons.error),
-                          width: 60,
-                          height: 40,
+
+                        child: FutureBuilder<FileInfo>(
+                          future: DefaultCacheManager().getFileFromCache(
+                              "http://dev.agentsmanage.com/image/${item.image}"),
+                          builder: (BuildContext context,
+                              AsyncSnapshot<FileInfo> snapshot) {
+                            if (snapshot.hasData) {
+                              return Container(
+                                  height: 40,
+                                  width: 60,
+                                  child: Image.file(snapshot.data.file));
+                            } else {
+                              // We can show the loading view until the data comes back.
+                              return const Icon(Icons.error);
+                            }
+                          },
                         ),
+
+                        //  CachedNetworkImage(
+                        //   fit: BoxFit.cover,
+                        //   imageUrl: /*config.imageUrl +*/ "http://dev.agentsmanage.com/image/${item.image}",
+                        //   placeholder: (BuildContext context, String url) =>
+                        //       const CircularProgressIndicator(),
+                        //   errorWidget: (BuildContext context, String url,
+                        //           dynamic error) =>
+                        //       const Icon(Icons.error),
+                        //   width: 60,
+                        //   height: 40,
+                        // ),
                       ),
                     ],
                   ),
@@ -569,32 +566,21 @@ class _OrderScreenState extends State<OrderScreen> {
                         Text(item.unit,
                             style: styles.mystyle, textAlign: TextAlign.start),
                       ],
-                    )
-                    // child: FlatButton(
-                    //   padding: EdgeInsets.zero,
-                    //   onPressed: () {
-                    //     showUnitDialog(
-                    //         getIt<OrderListProvider>().getItemForUnit(item.id));
-                    //   },
-                    //   child: Row(
-                    //     children: <Widget>[
-                    //       Text(item.unit,
-                    //           style: styles.mystyle, textAlign: TextAlign.start),
-                    //     ],
-                    //   ),
-                    // ),
-                    ),
+                    )),
+                Expanded(
+                    child: InkWell(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
+                    child: Text(item.unitPrice,
+                        style: styles.mystyle, textAlign: TextAlign.center),
+                  ),
+                  onTap: () {
+                    showPriceDialog(item.id);
+                  },
+                )),
                 Expanded(
                   child: Text(
-                      (ben != null)
-                          ? ben.itemsPrices[item.id.toString()] ?? ""
-                          : item.unitPrice,
-                      style: styles.mystyle,
-                      textAlign: TextAlign.center),
-                ),
-                Expanded(
-                  child: Text(
-                    "${double.parse((ben != null) ? ben.itemsPrices[item.id.toString()] ?? item.unitPrice : item.unitPrice) * item.queantity}",
+                    "${double.parse(item.unitPrice) * item.queantity}",
                     style: styles.mystyle,
                     textAlign: TextAlign.end,
                   ),
@@ -617,11 +603,34 @@ class _OrderScreenState extends State<OrderScreen> {
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  Text(trans(context, 'total') + " ",
-                      style: styles.mywhitestyle),
-                  Text(value.sumTotal.toString(), style: styles.mywhitestyle)
+                  Row(
+                    children: <Widget>[
+                      Text(trans(context, 'discount') + " ",
+                          style: styles.mywhitestyle),
+                      Text(value.discount.toString(),
+                          style: styles.mywhitestyle),
+                    ],
+                  ),
+                  Row(
+                    children: <Widget>[
+                      Text(trans(context, 'total') + " ",
+                          style: styles.mywhitestyle),
+                      Text(
+                          (value.sumTotal * (1 + config.tax / 100))
+                              .toStringAsFixed(2),
+                          style: styles.mywhitestyle),
+                    ],
+                  ),
+                  Row(
+                    children: <Widget>[
+                      Text(trans(context, 'cash_rquired') + " ",
+                          style: styles.mywhitestyle),
+                      Text(value.totalAfterDiscount.toStringAsFixed(2),
+                          style: styles.mywhitestyle),
+                    ],
+                  ),
                 ],
               ),
             ),
@@ -631,6 +640,21 @@ class _OrderScreenState extends State<OrderScreen> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: <Widget>[
+                Container(
+                  width: 110,
+                  child: RaisedButton(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12.0),
+                    ),
+                    color: colors.purple,
+                    onPressed: () {
+                      showDiscountDialog(value.sumTotal);
+                    },
+                    child: Text(trans(context, "discount"),
+                        style: styles.mywhitestyle),
+                  ),
+                ),
+                const SizedBox(width: 32),
                 Container(
                   width: 110,
                   child: RaisedButton(
@@ -651,6 +675,7 @@ class _OrderScreenState extends State<OrderScreen> {
                                 ),
                                 flareFit: BoxFit.cover,
                                 entryAnimation: EntryAnimation.TOP,
+                                //here
                                 onOkButtonPressed: () async {
                                   Navigator.pop(context);
                                   value.changeLoadingStare(true);
@@ -677,6 +702,7 @@ class _OrderScreenState extends State<OrderScreen> {
                       borderRadius: BorderRadius.circular(12.0),
                     ),
                     color: colors.blue,
+                    //here
                     onPressed: () async {
                       showDialog<dynamic>(
                         context: context,
@@ -705,6 +731,7 @@ class _OrderScreenState extends State<OrderScreen> {
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(18.0),
                                     ),
+                                    //here
                                     onPressed: () async {
                                       Navigator.pop(context);
                                       value.changeLoadingStare(true);
@@ -744,6 +771,7 @@ class _OrderScreenState extends State<OrderScreen> {
                                         borderRadius:
                                             BorderRadius.circular(18.0),
                                       ),
+                                      //here
                                       onPressed: () async {
                                         Navigator.pop(context);
                                         value.changeLoadingStare(true);
@@ -834,6 +862,7 @@ class _OrderScreenState extends State<OrderScreen> {
     );
   }
 
+//here
   Future<bool> sendTransFunction(bool agentOrBen, String status) async {
     if (agentOrBen) {
       bool res;
@@ -845,6 +874,7 @@ class _OrderScreenState extends State<OrderScreen> {
       return await getIt<OrderListProvider>().sendOrder(
           ben.id,
           getIt<OrderListProvider>().sumTotal,
+          getIt<OrderListProvider>().discount,
           0,
           isORderOrReturn ? "order" : "return",
           status,
@@ -894,7 +924,69 @@ class _OrderScreenState extends State<OrderScreen> {
         });
   }
 
+  Widget dragHere() {
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 8),
+      color: Colors.grey[300],
+      child: Stack(
+        children: <Widget>[
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              const SizedBox(height: 36),
+              Center(
+                child: Text(
+                  trans(context, 'drage_here'),
+                  style: styles.dargHereStyle,
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ],
+          ),
+          AnimatedContainer(
+            height: animatedHight,
+            duration: const Duration(milliseconds: 900),
+            child: DottedBorder(
+              color: colors.black,
+              borderType: BorderType.RRect,
+              strokeWidth: 2,
+              child: DragTarget<SingleItem>(
+                onWillAccept: (SingleItem data) {
+                  return true;
+                },
+                onAccept: (SingleItem value) {
+                  setState(() {
+                    getIt<OrderListProvider>().addItemToList(
+                        value.id,
+                        value.name,
+                        value.notes,
+                        value.queantity,
+                        value.unit,
+                        value.agentPrice,
+                        value.image);
+                    getIt<OrderListProvider>().selectedOptions.add(value.id);
+                    indexedStackId = 0;
+                    animatedHight = 0;
+                  });
+                },
+                onLeave: (dynamic value) {},
+                builder: (BuildContext context, List<SingleItem> candidateData,
+                    List<dynamic> rejectedData) {
+                  return Container(
+                      width: MediaQuery.of(context).size.width / 2,
+                      height: MediaQuery.of(context).size.width / 2,
+                      color: Colors.transparent);
+                },
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   TextEditingController quantityController = TextEditingController();
+  //here
   Future<dynamic> showQuantityDialog(int itemId) async {
     await showDialog<String>(
       context: context,
@@ -926,6 +1018,81 @@ class _OrderScreenState extends State<OrderScreen> {
                     : getIt<OrderListProvider>().setQuantityForAgentOrder(
                         itemId, int.parse(quantityController.text));
                 quantityController.clear();
+                Navigator.pop(context);
+              })
+        ],
+      ),
+    );
+  }
+
+  TextEditingController discountController = TextEditingController();
+//here
+  Future<dynamic> showDiscountDialog(double total) async {
+    await showDialog<String>(
+      context: context,
+      builder: (_) => AlertDialog(
+        contentPadding: const EdgeInsets.all(16.0),
+        content: Row(
+          children: <Widget>[
+            Expanded(
+              child: TextField(
+                autofocus: true,
+                controller: discountController,
+                keyboardType: TextInputType.number,
+              ),
+            )
+          ],
+        ),
+        actions: <Widget>[
+          FlatButton(
+              child: Text(trans(context, "cancel")),
+              onPressed: () {
+                Navigator.pop(context);
+              }),
+          FlatButton(
+              child: Text(trans(context, "set")),
+              onPressed: () {
+                getIt<OrderListProvider>()
+                    .setDiscount(double.parse(discountController.text));
+                Navigator.pop(context);
+              })
+        ],
+      ),
+    );
+  }
+
+  TextEditingController newPriceController = TextEditingController();
+//here
+  Future<dynamic> showPriceDialog(int itemId) async {
+    await showDialog<String>(
+      context: context,
+      builder: (_) => AlertDialog(
+        contentPadding: const EdgeInsets.all(16.0),
+        content: Row(
+          children: <Widget>[
+            Expanded(
+              child: TextField(
+                autofocus: true,
+                controller: newPriceController,
+                keyboardType: TextInputType.number,
+              ),
+            )
+          ],
+        ),
+        actions: <Widget>[
+          FlatButton(
+              child: Text(trans(context, "cancel")),
+              onPressed: () {
+                Navigator.pop(context);
+              }),
+          FlatButton(
+              child: Text(trans(context, "set")),
+              onPressed: () {
+                getIt<OrderListProvider>()
+                    .changePrice(itemId, double.parse(newPriceController.text));
+                setState(() {
+                  newPriceController.text = "";
+                });
                 Navigator.pop(context);
               })
         ],
