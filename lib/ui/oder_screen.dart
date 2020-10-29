@@ -76,21 +76,22 @@ class _OrderScreenState extends State<OrderScreen> {
         },
         child: Column(
           children: <Widget>[
-            Row(
-              children: <Widget>[
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8),
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(8.0),
-                      border: Border.all(width: 1.0, color: Colors.green)),
-                  child: Text(
-                      (ben != null)
-                          ? ben.itemsBalances[item.id.toString()] ?? ""
-                          : "",
-                      style: styles.smallButton),
-                )
-              ],
-            ),
+            if (ben != null)
+              if (ben.itemsBalances[item.id.toString()] != "0" &&
+                  ben.itemsBalances[item.id.toString()] != "" &&
+                  ben.itemsBalances[item.id.toString()] != null)
+                Row(
+                  children: <Widget>[
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 8),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(8.0),
+                          border: Border.all(width: 1.0, color: Colors.green)),
+                      child: Text(ben.itemsBalances[item.id.toString()],
+                          style: styles.smallButton),
+                    )
+                  ],
+                ),
             const SizedBox(height: 2),
             // CachedNetworkImageBuilder(
             //   url: /*config.imageUrl +*/ "http://dev.agentsmanage.com/image/${item.image}",
@@ -212,7 +213,6 @@ class _OrderScreenState extends State<OrderScreen> {
         actions: <Widget>[
           IconButton(
             icon: const Icon(Icons.refresh, size: 16),
-            //here
             onPressed: () async {
               if (await getIt<OrderListProvider>().checkItemsUpdate()) {
                 getIt<OrderListProvider>().getItems();
@@ -272,12 +272,13 @@ class _OrderScreenState extends State<OrderScreen> {
                                           "assets/images/analysis_new.flr",
                                           alignment: Alignment.center,
                                           fit: BoxFit.cover,
-                                          isPaused: orderProvider.itemsDataLoaded,
+                                          isPaused:
+                                              orderProvider.itemsDataLoaded,
                                           animation: "analysis"),
                                     ),
-
                                     const SizedBox(height: 25),
-                                    Text(trans(context, "please_wait_loading"),style: styles.plzWaitLoading)
+                                    Text(trans(context, "please_wait_loading"),
+                                        style: styles.plzWaitLoading)
                                   ],
                                 ),
                                 if (orderProvider.itemsDataLoaded)
@@ -482,7 +483,7 @@ class _OrderScreenState extends State<OrderScreen> {
 
                         child: FutureBuilder<FileInfo>(
                           future: DefaultCacheManager().getFileFromCache(
-                              "http://dev.agentsmanage.com/image/${item.image}"),
+                              "${config.imageUrl}${item.image}"),
                           builder: (BuildContext context,
                               AsyncSnapshot<FileInfo> snapshot) {
                             if (snapshot.hasData) {

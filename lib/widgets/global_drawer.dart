@@ -34,12 +34,12 @@ class _GlobalDrawerState extends State<GlobalDrawer> {
   @override
   void initState() {
     super.initState();
-    location.onLocationChanged.listen((LocationData currentLocation) {
-      latTosend = currentLocation.latitude;
-      longTosend = currentLocation.longitude;
-      print(
-          "hola hola lat ${currentLocation.latitude} hola hola long ${currentLocation.longitude}");
-    });
+    // location.onLocationChanged.listen((LocationData currentLocation) {
+    //   latTosend = currentLocation.latitude;
+    //   longTosend = currentLocation.longitude;
+    //   print(
+    //       "hola hola lat ${currentLocation.latitude} hola hola long ${currentLocation.longitude}");
+    // });
     restoreData();
   }
 

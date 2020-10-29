@@ -32,12 +32,7 @@ Future<void> dioDefaults() async {
     latTosend = value.latitude;
     longTosend = value.longitude;
   });
-  // location.onLocationChanged.listen((LocationData currentLocation) {
-  //   latTosend = currentLocation.latitude;
-  //   longTosend = currentLocation.longitude;
-  //   print(
-  //       "hola hola lat ${currentLocation.latitude} hola hola long ${currentLocation.longitude}");
-  // });
+
   // dio.options.headers['authorization'] = 'Bearer ${config.token}';
   dio.interceptors
       .add(InterceptorsWrapper(onRequest: (RequestOptions options) async {

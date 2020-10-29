@@ -453,7 +453,8 @@ class OrderListProvider with ChangeNotifier {
       getIt<GlobalVars>()
           .setBalanceForBen(benId, response.data['balance'].toString());
       getIt<GlobalVars>().clearOrderTotAndReturnTotal(benId);
-      getIt<TransactionProvider>().pagewiseCollectionController.reset();
+      if (getIt<TransactionProvider>().pagewiseCollectionController != null)
+        getIt<TransactionProvider>().pagewiseCollectionController.reset();
       print("pay response value :  ${response.data}");
       // transactionTopAyIds.clear();
       notifyListeners();
@@ -469,13 +470,13 @@ class OrderListProvider with ChangeNotifier {
         items == null ||
         items.isEmpty ||
         items.toLowerCase() == "null") {
-      await loadItems();
+      await loadItems(<SingleItem>[]);
       return 0;
     }
     if (config.dontloadItems) {
-      // final dynamic json = jsonDecode(items);
-      // itemsList = Items.fromJson(json).itemsList;
-      await loadItems();
+      final dynamic json = jsonDecode(items);
+      itemsList = Items.fromJson(json).itemsList;
+      await loadItems(itemsList);
       return 0;
     } else {
       final dynamic json = jsonDecode(items);
@@ -490,11 +491,11 @@ class OrderListProvider with ChangeNotifier {
     }
   }
 
-  Future<void> loadItems() async {
+  Future<void> loadItems(List<SingleItem> olditems) async {
     await dio.get<dynamic>("items").then((Response<dynamic> value) async {
       itemsList = Items.fromJson(value.data).itemsList;
       await cachImages(itemsList);
-      //  removeOldImages(itemsList, olditems);
+      removeOldImages(itemsList, olditems);
       data.setData("items", jsonEncode(value.data));
       itemsDataLoaded = true;
       indexedStack = 1;
@@ -512,7 +513,6 @@ class OrderListProvider with ChangeNotifier {
           if (items[i].image != "null")
             await DefaultCacheManager()
                 .downloadFile("${config.imageUrl}${items[i].image}");
-          print("انت بتفوت هنا يا عم ؟");
         }
       } catch (err) {
         print("cach downolad error  $err");
@@ -543,7 +543,6 @@ class OrderListProvider with ChangeNotifier {
       final String itemsCurrentLastUpdateDate =
           await data.getData("items_updated_at");
       if (int.parse(itemsCurrentLastUpdateDate) < int.parse(itemsLastDate)) {
-        config.dontloadItems = true;
         await data.setData("items_updated_at", itemsLastDate);
         res = true;
       } else {

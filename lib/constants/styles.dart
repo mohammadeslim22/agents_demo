@@ -189,6 +189,7 @@ class Styles {
       fontWeight: FontWeight.w600,
       color: Colors.blue,
       fontSize: 14,
+      
       height: 1.3);
   TextStyle paymentCashStyle = TextStyle(
       fontWeight: FontWeight.w200,
