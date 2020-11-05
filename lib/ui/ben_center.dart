@@ -344,7 +344,7 @@ class _BeneficiaryCenterState extends State<BeneficiaryCenter> {
                               });
                             },
                             child:
-                                SvgPicture.asset("assets/images/invoice.svg")),
+                                SvgPicture.asset("assets/images/order_icon.svg")),
                       ),
                       Container(
                         width: SizeConfig.blockSizeHorizontal * 5,
