@@ -433,16 +433,18 @@ class OrderListProvider with ChangeNotifier {
     }
   }
 
-  Future<void> payMYOrdersAndReturnList(
-      BuildContext c, int benId, double amount,double discount, String note) async {
+  Future<void> payMYOrdersAndReturnList(BuildContext c, int benId,
+      double amount, double discount, String note) async {
     final Response<dynamic> response = await dio
         .post<dynamic>("transaction/pay", data: <String, dynamic>{
       "amount": amount,
       "beneficiary_id": benId,
-      "discount":discount,
+      "discount": discount,
       "note": note
     });
     if (response.statusCode == 200) {
+      print("discount $discount");
+      print("res data ${response.data}");
       Navigator.of(c).pushNamedAndRemoveUntil("/Beneficiary_Center",
           (Route<dynamic> route) {
         return howManyscreensToPop-- == 0;

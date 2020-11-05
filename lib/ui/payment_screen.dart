@@ -38,7 +38,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
   void initState() {
     super.initState();
     _ben = getIt<GlobalVars>().getbenInFocus();
-    paymentCashController.text = "${-widget.cashTotal.truncate()}";
+    paymentCashController.text = "${widget.cashTotal.truncate()}";
     paymentAmountController.text = "${widget.orderTotal.toStringAsFixed(2)}";
     if (widget.orderTotal != null)
       try {
@@ -51,7 +51,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
 
     paymentDeptController.text = "${widget.returnTotal.truncate()}";
     discountController.text =
-        (widget.cashTotal.truncate() - widget.cashTotal).toStringAsFixed(2);
+        (widget.cashTotal-widget.cashTotal.truncate()).toStringAsFixed(2);
   }
 
   TextEditingController noteController = TextEditingController();
