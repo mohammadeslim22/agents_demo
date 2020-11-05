@@ -56,9 +56,6 @@ class Splash extends StatelessWidget {
                 const Spacer(),
                 const Divider(thickness: 2, color: Colors.grey),
                 Row(
-                  // crossAxisAlignment: CrossAxisAlignment.start,
-                  // mainAxisSize: MainAxisSize.max,
-                  // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
                     Expanded(
                       child: FlatButton(
@@ -85,7 +82,7 @@ class Splash extends StatelessWidget {
                             await data.setData("baseUrl", result.rawContent);
                             config.baseUrl = "${result.rawContent}api/";
                             config.imageUrl = "${result.rawContent}image/";
-                              Navigator.popAndPushNamed(context, "/login");
+                            Navigator.popAndPushNamed(context, "/login");
                           } catch (e) {
                             Fluttertoast.showToast(
                                 msg: trans(context, 'use_right_qr_code'));
@@ -109,7 +106,7 @@ class Splash extends StatelessWidget {
     return Container(
         padding: EdgeInsets.zero,
         child: const VerticalDivider(
-          // color: Colors.grey,
+          color: Colors.grey,
           thickness: 2,
         ),
         height: SizeConfig.screenHeight * .155);
