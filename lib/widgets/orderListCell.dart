@@ -1,3 +1,4 @@
+import 'package:agent_second/util/size_config.dart';
 import 'package:flutter/material.dart';
 import 'package:agent_second/models/transactions.dart';
 import 'package:agent_second/localization/trans.dart';
@@ -10,10 +11,12 @@ class OrderListCell extends StatelessWidget {
   Widget build(BuildContext context) {
     return Expanded(
         child: SingleChildScrollView(
+
             scrollDirection: Axis.vertical,
             child: DataTable(
               horizontalMargin: 0,
-              columnSpacing: 18,
+              columnSpacing: SizeConfig.blockSizeHorizontal * 2,
+
               columns: <DataColumn>[
                 DataColumn(
                   label: Text(trans(context, '#'), style: styles.bill),

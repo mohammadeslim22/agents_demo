@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:agent_second/constants/colors.dart';
 import 'package:agent_second/constants/config.dart';
 import 'package:agent_second/constants/styles.dart';
@@ -8,9 +6,9 @@ import 'package:agent_second/models/Items.dart';
 import 'package:agent_second/models/ben.dart';
 import 'package:agent_second/providers/export.dart';
 import 'package:agent_second/util/service_locator.dart';
+import 'package:agent_second/util/size_config.dart';
 import 'package:agent_second/widgets/delete_tarnsaction_dialog.dart';
 import 'package:agent_second/widgets/text_form_input.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
@@ -93,31 +91,6 @@ class _OrderScreenState extends State<OrderScreen> {
                   ],
                 ),
             const SizedBox(height: 2),
-            // CachedNetworkImageBuilder(
-            //   url: /*config.imageUrl +*/ "http://dev.agentsmanage.com/image/${item.image}",
-            //   builder: (File image) {
-            //     return Container(
-            //       height: 40,
-            //       width: 60,
-            //       child: Image.file(image));
-            //   },
-
-            //   placeHolder: const CircularProgressIndicator(),
-            //   errorWidget: const Icon(Icons.error),
-            //   // imageExtensions: ['jpg', 'png'],
-            // ),
-            // ImageBuild(itemImage: item.image),
-            // OptimizedCacheImage(
-            //   fit: BoxFit.cover,
-            //   useOldImageOnUrlChange: false,
-            //   imageUrl: /*config.imageUrl +*/ "http://dev.agentsmanage.com/image/${item.image}",
-            //   placeholder: (BuildContext context, String url) =>
-            //       const CircularProgressIndicator(),
-            //   errorWidget: (BuildContext context, String url, dynamic error) =>
-            //       const Icon(Icons.error),
-            //   width: 60,
-            //   height: 40,
-            // ),
             FutureBuilder<FileInfo>(
               future: DefaultCacheManager()
                   .getFileFromCache("${config.imageUrl}${item.image}"),
@@ -125,48 +98,15 @@ class _OrderScreenState extends State<OrderScreen> {
                   (BuildContext context, AsyncSnapshot<FileInfo> snapshot) {
                 if (snapshot.hasData) {
                   return Container(
-                      height: 40,
-                      width: 60,
+                      padding: EdgeInsets.zero,
+                      height: SizeConfig.blockSizeVertical * 6,
+                      width: SizeConfig.blockSizeHorizontal * 6,
                       child: Image.file(snapshot.data.file));
                 } else {
-                  // We can show the loading view until the data comes back.
                   return const Icon(Icons.error);
                 }
               },
             ),
-
-            // CachedNetworkImage(
-            //   fit: BoxFit.cover,
-            //   imageUrl: /*config.imageUrl +*/ "http://dev.agentsmanage.com/image/${item.image}",
-            //   placeholder: (BuildContext context, String url) =>
-            //       const CircularProgressIndicator(),
-            //   errorWidget: (BuildContext context, String url, dynamic error) =>
-            //       const Icon(Icons.error),
-            //   width: 60,
-            //   height: 40,
-            // ),
-            // Image(
-            //   fit: BoxFit.cover,
-            //   image: CacheImage(
-            //       (item.image != "null")
-            //           ? config.imageUrl + "${item.image}"
-            //           : "",
-            //       cache: true,
-            //       duration: const Duration(hours: 1)),
-            // ),
-            // CachedNetworkImage(
-            //   fit: BoxFit.cover,
-            //   width: 60,
-            //   height: 40,
-            //   imageUrl: (item.image != "null")
-            //       ? config.imageUrl + "${item.image}"
-            //       : "",
-            //   progressIndicatorBuilder: (BuildContext context, String url,
-            //           DownloadProgress downloadProgress) =>
-            //       CircularProgressIndicator(value: downloadProgress.progress),
-            //   errorWidget: (BuildContext context, String url, dynamic error) =>
-            //       const Icon(Icons.error),
-            // ),
             const SizedBox(height: 2),
             Expanded(
               child: Text(
@@ -264,10 +204,11 @@ class _OrderScreenState extends State<OrderScreen> {
                               index: orderProvider.indexedStack,
                               children: <Widget>[
                                 Column(
-                                  children: [
+                                  children: <Widget>[
                                     Container(
-                                      width: 600,
-                                      height: 450,
+                                      width:
+                                          SizeConfig.blockSizeHorizontal * 60,
+                                      height: SizeConfig.blockSizeVertical * 60,
                                       child: FlareActor(
                                           "assets/images/analysis_new.flr",
                                           alignment: Alignment.center,
@@ -276,7 +217,9 @@ class _OrderScreenState extends State<OrderScreen> {
                                               orderProvider.itemsDataLoaded,
                                           animation: "analysis"),
                                     ),
-                                    const SizedBox(height: 25),
+                                    SizedBox(
+                                        height:
+                                            SizeConfig.blockSizeVertical * 4.5),
                                     Text(trans(context, "please_wait_loading"),
                                         style: styles.plzWaitLoading)
                                   ],
@@ -285,7 +228,7 @@ class _OrderScreenState extends State<OrderScreen> {
                                   GridView.count(
                                       padding: const EdgeInsets.symmetric(
                                           horizontal: 6, vertical: 12),
-                                      physics: const ScrollPhysics(),
+                                      physics: const ClampingScrollPhysics(),
                                       shrinkWrap: true,
                                       primary: true,
                                       crossAxisSpacing: 4,
@@ -639,11 +582,11 @@ class _OrderScreenState extends State<OrderScreen> {
           Padding(
             padding: const EdgeInsets.fromLTRB(8, 0, 8, 4),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 Container(
-                  width: 110,
                   child: RaisedButton(
+                 padding: const EdgeInsets.symmetric(horizontal: 12,vertical: 6),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12.0),
                     ),
@@ -655,10 +598,10 @@ class _OrderScreenState extends State<OrderScreen> {
                         style: styles.mywhitestyle),
                   ),
                 ),
-                const SizedBox(width: 32),
+                SizedBox(width: SizeConfig.blockSizeHorizontal),
                 Container(
-                  width: 110,
                   child: RaisedButton(
+                    padding: const EdgeInsets.symmetric(horizontal: 12,vertical: 6),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12.0),
                     ),
@@ -695,10 +638,11 @@ class _OrderScreenState extends State<OrderScreen> {
                         style: styles.mywhitestyle),
                   ),
                 ),
-                const SizedBox(width: 32),
+                SizedBox(width: SizeConfig.blockSizeHorizontal),
                 Container(
-                  width: 110,
+                    padding: EdgeInsets.zero,
                   child: RaisedButton(
+             padding: const EdgeInsets.symmetric(horizontal: 12,vertical: 6),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12.0),
                     ),
@@ -817,10 +761,10 @@ class _OrderScreenState extends State<OrderScreen> {
                         style: styles.mywhitestyle),
                   ),
                 ),
-                const SizedBox(width: 32),
+                SizedBox(width: SizeConfig.blockSizeHorizontal),
                 Container(
-                  width: 110,
                   child: RaisedButton(
+                    padding: const EdgeInsets.symmetric(horizontal: 12,vertical: 6),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12.0),
                     ),
@@ -1039,7 +983,7 @@ class _OrderScreenState extends State<OrderScreen> {
               child: TextField(
                 autofocus: true,
                 controller: discountController,
-                keyboardType: TextInputType.number,
+                keyboardType: const TextInputType.numberWithOptions(decimal: true),
               ),
             )
           ],
@@ -1062,7 +1006,7 @@ class _OrderScreenState extends State<OrderScreen> {
     );
   }
 
-  TextEditingController newPriceController = TextEditingController();
+  TextEditingController priceController = TextEditingController();
 //here
   Future<dynamic> showPriceDialog(int itemId) async {
     await showDialog<String>(
@@ -1074,8 +1018,8 @@ class _OrderScreenState extends State<OrderScreen> {
             Expanded(
               child: TextField(
                 autofocus: true,
-                controller: newPriceController,
-                keyboardType: TextInputType.number,
+                controller: priceController,
+                keyboardType: const TextInputType.numberWithOptions(decimal: true),
               ),
             )
           ],
@@ -1090,9 +1034,9 @@ class _OrderScreenState extends State<OrderScreen> {
               child: Text(trans(context, "set")),
               onPressed: () {
                 getIt<OrderListProvider>()
-                    .changePrice(itemId, double.parse(newPriceController.text));
+                    .changePrice(itemId, double.parse(priceController.text));
                 setState(() {
-                  newPriceController.text = "";
+                  priceController.text = "";
                 });
                 Navigator.pop(context);
               })

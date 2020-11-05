@@ -12,7 +12,6 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:blue_thermal_printer/blue_thermal_printer.dart';
 import 'package:flutter/services.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
 class Bluetooth extends StatefulWidget {
   const Bluetooth({Key key, this.transaction}) : super(key: key);

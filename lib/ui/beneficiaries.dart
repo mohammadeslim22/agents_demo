@@ -5,6 +5,7 @@ import 'package:agent_second/models/ben.dart';
 import 'package:agent_second/providers/export.dart';
 import 'package:agent_second/providers/global_variables.dart';
 import 'package:agent_second/util/service_locator.dart';
+import 'package:agent_second/util/size_config.dart';
 import 'package:agent_second/widgets/global_drawer.dart';
 import 'package:agent_second/widgets/text_form_input.dart';
 import 'package:flutter/material.dart';
@@ -89,70 +90,78 @@ class _BeneficiariesState extends State<Beneficiaries> {
                   });
                 },
                 child: Container(
-                  margin: const EdgeInsets.fromLTRB(6, 2, 6, 0),
+                  margin: EdgeInsets.fromLTRB(
+                      SizeConfig.blockSizeHorizontal * 1,
+                      SizeConfig.blockSizeVertical * 1.5,
+                      SizeConfig.blockSizeHorizontal * 1,
+                      0),
                   child: Column(
                     children: <Widget>[
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Column(
-                            children: <Widget>[
-                              Text(item.id.toString(),
-                                  style: styles.beneficires),
-                              const SizedBox(height: 6),
-                              IconButton(
-                                icon:
-                                    const Icon(Icons.phone_forwarded, size: 12),
-                                color: Colors.green,
-                                onPressed: () {},
-                              )
-                            ],
-                          ),
-                          const SizedBox(width: 6),
-                          Expanded(
-                            child: Column(
+                      Expanded(
+                                              child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Column(
                               children: <Widget>[
-                                Row(
-                                  children: <Widget>[
-                                    Expanded(
-                                      child: Text(item.name,
-                                          style: styles.beneficiresNmae),
-                                    ),
-                                  ],
-                                ),
-                                Row(
-                                  children: <Widget>[
-                                    Expanded(
-                                      child: Text(item.address,
-                                          style: styles.underHeadgray),
-                                    ),
-                                  ],
-                                ),
-                                Row(
-                                  children: <Widget>[
-                                    Text(item.phone,
-                                        style: styles.underHeadgray),
-                                  ],
-                                )
+                                Text(item.id.toString(),
+                                    style: styles.beneficires),
+                                const SizedBox(height: 6),
+                                const Icon(Icons.phone_forwarded,
+                                    size: 16, color: Colors.green),
                               ],
                             ),
-                          ),
-                          if (item.visited)
-                            SvgPicture.asset("assets/images/visitedsign.svg",
-                                width: 40, height: 40)
-                          else
-                            SvgPicture.asset("assets/images/unvisitedBen.svg",
-                                width: 40, height: 40),
-                        ],
+                            const SizedBox(width: 6),
+                            Expanded(
+                              child: Column(
+                                children: <Widget>[
+                                  Row(
+                                    children: <Widget>[
+                                      Expanded(
+                                        child: Text(item.name,
+                                            style: styles.beneficiresNmae),
+                                      ),
+                                    ],
+                                  ),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: <Widget>[
+                                      Text(item.phone,
+                                          style: styles.underHeadgray),
+                                      Text(item.address,
+                                          style: styles.underHeadgray),
+                                    ],
+                                  ),
+                                  // Row(
+                                  //   children: <Widget>[
+                                  //     Text(item.phone,
+                                  //         style: styles.underHeadgray),
+                                  //   ],
+                                  // )
+                                ],
+                              ),
+                            ),
+                            if (item.visited)
+                              SvgPicture.asset("assets/images/visitedsign.svg",
+                                  width: SizeConfig.blockSizeHorizontal * 6,
+                                  height: SizeConfig.blockSizeVertical * 6)
+                            else
+                              SvgPicture.asset("assets/images/unvisitedBen.svg",
+                                  width: SizeConfig.blockSizeHorizontal * 6,
+                                  height: SizeConfig.blockSizeVertical * 6),
+                          ],
+                        ),
                       ),
                       const Divider(),
+                   //   const Spacer(),
                       if (selectedOptions.contains(item.id))
                         Expanded(
                           child: Container(
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 12, vertical: 6),
                               child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
                                 children: <Widget>[
                                   InkWell(
                                     splashColor: Colors.transparent,
@@ -173,7 +182,8 @@ class _BeneficiariesState extends State<Beneficiaries> {
                                     },
                                     child: SvgPicture.asset(
                                         "assets/images/invoice.svg",
-                                        height: 50),
+                                        height:
+                                            SizeConfig.blockSizeHorizontal * 5),
                                   ),
                                   InkWell(
                                     splashColor: Colors.transparent,
@@ -184,7 +194,7 @@ class _BeneficiariesState extends State<Beneficiaries> {
                                       getIt<OrderListProvider>()
                                           .setScreensToPop(2);
                                       globalVarsProv.setBenInFocus(item);
-                                     Navigator.pushNamed(
+                                      Navigator.pushNamed(
                                           context, "/Order_Screen",
                                           arguments: <String, dynamic>{
                                             "ben": item,
@@ -193,7 +203,8 @@ class _BeneficiariesState extends State<Beneficiaries> {
                                     },
                                     child: SvgPicture.asset(
                                         "assets/images/returnButton.svg",
-                                        height: 50),
+                                        height:
+                                            SizeConfig.blockSizeHorizontal * 5),
                                   ),
                                   InkWell(
                                     splashColor: Colors.transparent,
@@ -216,30 +227,38 @@ class _BeneficiariesState extends State<Beneficiaries> {
                                     },
                                     child: SvgPicture.asset(
                                         "assets/images/collectionButton.svg",
-                                        height: 50),
+                                        height:
+                                            SizeConfig.blockSizeHorizontal * 5),
                                   )
                                 ],
                               )),
                         )
                       else
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 16, vertical: 0),
-                          child: RaisedButton(
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(18.0),
-                                side: const BorderSide(color: Colors.blue)),
-                            onPressed: () async {
-                              getIt<OrderListProvider>().setScreensToPop(3);
-                              globalVarsProv.setBenInFocus(item);
-                              Navigator.pushNamed(
-                                  context, "/Beneficiary_Center",
-                                  arguments: <String, Ben>{"ben": item});
-                            },
-                            color: colors.myBlue,
-                            textColor: colors.white,
-                            child: Text(trans(context, 'view_more'),
-                                style: styles.seeMOre),
+                        Flexible(
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: SizeConfig.blockSizeHorizontal * 6,
+                                vertical: 0),
+                            child: RaisedButton(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal:
+                                      SizeConfig.blockSizeHorizontal * 2,
+                                  vertical: SizeConfig.blockSizeVertical * 1.5),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(180.0),
+                                  side: const BorderSide(color: Colors.blue)),
+                              onPressed: () async {
+                                getIt<OrderListProvider>().setScreensToPop(3);
+                                globalVarsProv.setBenInFocus(item);
+                                Navigator.pushNamed(
+                                    context, "/Beneficiary_Center",
+                                    arguments: <String, Ben>{"ben": item});
+                              },
+                              color: colors.myBlue,
+                              textColor: colors.white,
+                              child: Text(trans(context, 'view_more'),
+                                  style: styles.seeMOre),
+                            ),
                           ),
                         )
                     ],

@@ -5,9 +5,7 @@ import 'package:agent_second/localization/trans.dart';
 import 'package:agent_second/util/data.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:agent_second/util/dio.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:location/location.dart';
+
 
 class GlobalDrawer extends StatefulWidget {
   const GlobalDrawer({

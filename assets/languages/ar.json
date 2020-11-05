@@ -112,5 +112,8 @@
     "print_today_invoices":"طباعة فواتير اليوم",
     "invoice_printing":"إدارة طباعة الفواتير",
     "error_happened":"حدث خطأ!",
-    "please_wait_loading":"جاري التحميل ..انتظر من فضلك"
+    "please_wait_loading":"جاري التحميل ..انتظر من فضلك",
+    "demo_or_qr":"هذه نسخة تجريبية هل تريد ..؟",
+    "go_demo":"إستكمال",
+    "activate":"تفعيل التطبيق"
 }

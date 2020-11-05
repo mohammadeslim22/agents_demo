@@ -5,6 +5,7 @@ import '../providers/export.dart';
 
 GetIt getIt = GetIt.instance;
 void setupLocator() {
+  
 getIt.registerLazySingleton(() => NavigationService());
 getIt.registerLazySingleton(() => Auth());
 getIt.registerLazySingleton(() => OrderListProvider());

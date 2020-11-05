@@ -9,6 +9,7 @@ import 'package:agent_second/models/transactions.dart';
 import 'package:agent_second/providers/export.dart';
 import 'package:agent_second/providers/transaction_provider.dart';
 import 'package:agent_second/util/service_locator.dart';
+import 'package:agent_second/util/size_config.dart';
 import 'package:animated_card/animated_card.dart';
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/cupertino.dart';
@@ -215,8 +216,7 @@ class _BeneficiaryCenterState extends State<BeneficiaryCenter> {
                               Icon(Icons.call, color: colors.blue, size: 20),
                               const SizedBox(width: 8),
                               Text(
-                                trans(context, "mobile_number") +
-                                    " : ${ben.phone}",
+                                "${ben.phone}",
                                 style: styles.beneficiresNmae,
                               )
                             ],
@@ -257,7 +257,6 @@ class _BeneficiaryCenterState extends State<BeneficiaryCenter> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: <Widget>[
                         Container(
-                          width: 110,
                           child: RaisedButton(
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(12.0),
@@ -278,7 +277,6 @@ class _BeneficiaryCenterState extends State<BeneficiaryCenter> {
                         ),
                         const SizedBox(width: 16),
                         Container(
-                          width: 110,
                           child: RaisedButton(
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(12.0),
@@ -299,7 +297,6 @@ class _BeneficiaryCenterState extends State<BeneficiaryCenter> {
                         ),
                         const SizedBox(width: 16),
                         Container(
-                          width: 110,
                           child: RaisedButton(
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(12.0),
@@ -327,8 +324,8 @@ class _BeneficiaryCenterState extends State<BeneficiaryCenter> {
                       Text(trans(context, "show_chices"),
                           style: styles.mystyle),
                       Container(
-                        width: 50,
-                        height: 35,
+                        width: SizeConfig.blockSizeHorizontal * 5,
+                        height: SizeConfig.blockSizeVertical * 5,
                         padding: EdgeInsets.zero,
                         margin: const EdgeInsets.all(8.0),
                         decoration: BoxDecoration(
@@ -350,8 +347,8 @@ class _BeneficiaryCenterState extends State<BeneficiaryCenter> {
                                 SvgPicture.asset("assets/images/invoice.svg")),
                       ),
                       Container(
-                        width: 50,
-                        height: 35,
+                        width: SizeConfig.blockSizeHorizontal * 5,
+                        height: SizeConfig.blockSizeVertical * 5,
                         margin: const EdgeInsets.all(8.0),
                         decoration: BoxDecoration(
                             border: Border.all(
@@ -372,8 +369,8 @@ class _BeneficiaryCenterState extends State<BeneficiaryCenter> {
                                 "assets/images/return_icon.svg")),
                       ),
                       Container(
-                        width: 50,
-                        height: 35,
+                        width: SizeConfig.blockSizeHorizontal * 5,
+                        height: SizeConfig.blockSizeVertical * 5,
                         margin: const EdgeInsets.all(8.0),
                         decoration: BoxDecoration(
                             border: Border.all(
@@ -641,8 +638,8 @@ class _BeneficiaryCenterState extends State<BeneficiaryCenter> {
 
   Widget loadTransactions() {
     return Container(
-      width: 400,
-      height: 400,
+      width: SizeConfig.blockSizeHorizontal * 30,
+      height: SizeConfig.blockSizeVertical * 30,
       child: FlareActor("assets/images/new_intro.flr",
           alignment: Alignment.center,
           color: colors.blue,
@@ -848,8 +845,8 @@ class _BeneficiaryCenterState extends State<BeneficiaryCenter> {
             if (!billIsOn)
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 0),
-                width: 70,
-                height: 50,
+                width: SizeConfig.blockSizeHorizontal * 10,
+                height: SizeConfig.blockSizeVertical * 10,
                 child: Column(
                   children: <Widget>[
                     Expanded(
@@ -905,7 +902,7 @@ class _BeneficiaryCenterState extends State<BeneficiaryCenter> {
               children: <Widget>[
                 Text(trans(context, "total"), style: styles.mybluestyle),
                 const SizedBox(width: 12),
-                Text(trans(context, transaction.amount.toString() + ".00"),
+                Text(trans(context, transaction.amount.toString()),
                     style: styles.mystyle),
                 const SizedBox(width: 32),
               ],

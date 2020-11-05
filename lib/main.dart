@@ -3,6 +3,7 @@ import 'package:agent_second/providers/counter.dart';
 import 'package:agent_second/providers/language.dart';
 import 'package:agent_second/providers/global_variables.dart';
 import 'package:agent_second/services/navigationService.dart';
+import 'package:agent_second/splash.dart';
 import 'package:agent_second/ui/auth/login_screen.dart';
 import 'package:agent_second/util/data.dart';
 import 'package:agent_second/util/dio.dart';
@@ -10,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'constants/config.dart';
 import 'constants/route.dart';
 import 'constants/themes.dart';
 import 'localization/localization_delegate.dart';
@@ -27,6 +29,20 @@ Future<void> main() async {
     DeviceOrientation.landscapeLeft,
     DeviceOrientation.landscapeRight
   ]);
+  final String baseUrl = await data.getData("baseUrl");
+  print("base url $baseUrl");
+  if (baseUrl == "null" ||
+      baseUrl == null ||
+      baseUrl.isEmpty ||
+      baseUrl == "") {
+    config.baseUrl = "http://demo.agentsmanage.com/api/";
+    config.imageUrl = "http://demo.agentsmanage.com/image/";
+    config.qrCodeScan = true;
+  } else {
+    config.baseUrl = "${baseUrl}api/";
+    config.imageUrl = "${baseUrl}image/";
+    config.qrCodeScan = false;
+  }
   runApp(
     MultiProvider(
       providers: <ChangeNotifierProvider<ChangeNotifier>>[
@@ -61,6 +77,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final Language lang = Provider.of<Language>(context);
+
     return MaterialApp(
         navigatorKey: getIt<NavigationService>().navigatorKey,
         debugShowCheckedModeBanner: false,
@@ -91,6 +108,6 @@ class MyApp extends StatelessWidget {
         },
         theme: mainThemeData(),
         onGenerateRoute: onGenerateRoute,
-        home: const LoginScreen());
+        home: config.qrCodeScan ? const Splash() : const LoginScreen());
   }
 }

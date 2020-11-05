@@ -1,3 +1,5 @@
+import 'package:agent_second/util/size_config.dart';
+
 import 'colors.dart';
 import 'package:flutter/material.dart';
 
@@ -7,71 +9,72 @@ class Styles {
   TextStyle smallButtonactivated =
       TextStyle(fontSize: 14, color: colors.black, fontWeight: FontWeight.w100);
 
-  TextStyle mystyle = const TextStyle(
-      fontWeight: FontWeight.w100,
+  TextStyle mystyle =  TextStyle(
+      fontWeight: FontWeight.w200,
       color: Colors.black,
-      fontSize: 14,
+      fontSize: SizeConfig.blockSizeHorizontal*1.35,
       height: 1.2);
-  TextStyle bill = const TextStyle(fontStyle: FontStyle.italic, fontSize: 10);
+  TextStyle bill = TextStyle(
+      fontStyle: FontStyle.italic, fontSize: SizeConfig.blockSizeHorizontal*1.35);
   TextStyle balanceInventory = const TextStyle(
       fontWeight: FontWeight.w100,
       color: Colors.red,
       fontSize: 24,
       height: 1.7);
-  TextStyle smallItembluestyle = const TextStyle(
+  TextStyle smallItembluestyle = TextStyle(
       fontWeight: FontWeight.w100,
       color: Colors.blue,
-      fontSize: 12,
+      fontSize: SizeConfig.blockSizeHorizontal * 1.3,
       height: 1.0);
-  TextStyle mybluestyle = const TextStyle(
+  TextStyle mybluestyle =  TextStyle(
       fontWeight: FontWeight.w100,
       color: Colors.blue,
-      fontSize: 14,
+      fontSize: SizeConfig.blockSizeHorizontal*1.5,
       height: 1.0);
   TextStyle myredstyle = const TextStyle(
       fontWeight: FontWeight.w100,
       color: Colors.red,
       fontSize: 15,
       height: 1.7);
-  TextStyle mystyle2 = const TextStyle(
+  TextStyle mystyle2 = TextStyle(
       fontWeight: FontWeight.bold,
       color: Colors.blue,
-      fontSize: 32,
+      fontSize: SizeConfig.blockSizeHorizontal * 3,
       height: 1.7);
   TextStyle underHead = const TextStyle(
       fontWeight: FontWeight.w100,
       color: Color(0xFF303030),
       fontSize: 12,
       height: 1.5);
-  TextStyle appBar = const TextStyle(
+  TextStyle appBar = TextStyle(
     fontWeight: FontWeight.w100,
     color: Colors.white,
-    fontSize: 16,
+    fontSize: SizeConfig.blockSizeHorizontal * 2,
   );
-  TextStyle seeMOre = const TextStyle(
+  TextStyle seeMOre = TextStyle(
     fontWeight: FontWeight.w100,
     color: Colors.white,
-    fontSize: 14,
+    fontSize: SizeConfig.blockSizeHorizontal * 2,
   );
   TextStyle underHeadblack = const TextStyle(
       fontWeight: FontWeight.w100,
       color: Colors.black,
       fontSize: 20,
       height: 1.7);
-  TextStyle underHeadgreen = const TextStyle(
+  TextStyle underHeadgreen = TextStyle(
       fontWeight: FontWeight.w100,
       color: Colors.green,
-      fontSize: 40,
+      fontSize: SizeConfig.blockSizeHorizontal * 3,
       height: 1.7);
-  TextStyle underHeadred = const TextStyle(
+  TextStyle underHeadred = TextStyle(
       fontWeight: FontWeight.w100,
       color: Colors.red,
-      fontSize: 40,
+      fontSize: SizeConfig.blockSizeHorizontal * 3,
       height: 1.7);
-  TextStyle thirtyblack = const TextStyle(
+  TextStyle thirtyblack = TextStyle(
       fontWeight: FontWeight.w100,
       color: Colors.black,
-      fontSize: 30,
+      fontSize: SizeConfig.blockSizeHorizontal * 3,
       height: 1.7);
   TextStyle notificationNO = const TextStyle(
       fontWeight: FontWeight.w100,
@@ -83,7 +86,7 @@ class Styles {
     color: Colors.black,
     fontSize: 14,
   );
-    TextStyle typeOrderScreen = const TextStyle(
+  TextStyle typeOrderScreen = const TextStyle(
     fontWeight: FontWeight.w400,
     color: Colors.black,
     fontSize: 22,
@@ -143,7 +146,7 @@ class Styles {
     color: Colors.white,
     fontSize: 14,
   );
-    TextStyle dargHereStyle = const TextStyle(
+  TextStyle dargHereStyle = const TextStyle(
     fontWeight: FontWeight.w500,
     color: Colors.white,
     fontSize: 30,
@@ -153,10 +156,10 @@ class Styles {
     color: Colors.white,
     fontSize: 12,
   );
-  TextStyle mywhitestyle = const TextStyle(
+  TextStyle mywhitestyle =  TextStyle(
     fontWeight: FontWeight.w100,
     color: Colors.white,
-    fontSize: 14,
+    fontSize:  SizeConfig.blockSizeHorizontal * 1.4,
     decoration: TextDecoration.none,
     //height: 1.7
   );
@@ -167,46 +170,44 @@ class Styles {
     decoration: TextDecoration.none,
     //height: 1.7
   );
-  TextStyle underHeadwhite = const TextStyle(
+  TextStyle underHeadwhite = TextStyle(
     fontWeight: FontWeight.w300,
     color: Colors.white,
-    fontSize: 14,
-    // height: 1.7,
+    fontSize: SizeConfig.blockSizeHorizontal * 2,
     decoration: TextDecoration.none,
   );
-  TextStyle underHeadgray = const TextStyle(
+  TextStyle underHeadgray = TextStyle(
       fontWeight: FontWeight.w300,
       color: Colors.grey,
-      fontSize: 14,
+      fontSize: SizeConfig.blockSizeHorizontal * 1.5,
       decoration: TextDecoration.none,
       height: 1.3);
-  TextStyle beneficires = const TextStyle(
+  TextStyle beneficires = TextStyle(
       fontWeight: FontWeight.w100,
       color: Colors.blue,
-      fontSize: 14,
+      fontSize: SizeConfig.blockSizeHorizontal * 2,
       height: 1.3);
-  TextStyle beneficiresNmae = const TextStyle(
+  TextStyle beneficiresNmae = TextStyle(
       fontWeight: FontWeight.w600,
       color: Colors.blue,
-      fontSize: 14,
-      
+      fontSize: SizeConfig.blockSizeHorizontal * 1.5,
       height: 1.3);
   TextStyle paymentCashStyle = TextStyle(
       fontWeight: FontWeight.w200,
       color: colors.black,
-      fontSize: 20,
-      height: 1.3);
+      fontSize: SizeConfig.blockSizeHorizontal * 1.5,
+      //height: 1.3
+      );
   TextStyle paymentCardStyle = const TextStyle(
     fontSize: 15.0,
     height: 1.7,
     fontWeight: FontWeight.w200,
   );
-    TextStyle plzWaitLoading = const TextStyle(
-    fontSize: 20.0,
-    height: 1.7,
-    fontWeight: FontWeight.w600,
-    color: Colors.blue
-  );
+  TextStyle plzWaitLoading = const TextStyle(
+      fontSize: 20.0,
+      height: 1.7,
+      fontWeight: FontWeight.w600,
+      color: Colors.blue);
 
   TextStyle memberShipMessage = TextStyle(fontSize: 15.0, color: colors.green);
 }

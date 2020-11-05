@@ -5,6 +5,7 @@ import 'package:agent_second/constants/colors.dart';
 import 'package:agent_second/constants/config.dart';
 import 'package:agent_second/providers/global_variables.dart';
 import 'package:agent_second/util/service_locator.dart';
+import 'package:agent_second/util/size_config.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
@@ -73,8 +74,8 @@ class _DashBoardState extends State<DashBoard> {
   @override
   void initState() {
     super.initState();
-    lat = widget.lat ?? 25.063054;
-    long = widget.long ?? 55.170010;
+    lat = config.lat;
+    long = config.long;
     location.onLocationChanged.listen((LocationData currentLocation) {
       latTosend = currentLocation.latitude;
       longTosend = currentLocation.longitude;
@@ -110,20 +111,20 @@ class _DashBoardState extends State<DashBoard> {
 
   Widget card(String picPath, String header, Widget widget) {
     return Container(
-      width: 156,
       child: Card(
         child: InkWell(
           onTap: () {},
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 16),
+            padding: EdgeInsets.symmetric(
+                horizontal: 4, vertical: SizeConfig.blockSizeVertical * 1.5),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: <Widget>[
                 SvgPicture.asset(
                   picPath,
-                  width: 60.0,
-                  height: 60.0,
+                  width: SizeConfig.blockSizeHorizontal * 10,
+                  height: SizeConfig.blockSizeVertical * 10,
                 ),
                 const SizedBox(height: 6),
                 Text(header, style: styles.underHead),
@@ -217,7 +218,7 @@ class _DashBoardState extends State<DashBoard> {
                             ClipRRect(
                                 borderRadius: BorderRadius.circular(100.0),
                                 child: CircleAvatar(
-                                  radius: 50,
+                                  radius: SizeConfig.blockSizeVertical * 6,
                                   backgroundColor: colors.trans,
                                   child:
                                       CachedNetworkImage(imageUrl: config.logo),

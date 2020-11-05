@@ -1,9 +1,9 @@
+import 'package:agent_second/util/size_config.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class MyCounter extends ChangeNotifier {
-
   bool loading = false;
   static TickerProvider c;
   static String loginbase = "login";
@@ -84,12 +84,16 @@ class MyCounter extends ChangeNotifier {
     loginbase = login;
     if (!loading) {
       return Padding(
-          padding: const EdgeInsets.fromLTRB(30, 20, 30, 20),
+          padding: EdgeInsets.fromLTRB(
+              SizeConfig.blockSizeHorizontal * 5,
+              SizeConfig.blockSizeVertical * 3,
+              SizeConfig.blockSizeHorizontal * 5,
+              SizeConfig.blockSizeVertical * 3),
           child: Text(loginbase,
-              style: const TextStyle(
+              style: TextStyle(
                 fontWeight: FontWeight.bold,
                 color: Colors.white,
-                fontSize: 25,
+                fontSize: SizeConfig.blockSizeHorizontal * 2.5,
               )));
     } else {
       return spinkit;
@@ -98,7 +102,7 @@ class MyCounter extends ChangeNotifier {
 
   void togelf(bool state) {
     loading = state;
-      notifyListeners();
+    notifyListeners();
   }
 
   void togelocationloading(bool state) {

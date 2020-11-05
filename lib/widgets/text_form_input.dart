@@ -1,4 +1,5 @@
 import 'dart:core';
+import 'package:agent_second/util/size_config.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -43,13 +44,15 @@ class TextFormInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+      padding: EdgeInsets.fromLTRB(SizeConfig.blockSizeHorizontal * 1, 0,
+          SizeConfig.blockSizeHorizontal * 1, 0),
       child: TextFormField(
         readOnly: readOnly,
         keyboardType: kt,
         onTap: () => onTab(),
         controller: cController,
-        style: const TextStyle(color: Colors.black, fontSize: 12),
+        style: TextStyle(
+            color: Colors.black, fontSize: SizeConfig.blockSizeHorizontal * 1.5),
         obscureText: obscureText,
         decoration: InputDecoration(
             suffix: prefixWidget,
@@ -59,7 +62,9 @@ class TextFormInput extends StatelessWidget {
             filled: true,
             fillColor: Colors.white70,
             hintText: text,
-            hintStyle: TextStyle(color: colors.ggrey, fontSize: 10),
+            hintStyle: TextStyle(
+                color: colors.ggrey,
+                fontSize: SizeConfig.blockSizeHorizontal * 1.5),
             disabledBorder: const OutlineInputBorder(
                 borderSide: BorderSide(
               color: Colors.blue,
@@ -73,7 +78,8 @@ class TextFormInput extends StatelessWidget {
               ),
               borderRadius: BorderRadius.circular(12),
             ),
-            contentPadding: const EdgeInsets.symmetric(vertical: 8),
+            contentPadding: EdgeInsets.symmetric(
+                vertical: SizeConfig.blockSizeVertical * 1.5),
             prefixIcon: Icon(
               prefixIcon,
               color: colors.blue,

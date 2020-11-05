@@ -32,6 +32,7 @@ class Config {
   bool dontloadCustomers = false;
   bool dontloadItems = false;
   int editPrice;
+  bool qrCodeScan;
 }
 
 final Config config = Config();

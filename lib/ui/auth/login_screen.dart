@@ -5,10 +5,12 @@ import 'package:agent_second/localization/trans.dart';
 import 'package:agent_second/providers/auth.dart';
 import 'package:agent_second/providers/counter.dart';
 import 'package:agent_second/util/dio.dart';
+import 'package:agent_second/util/size_config.dart';
 import 'package:agent_second/widgets/text_form_input.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
@@ -53,14 +55,18 @@ class _LoginScreenState extends State<LoginScreen>
   }
 
   bool _obscureText = false;
-  final TextEditingController usernameController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
+  final TextEditingController usernameController = TextEditingController(text: kReleaseMode ? '' : 'ramis');
+  final TextEditingController passwordController = TextEditingController(text: kReleaseMode ? '' : '123456');
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final FocusNode focus1 = FocusNode();
   final FocusNode focus2 = FocusNode();
   Widget customcard(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(15, 30, 15, 0),
+      padding: EdgeInsets.fromLTRB(
+          SizeConfig.blockSizeHorizontal * 1,
+          SizeConfig.blockSizeVertical * 5,
+          SizeConfig.blockSizeHorizontal * 1,
+          0),
       child: Form(
         key: _formKey,
         onWillPop: () {
@@ -86,7 +92,7 @@ class _LoginScreenState extends State<LoginScreen>
                   }
                   return validationMap['username'];
                 }),
-            const SizedBox(height: 16),
+            SizedBox(height: SizeConfig.blockSizeVertical * 2),
             TextFormInput(
                 text: trans(context, 'pin_code'),
                 cController: passwordController,
@@ -124,9 +130,14 @@ class _LoginScreenState extends State<LoginScreen>
   }
 
   @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final Auth auth = Provider.of<Auth>(context);
-
+    SizeConfig().init(context);
     final MyCounter bolc = Provider.of<MyCounter>(context);
     return Scaffold(
         backgroundColor: colors.blue,
@@ -137,7 +148,7 @@ class _LoginScreenState extends State<LoginScreen>
           child: Stack(
             children: <Widget>[
               Padding(
-                padding: const EdgeInsets.all(32.0),
+                padding: EdgeInsets.all(SizeConfig.blockSizeHorizontal * 3),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: <Widget>[
@@ -147,21 +158,25 @@ class _LoginScreenState extends State<LoginScreen>
                           borderRadius: BorderRadius.all(Radius.circular(12)),
                         ),
                         child: ListView(
-                          padding: const EdgeInsets.all(16.0),
+                          padding:
+                              EdgeInsets.all(SizeConfig.blockSizeHorizontal),
                           children: <Widget>[
-                            SvgPicture.asset(
-                              'assets/images/welcomeback.svg',
-                              width: 80.0,
-                              height: 80.0,
-                            ),
-                            const SizedBox(height: 24),
+                            SizedBox(height: SizeConfig.blockSizeVertical * 3),
+                            SvgPicture.asset('assets/images/welcomeback.svg',
+                                width: SizeConfig.blockSizeHorizontal * 15,
+                                height: SizeConfig.blockSizeVertical * 15),
+                            SizedBox(height: SizeConfig.blockSizeVertical * 3),
                             Text(trans(context, 'welcome_back'),
                                 textAlign: TextAlign.center,
                                 style: styles.mystyle2),
                             customcard(context),
-                            const SizedBox(height: 16),
+                            SizedBox(height: SizeConfig.blockSizeVertical * 5),
                             Padding(
-                              padding: const EdgeInsets.fromLTRB(20, 10, 20, 0),
+                              padding: EdgeInsets.fromLTRB(
+                                  SizeConfig.blockSizeHorizontal * 5,
+                                  SizeConfig.blockSizeVertical * 5,
+                                  SizeConfig.blockSizeHorizontal * 5,
+                                  0),
                               child: RaisedButton(
                                   shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(18.0),
@@ -222,7 +237,7 @@ class _LoginScreenState extends State<LoginScreen>
                               if (snapshot.hasData) {
                                 return Center(
                                   child: CircleAvatar(
-                                    radius: 100,
+                                    radius: SizeConfig.screenWidth * .08,
                                     backgroundImage: CachedNetworkImageProvider(
                                       config.imageUrl + "${snapshot.data}",
                                     ),
@@ -233,9 +248,10 @@ class _LoginScreenState extends State<LoginScreen>
                               }
                             },
                           ),
-                          const SizedBox(height: 64),
+                          SizedBox(height: SizeConfig.screenHeight * .19),
                           SvgPicture.asset('assets/images/mainLogo.svg',
-                              width: 240.0, height: 240.0),
+                              width: SizeConfig.blockSizeHorizontal * 40,
+                              height: SizeConfig.blockSizeVertical * 40),
                         ],
                       ),
                     ),

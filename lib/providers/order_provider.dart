@@ -1,6 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
-
 import 'package:agent_second/constants/config.dart';
 import 'package:agent_second/models/ben.dart';
 import 'package:agent_second/models/transactions.dart';
@@ -436,11 +434,12 @@ class OrderListProvider with ChangeNotifier {
   }
 
   Future<void> payMYOrdersAndReturnList(
-      BuildContext c, int benId, double amount, String note) async {
+      BuildContext c, int benId, double amount,double discount, String note) async {
     final Response<dynamic> response = await dio
         .post<dynamic>("transaction/pay", data: <String, dynamic>{
       "amount": amount,
       "beneficiary_id": benId,
+      "discount":discount,
       "note": note
     });
     if (response.statusCode == 200) {
