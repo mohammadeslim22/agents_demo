@@ -584,6 +584,7 @@ class _OrderScreenState extends State<OrderScreen> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
+                if(isORderOrReturn)
                 Container(
                   child: RaisedButton(
                  padding: const EdgeInsets.symmetric(horizontal: 12,vertical: 6),
