@@ -38,20 +38,27 @@ class _PaymentScreenState extends State<PaymentScreen> {
   void initState() {
     super.initState();
     _ben = getIt<GlobalVars>().getbenInFocus();
-    paymentCashController.text = "${-widget.cashTotal.truncate()}";
-    paymentAmountController.text = "${widget.orderTotal.toStringAsFixed(2)}";
-    if (widget.orderTotal != null)
-      try {
-        paymentCashController.selection = TextSelection(
-            baseOffset: 0,
-            extentOffset: widget.cashTotal.truncate().toString().length - 1);
-      } catch (e) {
-        print("i am in catch");
-      }
+    if (widget.cashTotal > 0) {
+      paymentCashController.text = "${widget.cashTotal.truncate()}";
+      paymentAmountController.text = "${widget.orderTotal.toStringAsFixed(2)}";
+      if (widget.orderTotal != null)
+        try {
+          paymentCashController.selection = TextSelection(
+              baseOffset: 0,
+              extentOffset: widget.cashTotal.truncate().toString().length - 1);
+        } catch (e) {
+          print("i am in catch");
+        }
 
-    paymentDeptController.text = "${widget.returnTotal.truncate()}";
-    discountController.text =
-        (widget.cashTotal.truncate() - widget.cashTotal).toStringAsFixed(2);
+      paymentDeptController.text = "${widget.returnTotal.truncate()}";
+      discountController.text =
+          (widget.cashTotal - widget.cashTotal.truncate()).toStringAsFixed(2);
+    } else {
+      paymentCashController.text = "00.0";
+      paymentAmountController.text = "00.0";
+      paymentDeptController.text = "00.0";
+      discountController.text = "00.0";
+    }
   }
 
   TextEditingController noteController = TextEditingController();

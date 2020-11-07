@@ -46,8 +46,6 @@ class _OrderScreenState extends State<OrderScreen> {
   List<int> prices = <int>[];
   Widget childForDragging(
       SingleItem item, OrderListProvider orsderListProvider) {
-    // final File f = await DefaultCacheManager()
-    //     .getSingleFile("http://dev.agentsmanage.com/image/${item.image}");
     return Card(
       shape: RoundedRectangleBorder(
           side: const BorderSide(width: 1, color: Colors.green),
@@ -584,24 +582,27 @@ class _OrderScreenState extends State<OrderScreen> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                Container(
-                  child: RaisedButton(
-                 padding: const EdgeInsets.symmetric(horizontal: 12,vertical: 6),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12.0),
+                if (isORderOrReturn)
+                  Container(
+                    child: RaisedButton(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 12, vertical: 6),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12.0),
+                      ),
+                      color: colors.purple,
+                      onPressed: () {
+                        showDiscountDialog(value.sumTotal);
+                      },
+                      child: Text(trans(context, "discount"),
+                          style: styles.mywhitestyle),
                     ),
-                    color: colors.purple,
-                    onPressed: () {
-                      showDiscountDialog(value.sumTotal);
-                    },
-                    child: Text(trans(context, "discount"),
-                        style: styles.mywhitestyle),
                   ),
-                ),
                 SizedBox(width: SizeConfig.blockSizeHorizontal),
                 Container(
                   child: RaisedButton(
-                    padding: const EdgeInsets.symmetric(horizontal: 12,vertical: 6),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12.0),
                     ),
@@ -619,7 +620,6 @@ class _OrderScreenState extends State<OrderScreen> {
                                 ),
                                 flareFit: BoxFit.cover,
                                 entryAnimation: EntryAnimation.TOP,
-                                //here
                                 onOkButtonPressed: () async {
                                   Navigator.pop(context);
                                   value.changeLoadingStare(true);
@@ -640,14 +640,14 @@ class _OrderScreenState extends State<OrderScreen> {
                 ),
                 SizedBox(width: SizeConfig.blockSizeHorizontal),
                 Container(
-                    padding: EdgeInsets.zero,
+                  padding: EdgeInsets.zero,
                   child: RaisedButton(
-             padding: const EdgeInsets.symmetric(horizontal: 12,vertical: 6),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12.0),
                     ),
                     color: colors.blue,
-                    //here
                     onPressed: () async {
                       showDialog<dynamic>(
                         context: context,
@@ -676,7 +676,6 @@ class _OrderScreenState extends State<OrderScreen> {
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(18.0),
                                     ),
-                                    //here
                                     onPressed: () async {
                                       Navigator.pop(context);
                                       value.changeLoadingStare(true);
@@ -716,7 +715,6 @@ class _OrderScreenState extends State<OrderScreen> {
                                         borderRadius:
                                             BorderRadius.circular(18.0),
                                       ),
-                                      //here
                                       onPressed: () async {
                                         Navigator.pop(context);
                                         value.changeLoadingStare(true);
@@ -764,7 +762,8 @@ class _OrderScreenState extends State<OrderScreen> {
                 SizedBox(width: SizeConfig.blockSizeHorizontal),
                 Container(
                   child: RaisedButton(
-                    padding: const EdgeInsets.symmetric(horizontal: 12,vertical: 6),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12.0),
                     ),
@@ -807,7 +806,6 @@ class _OrderScreenState extends State<OrderScreen> {
     );
   }
 
-//here
   Future<bool> sendTransFunction(bool agentOrBen, String status) async {
     if (agentOrBen) {
       bool res;
@@ -931,7 +929,7 @@ class _OrderScreenState extends State<OrderScreen> {
   }
 
   TextEditingController quantityController = TextEditingController();
-  //here
+
   Future<dynamic> showQuantityDialog(int itemId) async {
     await showDialog<String>(
       context: context,
@@ -971,7 +969,7 @@ class _OrderScreenState extends State<OrderScreen> {
   }
 
   TextEditingController discountController = TextEditingController();
-//here
+
   Future<dynamic> showDiscountDialog(double total) async {
     await showDialog<String>(
       context: context,
@@ -983,7 +981,8 @@ class _OrderScreenState extends State<OrderScreen> {
               child: TextField(
                 autofocus: true,
                 controller: discountController,
-                keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                keyboardType:
+                    const TextInputType.numberWithOptions(decimal: true),
               ),
             )
           ],
@@ -1007,7 +1006,6 @@ class _OrderScreenState extends State<OrderScreen> {
   }
 
   TextEditingController priceController = TextEditingController();
-//here
   Future<dynamic> showPriceDialog(int itemId) async {
     await showDialog<String>(
       context: context,
@@ -1019,7 +1017,8 @@ class _OrderScreenState extends State<OrderScreen> {
               child: TextField(
                 autofocus: true,
                 controller: priceController,
-                keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                keyboardType:
+                    const TextInputType.numberWithOptions(decimal: true),
               ),
             )
           ],
