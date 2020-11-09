@@ -54,7 +54,7 @@ class Styles {
   TextStyle seeMOre = TextStyle(
     fontWeight: FontWeight.w100,
     color: Colors.white,
-    fontSize: SizeConfig.blockSizeHorizontal * 2,
+    fontSize: SizeConfig.blockSizeHorizontal * 1.7,
   );
   TextStyle underHeadblack = const TextStyle(
       fontWeight: FontWeight.w100,
