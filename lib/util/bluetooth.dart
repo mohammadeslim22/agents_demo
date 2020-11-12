@@ -144,11 +144,9 @@ class _MyAppState extends State<Bluetooth> {
                 child: RaisedButton(
                   color: colors.blue,
                   onPressed: () async {
-                  
-                      printTodayTransactions(
-                          getIt<TransactionProvider>().ordersToPrint,
-                          getIt<TransactionProvider>().returnsToPrint);
-            
+                    printTodayTransactions(
+                        getIt<TransactionProvider>().ordersToPrint,
+                        getIt<TransactionProvider>().returnsToPrint);
                   },
                   child: Text(trans(context, 'print_today_invoices'),
                       style: TextStyle(color: colors.white)),
@@ -245,9 +243,7 @@ class _MyAppState extends State<Bluetooth> {
         getIt<Auth>().bluetooth.printImage("asstes/images/logo_trans.svg");
         getIt<Auth>().bluetooth.printCustom("AL SAHARI BAKERY", 1, 1);
 
-        getIt<Auth>()
-            .bluetooth
-            .printCustom(config.address, 1, 1);
+        getIt<Auth>().bluetooth.printCustom(config.address, 1, 1);
         getIt<Auth>()
             .bluetooth
             .printCustom("Tel:072226355 ,Mob: 0544117087", 1, 1);
@@ -258,7 +254,6 @@ class _MyAppState extends State<Bluetooth> {
             "TAX INVOICE  ${transaction.agent.substring(0, 2)}  / #${transaction.id}",
             "",
             0);
-        // getIt<Auth>().bluetooth.printCustom("Invoice Type\nCredit", 1, 2);
         getIt<Auth>().bluetooth.printNewLine();
         getIt<Auth>().bluetooth.printNewLine();
         getIt<Auth>()
@@ -276,7 +271,7 @@ class _MyAppState extends State<Bluetooth> {
             .printCustom("Place : ${transaction.address}", 1, 0);
         getIt<Auth>().bluetooth.printNewLine();
 
-         getIt<Auth>()
+        getIt<Auth>()
             .bluetooth
             .printCustom("SLNO  PRODUCT NAME          OYT  RATE  TOTAL", 1, 0);
         for (int i = 0; i < transaction.details.length; i++) {
@@ -285,12 +280,14 @@ class _MyAppState extends State<Bluetooth> {
             itemName = itemName + " ";
           }
           getIt<Auth>().bluetooth.printCustom(
-              "${i+1}  $itemName    ${transaction.details[i].quantity}    ${transaction.details[i].itemPrice}   ${transaction.details[i].total.toStringAsFixed(2)}",
+              "${i + 1}  $itemName    ${transaction.details[i].quantity}    ${transaction.details[i].itemPrice}   ${transaction.details[i].total.toStringAsFixed(2)}",
               1,
               0);
-            
+          getIt<Auth>()
+              .bluetooth
+              .printCustom("    ${transaction.details[i].barcode}", 1, 0);
         }
-        final double taxMony =  transaction.amount/(1+config.tax / 100 );
+        final double taxMony = transaction.amount / (1 + config.tax / 100);
         final double totalBeforTax =
             transaction.amount - config.tax / 100 * transaction.amount;
 
@@ -303,9 +300,8 @@ class _MyAppState extends State<Bluetooth> {
             .bluetooth
             .printCustom("VAT AMOUNT ${taxMony.toStringAsFixed(2)}", 1, 2);
         getIt<Auth>().bluetooth.printNewLine();
-        getIt<Auth>()
-            .bluetooth
-            .printCustom("NET TOTAL  ${transaction.amount.toStringAsFixed(2)}", 1, 2);
+        getIt<Auth>().bluetooth.printCustom(
+            "NET TOTAL  ${transaction.amount.toStringAsFixed(2)}", 1, 2);
         getIt<Auth>().bluetooth.printNewLine();
         getIt<Auth>().bluetooth.printNewLine();
         getIt<Auth>().bluetooth.printNewLine();
@@ -358,9 +354,7 @@ class _MyAppState extends State<Bluetooth> {
       if (isConnected) {
         getIt<Auth>().bluetooth.printCustom("DEMO STORE", 1, 1);
 
-        getIt<Auth>()
-            .bluetooth
-            .printCustom("DEMO STORE ADDRESS", 1, 1);
+        getIt<Auth>().bluetooth.printCustom("DEMO STORE ADDRESS", 1, 1);
         getIt<Auth>()
             .bluetooth
             .printCustom("Tel: 2865899 ,Mob: 05993337775", 1, 1);
@@ -393,8 +387,6 @@ class _MyAppState extends State<Bluetooth> {
             .bluetooth
             .printCustom("SLNO  PRODUCT NAME          OYT  RATE  TOTAL", 1, 0);
 
-        // getIt<Auth>().bluetooth.printCustom("OYT  RATE  TOTAL", 1, 2);
-
         orderTransactions.forEach((Transaction element) {
           taxMony += element.tax;
 
@@ -404,16 +396,12 @@ class _MyAppState extends State<Bluetooth> {
               itemName = itemName + " ";
             }
             getIt<Auth>().bluetooth.printCustom(
-                "${i+1}  $itemName  ${element.details[i].quantity}    ${element.details[i].itemPrice}   ${element.details[i].total.toStringAsFixed(2)}",
+                "${i + 1}  $itemName  ${element.details[i].quantity}    ${element.details[i].itemPrice}   ${element.details[i].total.toStringAsFixed(2)}",
                 1,
                 0);
-
-            // getIt<Auth>().bluetooth.printCustom(
-            //     "${element.details[i].quantity}   ${element.details[i].itemPrice}   ${element.details[i].total}",
-            //     1,
-            //     2);
-            // getIt<Auth>()
-            // .bluetooth.printLeftRight(string1, string2, size)
+            getIt<Auth>()
+                .bluetooth
+                .printCustom("    ${transaction.details[i].barcode}", 1, 0);
           }
           orderAmount += element.amount;
           getIt<Auth>().bluetooth.printNewLine();
@@ -422,20 +410,19 @@ class _MyAppState extends State<Bluetooth> {
         getIt<Auth>().bluetooth.printCustom("RETURN", 1, 1);
         getIt<Auth>().bluetooth.printNewLine();
         returnTransactions.forEach((Transaction element) {
-           taxMony += element.tax;
+          taxMony += element.tax;
           for (int i = 0; i < element.details.length; i++) {
             String itemName = element.details[i].item;
             for (int u = itemName.length; u < 24; u++) {
               itemName = itemName + " ";
             }
             getIt<Auth>().bluetooth.printCustom(
-                "${i+1}  $itemName  ${element.details[i].quantity}    ${element.details[i].itemPrice}   ${element.details[i].total.toStringAsFixed(2)}",
+                "${i + 1}  $itemName  ${element.details[i].quantity}    ${element.details[i].itemPrice}   ${element.details[i].total.toStringAsFixed(2)}",
                 1,
                 0);
-            // getIt<Auth>().bluetooth.printCustom(
-            //     "${element.details[i].quantity}   ${element.details[i].itemPrice}   ${element.details[i].total}",
-            //     1,
-            //     2);
+            getIt<Auth>()
+                .bluetooth
+                .printCustom("    ${transaction.details[i].barcode}", 1, 0);
           }
           returnAmount += element.amount;
           getIt<Auth>().bluetooth.printNewLine();

@@ -118,7 +118,8 @@ class MiniItems {
       this.itemPrice,
       this.quantity,
       this.total,
-      this.notes});
+      this.notes,
+      this.barcode});
 
   MiniItems.fromJson(dynamic json) {
     id = json['id'] as int;
@@ -129,6 +130,7 @@ class MiniItems {
     quantity = json['quantity'] as int;
     total = double.parse(json['total'].toString());
     notes = json['notes'].toString();
+    barcode = json['barcode'].toString();
   }
 
   Map<String, dynamic> toJson() {
@@ -151,4 +153,5 @@ class MiniItems {
   int quantity;
   double total;
   String notes;
+  String barcode;
 }
