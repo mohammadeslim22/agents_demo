@@ -273,14 +273,14 @@ class _LoginScreenState extends State<LoginScreen>
           await InternetAddress.lookup('google.com');
       if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
       } else {
-        showAWAITINGSENDOrderTruck();
+        showInternetError();
         setState(() {
           _isButtonEnabled = true;
         });
         bolc.togelf(false);
       }
     } on SocketException catch (_) {
-      showAWAITINGSENDOrderTruck();
+      showInternetError();
       setState(() {
         _isButtonEnabled = true;
       });
@@ -288,7 +288,7 @@ class _LoginScreenState extends State<LoginScreen>
     }
   }
 
-  void showAWAITINGSENDOrderTruck() {
+  void showInternetError() {
     showGeneralDialog<dynamic>(
         barrierLabel: "Label",
         barrierDismissible: true,

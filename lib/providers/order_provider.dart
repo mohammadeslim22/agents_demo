@@ -249,7 +249,6 @@ class OrderListProvider with ChangeNotifier {
     sumTotal = transaction.amount.toDouble();
     totalAfterDiscount = sumTotal * (1 + config.tax / 100) - discount;
     transaction.details.forEach((MiniItems element) {
-      print("mini element item ${element.item}");
       selectedOptions.add(element.itemId);
       ordersList.add(SingleItemForSend(
           id: element.itemId,
@@ -315,7 +314,7 @@ class OrderListProvider with ChangeNotifier {
       itemsUnit.add(ordersList[i].unitId);
       itemsNote.add(ordersList[i].notes);
     }
-
+    print("from transactpm $fromTransactionId");
     final Response<dynamic> response = await dio.post<dynamic>(
       "btransactions",
       data: <String, dynamic>{
@@ -341,7 +340,6 @@ class OrderListProvider with ChangeNotifier {
         print('progress receive: $count');
       },
     );
-    print("respons ::::::::: $response");
 
     if (response.statusCode == 200) {
       clearOrcerList();

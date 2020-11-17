@@ -46,8 +46,6 @@ class _OrderScreenState extends State<OrderScreen> {
   List<int> prices = <int>[];
   Widget childForDragging(
       SingleItem item, OrderListProvider orsderListProvider) {
-    // final File f = await DefaultCacheManager()
-    //     .getSingleFile("http://dev.agentsmanage.com/image/${item.image}");
     return Card(
       shape: RoundedRectangleBorder(
           side: const BorderSide(width: 1, color: Colors.green),
@@ -109,11 +107,9 @@ class _OrderScreenState extends State<OrderScreen> {
             ),
             const SizedBox(height: 2),
             Expanded(
-              child: Text(
-                item.name,
-                style: styles.smallItembluestyle,
-                textAlign: TextAlign.center,
-              ),
+              child: Text(item.name,
+                  style: styles.smallItembluestyle,
+                  textAlign: TextAlign.center),
             ),
             Text(item.agentPrice, style: styles.mystyle),
           ],
@@ -298,13 +294,10 @@ class _OrderScreenState extends State<OrderScreen> {
                                   child: Text(trans(context, "u_price"),
                                       style: styles.mystyle)),
                               Expanded(
-                                flex: 1,
-                                child: Text(
-                                  trans(context, "t_price"),
-                                  style: styles.mystyle,
-                                  textAlign: TextAlign.end,
-                                ),
-                              )
+                                  flex: 1,
+                                  child: Text(trans(context, "t_price"),
+                                      style: styles.mystyle,
+                                      textAlign: TextAlign.end))
                             ],
                           ),
                         ),
@@ -377,16 +370,6 @@ class _OrderScreenState extends State<OrderScreen> {
         data: item,
         feedback: Column(
           children: <Widget>[
-            // CachedNetworkImage(
-            //   fit: BoxFit.cover,
-            //   imageUrl: /* config.imageUrl + */ "http://dev.agentsmanage.com/image/${item.image}",
-            //   placeholder: (BuildContext context, String url) =>
-            //       const CircularProgressIndicator(),
-            //   errorWidget: (BuildContext context, String url, dynamic error) =>
-            //       const Icon(Icons.error),
-            //   width: 60,
-            //   height: 40,
-            // ),
             Material(
                 color: Colors.transparent,
                 textStyle: styles.smallItembluestyle,
@@ -423,7 +406,6 @@ class _OrderScreenState extends State<OrderScreen> {
                         decoration: const BoxDecoration(
                             borderRadius:
                                 BorderRadius.all(Radius.circular(120))),
-
                         child: FutureBuilder<FileInfo>(
                           future: DefaultCacheManager().getFileFromCache(
                               "${config.imageUrl}${item.image}"),
@@ -435,23 +417,10 @@ class _OrderScreenState extends State<OrderScreen> {
                                   width: 60,
                                   child: Image.file(snapshot.data.file));
                             } else {
-                              // We can show the loading view until the data comes back.
                               return const Icon(Icons.error);
                             }
                           },
                         ),
-
-                        //  CachedNetworkImage(
-                        //   fit: BoxFit.cover,
-                        //   imageUrl: /*config.imageUrl +*/ "http://dev.agentsmanage.com/image/${item.image}",
-                        //   placeholder: (BuildContext context, String url) =>
-                        //       const CircularProgressIndicator(),
-                        //   errorWidget: (BuildContext context, String url,
-                        //           dynamic error) =>
-                        //       const Icon(Icons.error),
-                        //   width: 60,
-                        //   height: 40,
-                        // ),
                       ),
                     ],
                   ),
@@ -523,12 +492,10 @@ class _OrderScreenState extends State<OrderScreen> {
                   },
                 )),
                 Expanded(
-                  child: Text(
-                    "${double.parse(item.unitPrice) * item.queantity}",
-                    style: styles.mystyle,
-                    textAlign: TextAlign.end,
-                  ),
-                ),
+                    child: Text(
+                        "${double.parse(item.unitPrice) * item.queantity}",
+                        style: styles.mystyle,
+                        textAlign: TextAlign.end)),
               ],
             ),
           ],
@@ -584,25 +551,27 @@ class _OrderScreenState extends State<OrderScreen> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                if(isORderOrReturn)
-                Container(
-                  child: RaisedButton(
-                 padding: const EdgeInsets.symmetric(horizontal: 12,vertical: 6),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12.0),
+                if (isORderOrReturn)
+                  Container(
+                    child: RaisedButton(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 12, vertical: 6),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12.0),
+                      ),
+                      color: colors.purple,
+                      onPressed: () {
+                        showDiscountDialog(value.sumTotal);
+                      },
+                      child: Text(trans(context, "discount"),
+                          style: styles.mywhitestyle),
                     ),
-                    color: colors.purple,
-                    onPressed: () {
-                      showDiscountDialog(value.sumTotal);
-                    },
-                    child: Text(trans(context, "discount"),
-                        style: styles.mywhitestyle),
                   ),
-                ),
                 SizedBox(width: SizeConfig.blockSizeHorizontal),
                 Container(
                   child: RaisedButton(
-                    padding: const EdgeInsets.symmetric(horizontal: 12,vertical: 6),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12.0),
                     ),
@@ -620,7 +589,6 @@ class _OrderScreenState extends State<OrderScreen> {
                                 ),
                                 flareFit: BoxFit.cover,
                                 entryAnimation: EntryAnimation.TOP,
-                                //here
                                 onOkButtonPressed: () async {
                                   Navigator.pop(context);
                                   value.changeLoadingStare(true);
@@ -641,14 +609,13 @@ class _OrderScreenState extends State<OrderScreen> {
                 ),
                 SizedBox(width: SizeConfig.blockSizeHorizontal),
                 Container(
-                    padding: EdgeInsets.zero,
+                  padding: EdgeInsets.zero,
                   child: RaisedButton(
-             padding: const EdgeInsets.symmetric(horizontal: 12,vertical: 6),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12.0),
-                    ),
+                        borderRadius: BorderRadius.circular(12.0)),
                     color: colors.blue,
-                    //here
                     onPressed: () async {
                       showDialog<dynamic>(
                         context: context,
@@ -677,7 +644,6 @@ class _OrderScreenState extends State<OrderScreen> {
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(18.0),
                                     ),
-                                    //here
                                     onPressed: () async {
                                       Navigator.pop(context);
                                       value.changeLoadingStare(true);
@@ -717,7 +683,6 @@ class _OrderScreenState extends State<OrderScreen> {
                                         borderRadius:
                                             BorderRadius.circular(18.0),
                                       ),
-                                      //here
                                       onPressed: () async {
                                         Navigator.pop(context);
                                         value.changeLoadingStare(true);
@@ -765,7 +730,8 @@ class _OrderScreenState extends State<OrderScreen> {
                 SizedBox(width: SizeConfig.blockSizeHorizontal),
                 Container(
                   child: RaisedButton(
-                    padding: const EdgeInsets.symmetric(horizontal: 12,vertical: 6),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12.0),
                     ),
@@ -808,7 +774,6 @@ class _OrderScreenState extends State<OrderScreen> {
     );
   }
 
-//here
   Future<bool> sendTransFunction(bool agentOrBen, String status) async {
     if (agentOrBen) {
       bool res;
@@ -881,11 +846,8 @@ class _OrderScreenState extends State<OrderScreen> {
             children: <Widget>[
               const SizedBox(height: 36),
               Center(
-                child: Text(
-                  trans(context, 'drage_here'),
-                  style: styles.dargHereStyle,
-                  textAlign: TextAlign.center,
-                ),
+                child: Text(trans(context, 'drage_here'),
+                    style: styles.dargHereStyle, textAlign: TextAlign.center),
               ),
             ],
           ),
@@ -932,7 +894,7 @@ class _OrderScreenState extends State<OrderScreen> {
   }
 
   TextEditingController quantityController = TextEditingController();
-  //here
+
   Future<dynamic> showQuantityDialog(int itemId) async {
     await showDialog<String>(
       context: context,
@@ -942,10 +904,9 @@ class _OrderScreenState extends State<OrderScreen> {
           children: <Widget>[
             Expanded(
               child: TextField(
-                autofocus: true,
-                controller: quantityController,
-                keyboardType: TextInputType.number,
-              ),
+                  autofocus: true,
+                  controller: quantityController,
+                  keyboardType: TextInputType.number),
             )
           ],
         ),
@@ -972,7 +933,7 @@ class _OrderScreenState extends State<OrderScreen> {
   }
 
   TextEditingController discountController = TextEditingController();
-//here
+
   Future<dynamic> showDiscountDialog(double total) async {
     await showDialog<String>(
       context: context,
@@ -984,7 +945,8 @@ class _OrderScreenState extends State<OrderScreen> {
               child: TextField(
                 autofocus: true,
                 controller: discountController,
-                keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                keyboardType:
+                    const TextInputType.numberWithOptions(decimal: true),
               ),
             )
           ],
@@ -1008,7 +970,7 @@ class _OrderScreenState extends State<OrderScreen> {
   }
 
   TextEditingController priceController = TextEditingController();
-//here
+
   Future<dynamic> showPriceDialog(int itemId) async {
     await showDialog<String>(
       context: context,
@@ -1018,10 +980,10 @@ class _OrderScreenState extends State<OrderScreen> {
           children: <Widget>[
             Expanded(
               child: TextField(
-                autofocus: true,
-                controller: priceController,
-                keyboardType: const TextInputType.numberWithOptions(decimal: true),
-              ),
+                  autofocus: true,
+                  controller: priceController,
+                  keyboardType:
+                      const TextInputType.numberWithOptions(decimal: true)),
             )
           ],
         ),
