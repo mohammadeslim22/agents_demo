@@ -26,6 +26,7 @@ class TransactionProvider with ChangeNotifier {
 
   int orderTransColorIndecator = 0;
   int returnTransColorIndecator = 0;
+  int collectionTransColorIndecator = 0;
   List<Transaction> ordersToPrint;
   List<Transaction> returnsToPrint;
 
@@ -38,7 +39,10 @@ class TransactionProvider with ChangeNotifier {
     returnTransColorIndecator++;
     notifyListeners();
   }
-
+  void incrementCollection() {
+    collectionTransColorIndecator++;
+    notifyListeners();
+  }
   Future<void> deleteDradftTrans(int id) async {
     final Response<dynamic> response = await dio.post<dynamic>(
         "transaction/draft/delete",

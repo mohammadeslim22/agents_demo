@@ -107,11 +107,9 @@ class _OrderScreenState extends State<OrderScreen> {
             ),
             const SizedBox(height: 2),
             Expanded(
-              child: Text(
-                item.name,
-                style: styles.smallItembluestyle,
-                textAlign: TextAlign.center,
-              ),
+              child: Text(item.name,
+                  style: styles.smallItembluestyle,
+                  textAlign: TextAlign.center),
             ),
             Text(item.agentPrice, style: styles.mystyle),
           ],
@@ -296,13 +294,10 @@ class _OrderScreenState extends State<OrderScreen> {
                                   child: Text(trans(context, "u_price"),
                                       style: styles.mystyle)),
                               Expanded(
-                                flex: 1,
-                                child: Text(
-                                  trans(context, "t_price"),
-                                  style: styles.mystyle,
-                                  textAlign: TextAlign.end,
-                                ),
-                              )
+                                  flex: 1,
+                                  child: Text(trans(context, "t_price"),
+                                      style: styles.mystyle,
+                                      textAlign: TextAlign.end))
                             ],
                           ),
                         ),
@@ -375,16 +370,6 @@ class _OrderScreenState extends State<OrderScreen> {
         data: item,
         feedback: Column(
           children: <Widget>[
-            // CachedNetworkImage(
-            //   fit: BoxFit.cover,
-            //   imageUrl: /* config.imageUrl + */ "http://dev.agentsmanage.com/image/${item.image}",
-            //   placeholder: (BuildContext context, String url) =>
-            //       const CircularProgressIndicator(),
-            //   errorWidget: (BuildContext context, String url, dynamic error) =>
-            //       const Icon(Icons.error),
-            //   width: 60,
-            //   height: 40,
-            // ),
             Material(
                 color: Colors.transparent,
                 textStyle: styles.smallItembluestyle,
@@ -421,7 +406,6 @@ class _OrderScreenState extends State<OrderScreen> {
                         decoration: const BoxDecoration(
                             borderRadius:
                                 BorderRadius.all(Radius.circular(120))),
-
                         child: FutureBuilder<FileInfo>(
                           future: DefaultCacheManager().getFileFromCache(
                               "${config.imageUrl}${item.image}"),
@@ -433,23 +417,10 @@ class _OrderScreenState extends State<OrderScreen> {
                                   width: 60,
                                   child: Image.file(snapshot.data.file));
                             } else {
-                              // We can show the loading view until the data comes back.
                               return const Icon(Icons.error);
                             }
                           },
                         ),
-
-                        //  CachedNetworkImage(
-                        //   fit: BoxFit.cover,
-                        //   imageUrl: /*config.imageUrl +*/ "http://dev.agentsmanage.com/image/${item.image}",
-                        //   placeholder: (BuildContext context, String url) =>
-                        //       const CircularProgressIndicator(),
-                        //   errorWidget: (BuildContext context, String url,
-                        //           dynamic error) =>
-                        //       const Icon(Icons.error),
-                        //   width: 60,
-                        //   height: 40,
-                        // ),
                       ),
                     ],
                   ),
@@ -521,12 +492,10 @@ class _OrderScreenState extends State<OrderScreen> {
                   },
                 )),
                 Expanded(
-                  child: Text(
-                    "${double.parse(item.unitPrice) * item.queantity}",
-                    style: styles.mystyle,
-                    textAlign: TextAlign.end,
-                  ),
-                ),
+                    child: Text(
+                        "${double.parse(item.unitPrice) * item.queantity}",
+                        style: styles.mystyle,
+                        textAlign: TextAlign.end)),
               ],
             ),
           ],
@@ -645,8 +614,7 @@ class _OrderScreenState extends State<OrderScreen> {
                     padding:
                         const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12.0),
-                    ),
+                        borderRadius: BorderRadius.circular(12.0)),
                     color: colors.blue,
                     onPressed: () async {
                       showDialog<dynamic>(
@@ -878,11 +846,8 @@ class _OrderScreenState extends State<OrderScreen> {
             children: <Widget>[
               const SizedBox(height: 36),
               Center(
-                child: Text(
-                  trans(context, 'drage_here'),
-                  style: styles.dargHereStyle,
-                  textAlign: TextAlign.center,
-                ),
+                child: Text(trans(context, 'drage_here'),
+                    style: styles.dargHereStyle, textAlign: TextAlign.center),
               ),
             ],
           ),
@@ -939,10 +904,9 @@ class _OrderScreenState extends State<OrderScreen> {
           children: <Widget>[
             Expanded(
               child: TextField(
-                autofocus: true,
-                controller: quantityController,
-                keyboardType: TextInputType.number,
-              ),
+                  autofocus: true,
+                  controller: quantityController,
+                  keyboardType: TextInputType.number),
             )
           ],
         ),
@@ -1015,11 +979,11 @@ class _OrderScreenState extends State<OrderScreen> {
           children: <Widget>[
             Expanded(
               child: TextField(
-                autofocus: true,
-                controller: priceController,
-                keyboardType:
-                    const TextInputType.numberWithOptions(decimal: true),
-              ),
+                  autofocus: true,
+                  controller: priceController,
+                  keyboardType:
+                      const TextInputType.numberWithOptions(decimal: true)),
+
             )
           ],
         ),

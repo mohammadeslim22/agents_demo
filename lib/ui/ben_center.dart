@@ -343,8 +343,8 @@ class _BeneficiaryCenterState extends State<BeneficiaryCenter> {
                                 indexedStack = 0;
                               });
                             },
-                            child:
-                                SvgPicture.asset("assets/images/invoice.svg")),
+                            child: SvgPicture.asset(
+                                "assets/images/order_icon.svg")),
                       ),
                       Container(
                         width: SizeConfig.blockSizeHorizontal * 5,
@@ -502,6 +502,7 @@ class _BeneficiaryCenterState extends State<BeneficiaryCenter> {
                             padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
                             itemBuilder: (BuildContext context, dynamic entry,
                                 int index) {
+                              getIt<TransactionProvider>().incrementReturns();
                               return AnimatedCard(
                                 direction: AnimatedCardDirection.left,
                                 initDelay: const Duration(milliseconds: 0),
@@ -524,6 +525,8 @@ class _BeneficiaryCenterState extends State<BeneficiaryCenter> {
                             padding: const EdgeInsets.fromLTRB(0, 0, 0, 16),
                             itemBuilder: (BuildContext context, dynamic entry,
                                 int index) {
+                              getIt<TransactionProvider>()
+                                  .incrementCollection();
                               return AnimatedCard(
                                 direction: AnimatedCardDirection.left,
                                 initDelay: const Duration(milliseconds: 0),
@@ -691,7 +694,7 @@ class _BeneficiaryCenterState extends State<BeneficiaryCenter> {
                     arguments: <String, dynamic>{
                       "ben": ben,
                       "isORderOrReturn": entry.type == "order",
-                      "transId": entry.type == "return" ? entry.id : null
+                      "transId": int.parse(entry.fromTranId)
                     });
               },
             ),
@@ -704,7 +707,7 @@ class _BeneficiaryCenterState extends State<BeneficiaryCenter> {
                 getIt<TransactionProvider>().deleteDradftTrans(entry.id);
               },
             )
-          else
+          else if (entry.type == 'order')
             IconSlideAction(
               caption: 'Return',
               color: colors.red,
@@ -716,15 +719,19 @@ class _BeneficiaryCenterState extends State<BeneficiaryCenter> {
                     arguments: <String, dynamic>{
                       "ben": ben,
                       "isORderOrReturn": entry.type == "return",
-                      "transId": entry.type == "return" ? entry.id : null
+                      "transId": entry.id
                     });
               },
             ),
         ],
         child: Container(
-          color: getIt<TransactionProvider>().orderTransColorIndecator % 2 == 0
-              ? Colors.blue[100]
-              : Colors.white,
+          color: entry.type == "order"
+              ? getIt<TransactionProvider>().orderTransColorIndecator % 2 == 0
+                  ? Colors.blue[100]
+                  : Colors.white
+              : getIt<TransactionProvider>().returnTransColorIndecator % 2 == 0
+                  ? Colors.blue[100]
+                  : Colors.white,
           padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
           child: InkWell(
             onTap: () {
@@ -784,7 +791,7 @@ class _BeneficiaryCenterState extends State<BeneficiaryCenter> {
         ],
         child: FlatButton(
           padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-          color: collection.id % 2 == 0 ? Colors.blue[100] : Colors.transparent,
+          color: getIt<TransactionProvider>().collectionTransColorIndecator % 2 == 0 ? Colors.blue[100] : Colors.transparent,
           onPressed: () {},
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -795,7 +802,8 @@ class _BeneficiaryCenterState extends State<BeneficiaryCenter> {
                       style: styles.mystyle, textAlign: TextAlign.start)),
               Expanded(
                   flex: 2,
-                  child: Text(collection.agent.name ?? "اسم المندوب هنا",
+                  child: Text(
+                      collection.agent.name ?? trans(context, 'agent_name'),
                       style: styles.mystyle)),
               Expanded(
                   flex: 2, child: Text(collection.date, style: styles.mystyle)),

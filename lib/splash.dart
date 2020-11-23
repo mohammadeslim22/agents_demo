@@ -106,7 +106,8 @@ class Splash extends StatelessWidget {
     return Container(
         padding: EdgeInsets.zero,
         child: const VerticalDivider(
-          color: Colors.grey,
+          
+           color: Colors.grey,
           thickness: 2,
         ),
         height: SizeConfig.screenHeight * .155);
