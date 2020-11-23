@@ -95,7 +95,7 @@ class Auth with ChangeNotifier {
             Navigator.popAndPushNamed(context, '/Home',
                 arguments: <String, dynamic>{});
           } else {
-            showAmmountUnderZero(
+            shownoTabletAllowed(
                 context, value.data['agent']['puse_reason'].toString());
           }
         } else {
@@ -114,7 +114,7 @@ class Auth with ChangeNotifier {
     });
   }
 
-  void showAmmountUnderZero(BuildContext context, String suspentionReason) {
+  void shownoTabletAllowed(BuildContext context, String suspentionReason) {
     showGeneralDialog<dynamic>(
         barrierLabel: "Label",
         barrierDismissible: true,
