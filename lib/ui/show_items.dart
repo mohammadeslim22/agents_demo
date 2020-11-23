@@ -67,12 +67,6 @@ class _OrderScreenState extends State<ShowItems> {
         backgroundColor: colors.blue,
         title: Text(trans(context, "items")),
         centerTitle: true,
-        // leading: IconButton(
-        //   icon: const Icon(Icons.arrow_back),
-        //   onPressed: () {
-        //     Navigator.pop(context);
-        //   },
-        // ),
         actions: <Widget>[
           IconButton(
             icon: const Icon(Icons.refresh, size: 32),

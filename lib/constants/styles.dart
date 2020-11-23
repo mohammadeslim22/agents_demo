@@ -122,8 +122,8 @@ class Styles {
       fontSize: 18,
       height: 1.7);
   TextStyle darkbluestyle = const TextStyle(
-      fontWeight: FontWeight.w100,
-      color: Color(0xFF00158F),
+      fontWeight: FontWeight.w400,
+      color: Color(0xFF000000),
       fontSize: 18,
       height: 1.7);
   TextStyle darkgreenstyle = const TextStyle(

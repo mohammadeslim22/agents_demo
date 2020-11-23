@@ -55,7 +55,7 @@ class _LoginScreenState extends State<LoginScreen>
   }
 
   bool _obscureText = false;
-  final TextEditingController usernameController = TextEditingController(text: kReleaseMode ? '' : 'ramis');
+  final TextEditingController usernameController = TextEditingController(text: kReleaseMode ? '' : 'ahmed');
   final TextEditingController passwordController = TextEditingController(text: kReleaseMode ? '' : '123456');
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final FocusNode focus1 = FocusNode();
