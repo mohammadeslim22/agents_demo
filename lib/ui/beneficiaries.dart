@@ -174,7 +174,7 @@ class _BeneficiariesState extends State<Beneficiaries> {
                                           });
                                     },
                                     child: SvgPicture.asset(
-                                        "assets/images/invoice.svg",
+                                        "assets/images/orderButton.svg",
                                         height:
                                             SizeConfig.blockSizeHorizontal * 5),
                                   ),

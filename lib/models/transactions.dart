@@ -39,7 +39,8 @@ class Transaction {
       this.longitude,
       this.createdAt,
       this.tax,
-      this.details});
+      this.details,
+      this.fromTranId});
 
   Transaction.fromJson(dynamic json) {
     id = json['id'] as int;
@@ -66,6 +67,7 @@ class Transaction {
       });
     }
     if (json['taxed'] != null) tax = double.parse(json['taxed'].toString());
+    fromTranId = json['from_transaction_id'].toString();
   }
 
   dynamic toJson() {
@@ -107,6 +109,7 @@ class Transaction {
   String createdAt;
   double tax;
   List<MiniItems> details;
+  String fromTranId;
 }
 
 class MiniItems {
