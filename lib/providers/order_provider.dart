@@ -347,17 +347,6 @@ class OrderListProvider with ChangeNotifier {
 
       // لتحديث رصيد الصنف فقط
       getItemsBalances();
-      // addIdTOTransactionToPayIdsList(
-      //     int.parse(response.data['transaction_id'].toString()));
-
-      // howManyscreensToPop++;
-      // Navigator.of(c).pushNamedAndRemoveUntil("/Beneficiary_Center",
-      //     (Route<dynamic> route) {
-      //   return howManyscreensToPop-- == 0;
-      // }, arguments: <String, dynamic>{
-      //   "ben": getIt<GlobalVars>().getbenInFocus()
-      // });
-      //     howManyscreensToPop = 2;
       if (type == "order") {
         getIt<GlobalVars>().setOrderTotalsAfterPay((ammoutn).toString(), benId);
       } else {
@@ -375,12 +364,9 @@ class OrderListProvider with ChangeNotifier {
       notifyListeners();
       return true;
     } else if (response.statusCode == 422) {
-      // Fluttertoast.showToast(
-      //     msg: trans(c, "some_items_quantities are more than_u_have"));
-
+   
       notifyListeners();
       return false;
-// Find the Scaffold in the widget tree and use it to show a SnackBar.
 
     } else {
       notifyListeners();
@@ -424,7 +410,6 @@ class OrderListProvider with ChangeNotifier {
     } else if (response.statusCode == 422) {
       notifyListeners();
       return false;
-// Find the Scaffold in the widget tree and use it to show a SnackBar.
 
     } else {
       return false;
@@ -544,6 +529,7 @@ class OrderListProvider with ChangeNotifier {
       if (int.parse(itemsCurrentLastUpdateDate) < int.parse(itemsLastDate)) {
         await data.setData("items_updated_at", itemsLastDate);
         res = true;
+        config.dontloadItems = true;
       } else {
         res = false;
       }

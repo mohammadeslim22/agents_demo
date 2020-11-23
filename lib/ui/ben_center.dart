@@ -229,7 +229,7 @@ class _BeneficiaryCenterState extends State<BeneficiaryCenter> {
                               Icon(Icons.email, color: colors.blue, size: 20),
                               const SizedBox(width: 8),
                               Text(
-                                ben.email,
+                                ben.email.trim()!="null"?ben.email:"--",
                                 style: styles.underHeadgray,
                               )
                             ],

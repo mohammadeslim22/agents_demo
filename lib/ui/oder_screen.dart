@@ -970,7 +970,6 @@ class _OrderScreenState extends State<OrderScreen> {
   }
 
   TextEditingController priceController = TextEditingController();
-
   Future<dynamic> showPriceDialog(int itemId) async {
     await showDialog<String>(
       context: context,
@@ -984,6 +983,7 @@ class _OrderScreenState extends State<OrderScreen> {
                   controller: priceController,
                   keyboardType:
                       const TextInputType.numberWithOptions(decimal: true)),
+
             )
           ],
         ),

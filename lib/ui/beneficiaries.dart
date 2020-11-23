@@ -29,7 +29,7 @@ class _BeneficiariesState extends State<Beneficiaries> {
     final GlobalVars globalVarsProv =
         Provider.of<GlobalVars>(context, listen: false);
     beneficiaries = globalVarsProv.beneficiaries;
-    getIt<OrderListProvider>().getItemsBalances();
+    
   }
 
   @override
@@ -98,7 +98,7 @@ class _BeneficiariesState extends State<Beneficiaries> {
                   child: Column(
                     children: <Widget>[
                       Expanded(
-                                              child: Row(
+                        child: Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
                             Column(
@@ -132,12 +132,6 @@ class _BeneficiariesState extends State<Beneficiaries> {
                                           style: styles.underHeadgray),
                                     ],
                                   ),
-                                  // Row(
-                                  //   children: <Widget>[
-                                  //     Text(item.phone,
-                                  //         style: styles.underHeadgray),
-                                  //   ],
-                                  // )
                                 ],
                               ),
                             ),
@@ -153,7 +147,6 @@ class _BeneficiariesState extends State<Beneficiaries> {
                         ),
                       ),
                       const Divider(),
-                   //   const Spacer(),
                       if (selectedOptions.contains(item.id))
                         Expanded(
                           child: Container(

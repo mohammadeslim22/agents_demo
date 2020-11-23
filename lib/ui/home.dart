@@ -3,6 +3,7 @@ import 'dart:typed_data';
 import 'dart:ui';
 import 'package:agent_second/constants/colors.dart';
 import 'package:agent_second/constants/config.dart';
+import 'package:agent_second/providers/export.dart';
 import 'package:agent_second/providers/global_variables.dart';
 import 'package:agent_second/util/service_locator.dart';
 import 'package:agent_second/util/size_config.dart';
@@ -28,20 +29,18 @@ class Home extends StatelessWidget {
     if (config.looded) {
       return const DashBoard();
     }
-    {
-      return FutureBuilder<BeneficiariesModel>(
-        future: getIt<GlobalVars>().getBenData(),
-        builder:
-            (BuildContext ctx, AsyncSnapshot<BeneficiariesModel> snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
-            config.looded = true;
-            return const DashBoard();
-          } else {
-            return SplashScreen();
-          }
-        },
-      );
-    }
+
+    return FutureBuilder<BeneficiariesModel>(
+      future: getIt<GlobalVars>().getBenData(),
+      builder: (BuildContext ctx, AsyncSnapshot<BeneficiariesModel> snapshot) {
+        if (snapshot.connectionState == ConnectionState.done) {
+          config.looded = true;
+          return const DashBoard();
+        } else {
+          return SplashScreen();
+        }
+      },
+    );
   }
 }
 
@@ -76,6 +75,7 @@ class _DashBoardState extends State<DashBoard> {
     super.initState();
     lat = config.lat;
     long = config.long;
+    getIt<OrderListProvider>().getItemsBalances();
     location.onLocationChanged.listen((LocationData currentLocation) {
       latTosend = currentLocation.latitude;
       longTosend = currentLocation.longitude;
@@ -162,16 +162,6 @@ class _DashBoardState extends State<DashBoard> {
 
   Future<void> _onMapCreated(GoogleMapController controller) async {
     mapController = controller;
-
-    // serviceEnabled = await location.serviceEnabled();
-    // if (!serviceEnabled) {
-    // } else {
-    //   permissionGranted = await location.hasPermission();
-    //   if (permissionGranted == PermissionStatus.denied) {
-    //   } else {
-    //     _animateToUser();
-    //   }
-    // }
     serviceEnabled = await location.serviceEnabled();
     permissionGranted = await location.hasPermission();
 
@@ -193,28 +183,19 @@ class _DashBoardState extends State<DashBoard> {
             resizeToAvoidBottomInset: false,
             appBar: AppBar(
                 title: Text(config.companyName, style: styles.appBar),
-                //Text(trans(context, "altariq"), style: styles.appBar),
                 centerTitle: true),
-            // drawer: GlobalDrawer(sourceContext: context),
             body: Row(
               children: <Widget>[
                 Expanded(
                   child: Column(
-                    // mainAxisSize: MainAxisSize.min,
-                    // padding: EdgeInsets.zero,
                     children: <Widget>[
                       DrawerHeader(
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
-                            Row(
-                              children: <Widget>[
-                                Text("agentName", style: styles.underHeadwhite),
-                              ],
-                            ),
-                            // CachedNetworkImage(imageUrl: config.logo),
-                            // SvgPicture.asset('assets/images/company_logo.svg',
-                            // width: 80.0, height: 80.0),
+                            Row(children: <Widget>[
+                              Text("agentName", style: styles.underHeadwhite),
+                            ]),
                             ClipRRect(
                                 borderRadius: BorderRadius.circular(100.0),
                                 child: CircleAvatar(
@@ -225,9 +206,7 @@ class _DashBoardState extends State<DashBoard> {
                                 ))
                           ],
                         ),
-                        decoration: const BoxDecoration(
-                          color: Colors.blue,
-                        ),
+                        decoration: const BoxDecoration(color: Colors.blue),
                       ),
                       ListTile(
                         onTap: () {
@@ -308,9 +287,7 @@ class _DashBoardState extends State<DashBoard> {
                                       child: Text(
                                           golbalValues.orderscount ?? "",
                                           style: styles.greenstyle)),
-                                  const SizedBox(
-                                    width: 12,
-                                  ),
+                                  const SizedBox(width: 12),
                                   Container(
                                       padding: const EdgeInsets.symmetric(
                                           horizontal: 8),
@@ -392,18 +369,6 @@ class _DashBoardState extends State<DashBoard> {
                                     )),
                                     child: Text(golbalValues.timeSinceLogin,
                                         style: styles.darkgreenstyle))),
-                            // card(
-                            //     'assets/images/last_trip_time.svg',
-                            //     trans(context, 'time_since_last_trip'),
-                            //     Container(
-                            //         padding: const EdgeInsets.symmetric(
-                            //             horizontal: 8),
-                            //         decoration: BoxDecoration(
-                            //             border: Border.all(
-                            //           color: const Color(0xFF00158F),
-                            //         )),
-                            //         child: Text(golbalValues.timeSinceLastTrans,
-                            //             style: styles.bluestyle))),
                           ],
                         );
                       }),
@@ -531,30 +496,16 @@ class _DashBoardState extends State<DashBoard> {
   }
 }
 
-class SplashScreen extends StatefulWidget {
-  @override
-  _SplashScreenState createState() => _SplashScreenState();
-}
-
-class _SplashScreenState extends State<SplashScreen> {
-  @override
-  void initState() {
-    super.initState();
-  }
-
+class SplashScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: colors.black,
       extendBody: true,
-      body: Stack(
-        children: const <Widget>[
-          FlareActor("assets/images/LiquidDownloaddemo.flr",
-              alignment: Alignment.center,
-              fit: BoxFit.cover,
-              animation: "Demo"),
-        ],
-      ),
+      body: const FlareActor("assets/images/LiquidDownloaddemo.flr",
+          alignment: Alignment.center,
+          fit: BoxFit.cover,
+          animation: "Demo"),
     );
   }
 }
