@@ -29,7 +29,6 @@ class Auth with ChangeNotifier {
       if (value.statusCode == 422) {
         return value.data['errors'];
       }
-
       if (value.statusCode == 200) {
         if (value.data != "fail") {
           if (value.data['agent']['istable'] == 1) {

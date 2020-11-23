@@ -334,7 +334,7 @@ class _BeneficiaryCenterState extends State<BeneficiaryCenter> {
                                     ? colors.green
                                     : colors.trans),
                             color: indexedStack == 0
-                                ? Colors.green[100]
+                                ? Colors.white
                                 : Colors.transparent),
                         child: FlatButton(
                             padding: EdgeInsets.zero,
@@ -344,7 +344,7 @@ class _BeneficiaryCenterState extends State<BeneficiaryCenter> {
                               });
                             },
                             child: SvgPicture.asset(
-                                "assets/images/order_icon.svg")),
+                                "assets/images/invoice.svg")),
                       ),
                       Container(
                         width: SizeConfig.blockSizeHorizontal * 5,
