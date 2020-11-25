@@ -352,9 +352,13 @@ class _MyAppState extends State<Bluetooth> {
     //     "tax money ${taxMony.toStringAsFixed(2)}  total: ${totalfterReturn.toStringAsFixed(2)}");
     getIt<Auth>().bluetooth.isConnected.then((bool isConnected) {
       if (isConnected) {
-        getIt<Auth>().bluetooth.printCustom("DEMO STORE", 1, 1);
+        getIt<Auth>()
+            .bluetooth
+            .printCustom(config.companyName ?? "DEMO STORE", 1, 2);
 
-        getIt<Auth>().bluetooth.printCustom("DEMO STORE ADDRESS", 1, 1);
+        getIt<Auth>()
+            .bluetooth
+            .printCustom(config.address ?? "DEMO ADDRESS", 1, 1);
         getIt<Auth>()
             .bluetooth
             .printCustom("Tel: 2865899 ,Mob: 05993337775", 1, 1);
@@ -427,7 +431,6 @@ class _MyAppState extends State<Bluetooth> {
           returnAmount += element.amount;
           getIt<Auth>().bluetooth.printNewLine();
         });
-        // final double taxMony = (config.tax / 100) * orderAmount;
         final double totalfterReturn = orderAmount - returnAmount;
 
         getIt<Auth>().bluetooth.printNewLine();
