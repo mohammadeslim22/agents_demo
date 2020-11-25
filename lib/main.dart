@@ -15,12 +15,9 @@ import 'constants/config.dart';
 import 'constants/route.dart';
 import 'constants/themes.dart';
 import 'localization/localization_delegate.dart';
-
 import 'util/service_locator.dart';
 import 'package:agent_second/providers/order_provider.dart';
-
-// import 'package:flutter/scheduler.dart';
-
+//responsive
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   setupLocator();
