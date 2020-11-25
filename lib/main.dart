@@ -3,7 +3,6 @@ import 'package:agent_second/providers/counter.dart';
 import 'package:agent_second/providers/language.dart';
 import 'package:agent_second/providers/global_variables.dart';
 import 'package:agent_second/services/navigationService.dart';
-import 'package:agent_second/splash.dart';
 import 'package:agent_second/ui/auth/login_screen.dart';
 import 'package:agent_second/util/data.dart';
 import 'package:agent_second/util/dio.dart';
@@ -11,15 +10,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'constants/config.dart';
 import 'constants/route.dart';
 import 'constants/themes.dart';
 import 'localization/localization_delegate.dart';
-
 import 'util/service_locator.dart';
 import 'package:agent_second/providers/order_provider.dart';
-
-// import 'package:flutter/scheduler.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
