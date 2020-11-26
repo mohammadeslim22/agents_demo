@@ -240,7 +240,7 @@ class _MyAppState extends State<Bluetooth> {
   Future<void> _tesPrint(Transaction transaction) async {
     getIt<Auth>().bluetooth.isConnected.then((bool isConnected) {
       if (isConnected) {
-        getIt<Auth>().bluetooth.printImage("asstes/images/logo_trans.svg");
+        getIt<Auth>().bluetooth.printImage("asstes/images/logo.png");
         getIt<Auth>().bluetooth.printCustom("AL SAHARI BAKERY", 1, 1);
 
         getIt<Auth>().bluetooth.printCustom(config.address, 1, 1);
@@ -352,9 +352,10 @@ class _MyAppState extends State<Bluetooth> {
     //     "tax money ${taxMony.toStringAsFixed(2)}  total: ${totalfterReturn.toStringAsFixed(2)}");
     getIt<Auth>().bluetooth.isConnected.then((bool isConnected) {
       if (isConnected) {
+        getIt<Auth>().bluetooth.printImage("asstes/images/logo.png");
         getIt<Auth>()
             .bluetooth
-            .printCustom(config.companyName ?? "DEMO STORE", 1, 2);
+            .printCustom(config.companyName ?? "DEMO STORE", 2, 1);
 
         getIt<Auth>()
             .bluetooth
