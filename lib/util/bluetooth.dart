@@ -240,8 +240,8 @@ class _MyAppState extends State<Bluetooth> {
   Future<void> _tesPrint(Transaction transaction) async {
     getIt<Auth>().bluetooth.isConnected.then((bool isConnected) {
       if (isConnected) {
-        getIt<Auth>().bluetooth.printImage("asstes/images/logo.png");
-        getIt<Auth>().bluetooth.printCustom("AL SAHARI BAKERY", 1, 1);
+        // getIt<Auth>().bluetooth.printImage("asstes/images/logo.png");
+        getIt<Auth>().bluetooth.printCustom(config.companyName, 1, 1);
 
         getIt<Auth>().bluetooth.printCustom(config.address, 1, 1);
         getIt<Auth>()
@@ -308,6 +308,9 @@ class _MyAppState extends State<Bluetooth> {
         getIt<Auth>().bluetooth.printLeftRight("Salesman:${transaction.agent}",
             "     Car No:${config.verchilId}", 0);
         getIt<Auth>().bluetooth.printLeftRight("SIGNATURE", "", 0);
+        getIt<Auth>()
+            .bluetooth
+            .printLeftRight("mobile No: ${config.mobileNo}", "", 0);
 
         getIt<Auth>().bluetooth.paperCut();
       } else {
@@ -352,7 +355,7 @@ class _MyAppState extends State<Bluetooth> {
     //     "tax money ${taxMony.toStringAsFixed(2)}  total: ${totalfterReturn.toStringAsFixed(2)}");
     getIt<Auth>().bluetooth.isConnected.then((bool isConnected) {
       if (isConnected) {
-        getIt<Auth>().bluetooth.printImage("asstes/images/logo.png");
+        // getIt<Auth>().bluetooth.printImage("asstes/images/logo.png");
         getIt<Auth>()
             .bluetooth
             .printCustom(config.companyName ?? "DEMO STORE", 2, 1);
@@ -455,6 +458,10 @@ class _MyAppState extends State<Bluetooth> {
         getIt<Auth>().bluetooth.printLeftRight("Salesman:${transaction.agent}",
             "    Car No:${config.verchilId}", 0);
         getIt<Auth>().bluetooth.printLeftRight("SIGNATURE", "", 0);
+        getIt<Auth>()
+            .bluetooth
+            .printLeftRight("mobile No: ${config.mobileNo}", "", 0);
+
         getIt<Auth>().bluetooth.paperCut();
       } else {
         print("iam not connected ");

@@ -47,7 +47,7 @@ class Auth with ChangeNotifier {
             data.setData("tax", value.data['tax'].toString());
             data.setData("trn", value.data['trn'].toString());
             config.companyName = value.data['company_name'].toString();
-            config.address = value.data['settings']['company_name'].toString();
+            config.address = value.data['settings']['address'].toString();
             config.mobileNo = value.data['settings']['mobile'].toString();
             config.logo =
                 config.imageUrl + value.data['settings']['logo'].toString();
