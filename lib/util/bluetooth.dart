@@ -12,6 +12,7 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:blue_thermal_printer/blue_thermal_printer.dart';
 import 'package:flutter/services.dart';
+import 'package:path_provider/path_provider.dart';
 
 class Bluetooth extends StatefulWidget {
   const Bluetooth({Key key, this.transaction}) : super(key: key);
@@ -32,7 +33,18 @@ class _MyAppState extends State<Bluetooth> {
   void initState() {
     super.initState();
     initPlatformState();
+    initSavetoPath();
     transaction = widget.transaction;
+  }
+
+  Future<void> initSavetoPath() async {
+    const String filename = 'logo.png';
+    final ByteData bytes = await rootBundle.load("assets/images/logo.png");
+    final String dir = (await getApplicationDocumentsDirectory()).path;
+    writeToFile(bytes, '$dir/$filename');
+    setState(() {
+      pathImage = '$dir/$filename';
+    });
   }
 
   Future<void> initPlatformState() async {
@@ -238,10 +250,12 @@ class _MyAppState extends State<Bluetooth> {
   Future<void> _tesPrint(Transaction transaction) async {
     getIt<Auth>().bluetooth.isConnected.then((bool isConnected) {
       if (isConnected) {
-        getIt<Auth>().bluetooth.printImage("asstes/images/logo.png");
-        getIt<Auth>().bluetooth.printCustom("AL SAHARI BAKERY", 1, 2);
+        // getIt<Auth>().bluetooth.printImage(pathImage);
+        getIt<Auth>().bluetooth.printCustom("AL SAHARI BAKERY", 2, 1);
 
-        getIt<Auth>().bluetooth.printCustom(config.address, 1, 1);
+        getIt<Auth>()
+            .bluetooth
+            .printCustom("RAK -Sheikh Mohammed Bin Salem street", 1, 1);
         getIt<Auth>()
             .bluetooth
             .printCustom("Tel:072226355 ,Mob: 0544117087", 1, 1);
@@ -306,7 +320,7 @@ class _MyAppState extends State<Bluetooth> {
         getIt<Auth>().bluetooth.printLeftRight("Salesman:${transaction.agent}",
             "     Car No:${config.verchilId}", 0);
         getIt<Auth>().bluetooth.printLeftRight("SIGNATURE", "", 0);
-
+        getIt<Auth>().bluetooth.printLeftRight("mobile No: ${config.mobileNo}", "", 0);
         getIt<Auth>().bluetooth.paperCut();
       } else {
         print("iam not connected ");
@@ -350,10 +364,12 @@ class _MyAppState extends State<Bluetooth> {
     //     "tax money ${taxMony.toStringAsFixed(2)}  total: ${totalfterReturn.toStringAsFixed(2)}");
     getIt<Auth>().bluetooth.isConnected.then((bool isConnected) {
       if (isConnected) {
-        getIt<Auth>().bluetooth.printImage("asstes/images/logo.png");
-        getIt<Auth>().bluetooth.printCustom("AL SAHARI BAKERY", 1, 2);
+        // getIt<Auth>().bluetooth.printImage(pathImage);
+        getIt<Auth>().bluetooth.printCustom("AL SAHARI BAKERY", 2, 1);
 
-        getIt<Auth>().bluetooth.printCustom(config.address, 1, 1);
+        getIt<Auth>()
+            .bluetooth
+            .printCustom("RAK -Sheikh Mohammed Bin Salem street", 1, 1);
         getIt<Auth>()
             .bluetooth
             .printCustom("Tel: 072226355 ,Mob: 0544117087", 1, 1);
@@ -450,6 +466,7 @@ class _MyAppState extends State<Bluetooth> {
         getIt<Auth>().bluetooth.printLeftRight("Salesman:${transaction.agent}",
             "    Car No:${config.verchilId}", 0);
         getIt<Auth>().bluetooth.printLeftRight("SIGNATURE", "", 0);
+        getIt<Auth>().bluetooth.printLeftRight("mobile No: ${config.mobileNo}", "", 0);
         getIt<Auth>().bluetooth.paperCut();
       } else {
         print("iam not connected ");
