@@ -252,20 +252,21 @@ class _MyAppState extends State<Bluetooth> {
       if (isConnected) {
         // getIt<Auth>().bluetooth.printImage(pathImage);
         getIt<Auth>().bluetooth.printCustom("AL SAHARI BAKERY", 2, 1);
-
+        getIt<Auth>().bluetooth.printNewLine();
         getIt<Auth>()
             .bluetooth
             .printCustom("RAK -Sheikh Mohammed Bin Salem street", 1, 1);
+        getIt<Auth>().bluetooth.printNewLine();
         getIt<Auth>()
             .bluetooth
             .printCustom("Tel:072226355 ,Mob: 0544117087", 1, 1);
         getIt<Auth>().bluetooth.printNewLine();
         getIt<Auth>().bluetooth.printCustom("TRN : ${config.trn}", 1, 1);
         getIt<Auth>().bluetooth.printNewLine();
-        getIt<Auth>().bluetooth.printLeftRight(
+        getIt<Auth>().bluetooth.printCustom(
             "TAX INVOICE  ${transaction.agent.substring(0, 2)}  / #${transaction.id}",
-            "",
-            0);
+            1,
+            1);
         getIt<Auth>().bluetooth.printNewLine();
         getIt<Auth>().bluetooth.printNewLine();
         getIt<Auth>()
@@ -319,8 +320,9 @@ class _MyAppState extends State<Bluetooth> {
         getIt<Auth>().bluetooth.printNewLine();
         getIt<Auth>().bluetooth.printLeftRight("Salesman:${transaction.agent}",
             "     Car No:${config.verchilId}", 0);
-        getIt<Auth>().bluetooth.printLeftRight("SIGNATURE", "", 0);
-        getIt<Auth>().bluetooth.printLeftRight("mobile No: ${config.mobileNo}", "", 0);
+        // getIt<Auth>().bluetooth.printLeftRight("SIGNATURE", "", 0);
+        getIt<Auth>().bluetooth.printLeftRight(
+            "mobile No: ${config.mobileNo}", "    SIGNATURE", 0);
         getIt<Auth>().bluetooth.paperCut();
       } else {
         print("iam not connected ");
@@ -366,20 +368,21 @@ class _MyAppState extends State<Bluetooth> {
       if (isConnected) {
         // getIt<Auth>().bluetooth.printImage(pathImage);
         getIt<Auth>().bluetooth.printCustom("AL SAHARI BAKERY", 2, 1);
-
+        getIt<Auth>().bluetooth.printNewLine();
         getIt<Auth>()
             .bluetooth
             .printCustom("RAK -Sheikh Mohammed Bin Salem street", 1, 1);
+        getIt<Auth>().bluetooth.printNewLine();
         getIt<Auth>()
             .bluetooth
             .printCustom("Tel: 072226355 ,Mob: 0544117087", 1, 1);
         getIt<Auth>().bluetooth.printNewLine();
         getIt<Auth>().bluetooth.printCustom("TRN : ${config.trn}", 1, 1);
         getIt<Auth>().bluetooth.printNewLine();
-        getIt<Auth>().bluetooth.printLeftRight(
+        getIt<Auth>().bluetooth.printCustom(
             "TAX INVOICE  ${transaction.agent.substring(0, 2)}  / #${transaction.id}",
-            "",
-            0);
+            1,
+            1);
         getIt<Auth>().bluetooth.printNewLine();
         getIt<Auth>().bluetooth.printNewLine();
         getIt<Auth>()
@@ -398,9 +401,8 @@ class _MyAppState extends State<Bluetooth> {
             .printCustom("Place : ${transaction.address}", 1, 0);
         getIt<Auth>().bluetooth.printNewLine();
 
-        getIt<Auth>()
-            .bluetooth
-            .printCustom("SLNO  PRODUCT NAME          OYT  RATE  TOTAL", 1, 0);
+        getIt<Auth>().bluetooth.printCustom(
+            "SLNO  PRODUCT NAME           OYT  RATE  TOTAL", 1, 0);
 
         orderTransactions.forEach((Transaction element) {
           taxMony += element.tax;
@@ -465,8 +467,9 @@ class _MyAppState extends State<Bluetooth> {
         getIt<Auth>().bluetooth.printNewLine();
         getIt<Auth>().bluetooth.printLeftRight("Salesman:${transaction.agent}",
             "    Car No:${config.verchilId}", 0);
-        getIt<Auth>().bluetooth.printLeftRight("SIGNATURE", "", 0);
-        getIt<Auth>().bluetooth.printLeftRight("mobile No: ${config.mobileNo}", "", 0);
+        // getIt<Auth>().bluetooth.printLeftRight("SIGNATURE", "", 0);
+        getIt<Auth>().bluetooth.printLeftRight(
+            "mobile No: ${config.mobileNo}", "    SIGNATURE", 0);
         getIt<Auth>().bluetooth.paperCut();
       } else {
         print("iam not connected ");
