@@ -41,7 +41,7 @@ class Splash extends StatelessWidget {
                     if (snapshot.hasData) {
                       return Center(
                         child: CircleAvatar(
-                          radius: SizeConfig.screenWidth * .08,
+                          radius: SizeConfig.screenWidth * .07,
                           backgroundImage: CachedNetworkImageProvider(
                             config.imageUrl + "${snapshot.data}",
                           ),

@@ -11,8 +11,8 @@
          FlutterApplication and put your custom class here. -->
     <application
         android:name="io.flutter.app.FlutterApplication"
-        android:label="Al-SAHARY"
-        android:icon="@mipmap/sahary">
+        android:label="E-Agents"
+        android:icon="@mipmap/truck">
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"
