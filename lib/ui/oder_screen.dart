@@ -680,9 +680,8 @@ class _OrderScreenState extends State<OrderScreen> {
                                     FlatButton(
                                       color: Colors.grey,
                                       shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(18.0),
-                                      ),
+                                          borderRadius:
+                                              BorderRadius.circular(18.0)),
                                       onPressed: () async {
                                         Navigator.pop(context);
                                         value.changeLoadingStare(true);
@@ -984,7 +983,6 @@ class _OrderScreenState extends State<OrderScreen> {
                   controller: priceController,
                   keyboardType:
                       const TextInputType.numberWithOptions(decimal: true)),
-
             )
           ],
         ),
