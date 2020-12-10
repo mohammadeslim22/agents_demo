@@ -184,77 +184,71 @@ class _OrderScreenState extends State<OrderScreen> {
         ],
       ),
       body: Consumer<OrderListProvider>(
-        builder: (BuildContext context, OrderListProvider value, Widget child) {
+        builder: (BuildContext context, OrderListProvider orderProvider,
+            Widget child) {
           return Stack(
             children: <Widget>[
               Row(
                 children: <Widget>[
                   Expanded(
-                    child: Consumer<OrderListProvider>(
-                      builder: (BuildContext context,
-                          OrderListProvider orderProvider, Widget child) {
-                        return Container(
-                          alignment: Alignment.topCenter,
-                          width: MediaQuery.of(context).size.width / 2,
-                          child: IndexedStack(
-                              index: orderProvider.indexedStack,
-                              children: <Widget>[
-                                Column(
-                                  children: <Widget>[
-                                    Container(
-                                      width:
-                                          SizeConfig.blockSizeHorizontal * 60,
-                                      height: SizeConfig.blockSizeVertical * 60,
-                                      child: FlareActor(
-                                          "assets/images/analysis_new.flr",
-                                          alignment: Alignment.center,
-                                          fit: BoxFit.cover,
-                                          isPaused:
-                                              orderProvider.itemsDataLoaded,
-                                          animation: "analysis"),
-                                    ),
-                                    SizedBox(
-                                        height:
-                                            SizeConfig.blockSizeVertical * 4.5),
-                                    Text(trans(context, "please_wait_loading"),
-                                        style: styles.plzWaitLoading)
-                                  ],
-                                ),
-                                if (orderProvider.itemsDataLoaded)
-                                  GridView.count(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 6, vertical: 12),
-                                      physics: const ClampingScrollPhysics(),
-                                      shrinkWrap: true,
-                                      primary: true,
-                                      crossAxisSpacing: 4,
-                                      mainAxisSpacing: 1,
-                                      crossAxisCount: 6,
-                                      childAspectRatio: .7,
-                                      addRepaintBoundaries: true,
-                                      children: orderProvider.itemsList
-                                          .where((SingleItem element) {
-                                        return element.name
-                                            .trim()
-                                            .toLowerCase()
-                                            .contains(searchController.text
-                                                .trim()
-                                                .toLowerCase());
-                                      }).map((SingleItem item) {
-                                        return !getIt<OrderListProvider>()
-                                                .selectedOptions
-                                                .contains(item.id)
-                                            ? dragableItem(item, orderProvider)
-                                            : childForDragging(
-                                                item, orderProvider);
-                                      }).toList())
-                                else
-                                  Container()
-                              ]),
-                        );
-                      },
-                    ),
-                  ),
+                      child: Container(
+                    alignment: Alignment.topCenter,
+                    width: MediaQuery.of(context).size.width / 2,
+                    child: IndexedStack(
+                        index: orderProvider.indexedStack,
+                        children: <Widget>[
+                          Column(
+                            children: <Widget>[
+                              Container(
+                                width: SizeConfig.blockSizeHorizontal * 60,
+                                height: SizeConfig.blockSizeVertical * 60,
+                                child: FlareActor(
+                                    "assets/images/analysis_new.flr",
+                                    alignment: Alignment.center,
+                                    fit: BoxFit.cover,
+                                    isPaused: orderProvider.itemsDataLoaded,
+                                    animation: "analysis"),
+                              ),
+                              SizedBox(
+                                  height: SizeConfig.blockSizeVertical * 4.5),
+                              Text(trans(context, "please_wait_loading"),
+                                  style: styles.plzWaitLoading)
+                            ],
+                          ),
+                          if (orderProvider.itemsDataLoaded)
+                            GridView.count(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 6, vertical: 12),
+                                physics: const ClampingScrollPhysics(),
+                                shrinkWrap: true,
+                                primary: true,
+                                crossAxisSpacing: 4,
+                                mainAxisSpacing: 1,
+                                crossAxisCount: 6,
+                                childAspectRatio: .7,
+                                addRepaintBoundaries: true,
+                                children: orderProvider.itemsList
+                                    .where((SingleItem element) {
+                                  return element.name
+                                      .trim()
+                                      .toLowerCase()
+                                      .contains(searchController.text
+                                          .trim()
+                                          .toLowerCase());
+                                }).map((SingleItem item) {
+                                  return !getIt<OrderListProvider>()
+                                          .selectedOptions
+                                          .contains(item.id)
+                                      ? dragableItem(item, orderProvider)
+                                      : childForDragging(item, orderProvider);
+                                }).toList())
+                          else
+                            Container()
+                        ]),
+                  )
+                      //   },
+                      // ),
+                      ),
                   Container(
                     width: MediaQuery.of(context).size.width / 2,
                     child: Column(
@@ -303,7 +297,7 @@ class _OrderScreenState extends State<OrderScreen> {
                         ),
                         if (indexedStackId == 1) dragHere() else Container(),
                         Expanded(
-                          child: value.selectedOptions.isNotEmpty
+                          child: orderProvider.selectedOptions.isNotEmpty
                               ? GridView.count(
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 6, vertical: 2),
@@ -315,7 +309,7 @@ class _OrderScreenState extends State<OrderScreen> {
                                   crossAxisCount: 1,
                                   childAspectRatio: 6,
                                   addRepaintBoundaries: true,
-                                  children: value.ordersList.reversed
+                                  children: orderProvider.ordersList.reversed
                                       .map((SingleItemForSend item) {
                                     return Slidable(
                                         actionPane:
@@ -328,8 +322,9 @@ class _OrderScreenState extends State<OrderScreen> {
                                             icon: Icons.delete,
                                             onTap: () {
                                               setState(() {
-                                                value.removeItemFromList(
-                                                    item.id);
+                                                orderProvider
+                                                    .removeItemFromList(
+                                                        item.id);
                                               });
                                             },
                                           ),
@@ -338,13 +333,13 @@ class _OrderScreenState extends State<OrderScreen> {
                                   }).toList())
                               : Container(),
                         ),
-                        bottomTotal()
+                        bottomTotal(orderProvider)
                       ],
                     ),
                   ),
                 ],
               ),
-              if (value.loadingStar) Center(child: loadingStarWidget()),
+              if (orderProvider.loadingStar) Center(child: loadingStarWidget()),
             ],
           );
         },
@@ -504,70 +499,51 @@ class _OrderScreenState extends State<OrderScreen> {
     );
   }
 
-  Widget bottomTotal() {
-    return Consumer<OrderListProvider>(
-        builder: (BuildContext context, OrderListProvider value, Widget child) {
-      return Column(
-        children: <Widget>[
-          Card(
-            color: Colors.grey,
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Row(
-                    children: <Widget>[
-                      Text(trans(context, 'discount') + " ",
-                          style: styles.mywhitestyle),
-                      Text(value.discount.toString(),
-                          style: styles.mywhitestyle),
-                    ],
-                  ),
-                  Row(
-                    children: <Widget>[
-                      Text(trans(context, 'total') + " ",
-                          style: styles.mywhitestyle),
-                      Text(
-                          (value.sumTotal * (1 + config.tax / 100))
-                              .toStringAsFixed(2),
-                          style: styles.mywhitestyle),
-                    ],
-                  ),
-                  Row(
-                    children: <Widget>[
-                      Text(trans(context, 'cash_rquired') + " ",
-                          style: styles.mywhitestyle),
-                      Text(value.totalAfterDiscount.toStringAsFixed(2),
-                          style: styles.mywhitestyle),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(8, 0, 8, 4),
+  Widget bottomTotal(OrderListProvider value) {
+    return Column(
+      children: <Widget>[
+        Card(
+          color: Colors.grey,
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                if (isORderOrReturn)
-                  Container(
-                    child: RaisedButton(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 12, vertical: 6),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12.0),
-                      ),
-                      color: colors.purple,
-                      onPressed: () {
-                        showDiscountDialog(value.sumTotal);
-                      },
-                      child: Text(trans(context, "discount"),
-                          style: styles.mywhitestyle),
-                    ),
-                  ),
-                SizedBox(width: SizeConfig.blockSizeHorizontal),
+                Row(
+                  children: <Widget>[
+                    Text(trans(context, 'discount') + " ",
+                        style: styles.mywhitestyle),
+                    Text(value.discount.toString(), style: styles.mywhitestyle),
+                  ],
+                ),
+                Row(
+                  children: <Widget>[
+                    Text(trans(context, 'total') + " ",
+                        style: styles.mywhitestyle),
+                    Text(
+                        (value.sumTotal * (1 + config.tax / 100))
+                            .toStringAsFixed(2),
+                        style: styles.mywhitestyle),
+                  ],
+                ),
+                Row(
+                  children: <Widget>[
+                    Text(trans(context, 'cash_rquired') + " ",
+                        style: styles.mywhitestyle),
+                    Text(value.totalAfterDiscount.toStringAsFixed(2),
+                        style: styles.mywhitestyle),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.fromLTRB(8, 0, 8, 4),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              if (isORderOrReturn)
                 Container(
                   child: RaisedButton(
                     padding:
@@ -575,93 +551,96 @@ class _OrderScreenState extends State<OrderScreen> {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12.0),
                     ),
-                    color: Colors.green,
+                    color: colors.purple,
                     onPressed: () {
-                      showDialog<dynamic>(
-                          context: context,
-                          builder: (_) => FlareGiffyDialog(
-                                flarePath: 'assets/images/space_demo.flr',
-                                flareAnimation: 'loading',
-                                title: Text(
-                                  trans(context, "save_transaction"),
-                                  textAlign: TextAlign.center,
-                                  style: styles.underHeadblack,
-                                ),
-                                flareFit: BoxFit.cover,
-                                entryAnimation: EntryAnimation.TOP,
-                                onOkButtonPressed: () async {
-                                  Navigator.pop(context);
-                                  value.changeLoadingStare(true);
-
-                                  if (await sendTransFunction(
-                                      widget.isAgentOrder, "draft")) {
-                                  } else {
-                                    showOverQuantitySnakBar(context);
-                                  }
-                                  value.changeLoadingStare(false);
-                                  Navigator.pop(context);
-                                },
-                              ));
+                      showDiscountDialog(value.sumTotal);
                     },
-                    child: Text(trans(context, "draft"),
+                    child: Text(trans(context, "discount"),
                         style: styles.mywhitestyle),
                   ),
                 ),
-                SizedBox(width: SizeConfig.blockSizeHorizontal),
-                Container(
-                  padding: EdgeInsets.zero,
-                  child: RaisedButton(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12.0)),
-                    color: colors.blue,
-                    onPressed: () async {
-                      showDialog<dynamic>(
+              SizedBox(width: SizeConfig.blockSizeHorizontal),
+              Container(
+                child: RaisedButton(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12.0),
+                  ),
+                  color: Colors.green,
+                  onPressed: () {
+                    showDialog<dynamic>(
                         context: context,
-                        builder: (BuildContext contex) => AlertDialog(
-                          titlePadding: EdgeInsets.zero,
-                          contentPadding: EdgeInsets.zero,
-                          actionsPadding: EdgeInsets.zero,
-                          buttonPadding: EdgeInsets.zero,
-                          insetPadding: EdgeInsets.zero,
-                          title: Image.asset("assets/images/movingcloud.gif",
-                              height: 260.0, width: 400.0, fit: BoxFit.cover),
-                          content: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: <Widget>[
-                              const SizedBox(height: 8),
-                              Text(trans(context, 'confirm_or_pay'),
-                                  style: styles.typeOrderScreen,
-                                  textAlign: TextAlign.center),
-                              const SizedBox(height: 12),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
-                                children: <Widget>[
-                                  FlatButton(
-                                    color: colors.pink,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(18.0),
-                                    ),
-                                    onPressed: () async {
-                                      Navigator.pop(context);
-                                      value.changeLoadingStare(true);
-                                      if (isORderOrReturn) {
-                                        if (value
-                                            .checkItemsBalancesBrforeLeaving()) {
-                                          if (await sendTransFunction(
-                                              widget.isAgentOrder,
-                                              "confirmed")) {
-                                            print("order sent");
-                                            Navigator.pop(context);
-                                          } else {
-                                            showErrorSnakBar(context);
-                                          }
-                                        } else {
-                                          showOverQuantitySnakBar(context);
-                                        }
-                                      } else {
+                        builder: (_) => FlareGiffyDialog(
+                              flarePath: 'assets/images/space_demo.flr',
+                              flareAnimation: 'loading',
+                              title: Text(
+                                trans(context, "save_transaction"),
+                                textAlign: TextAlign.center,
+                                style: styles.underHeadblack,
+                              ),
+                              flareFit: BoxFit.cover,
+                              entryAnimation: EntryAnimation.TOP,
+                              onOkButtonPressed: () async {
+                                Navigator.pop(context);
+                                value.changeLoadingStare(true);
+
+                                if (await sendTransFunction(
+                                    widget.isAgentOrder, "draft")) {
+                                } else {
+                                  showOverQuantitySnakBar(context);
+                                }
+                                value.changeLoadingStare(false);
+                                Navigator.pop(context);
+                              },
+                            ));
+                  },
+                  child:
+                      Text(trans(context, "draft"), style: styles.mywhitestyle),
+                ),
+              ),
+              SizedBox(width: SizeConfig.blockSizeHorizontal),
+              Container(
+                padding: EdgeInsets.zero,
+                child: RaisedButton(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12.0)),
+                  color: colors.blue,
+                  onPressed: () async {
+                    showDialog<dynamic>(
+                      context: context,
+                      builder: (BuildContext contex) => AlertDialog(
+                        titlePadding: EdgeInsets.zero,
+                        contentPadding: EdgeInsets.zero,
+                        actionsPadding: EdgeInsets.zero,
+                        buttonPadding: EdgeInsets.zero,
+                        insetPadding: EdgeInsets.zero,
+                        title: Image.asset("assets/images/movingcloud.gif",
+                            height: 260.0, width: 400.0, fit: BoxFit.cover),
+                        content: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: <Widget>[
+                            const SizedBox(height: 8),
+                            Text(trans(context, 'confirm_or_pay'),
+                                style: styles.typeOrderScreen,
+                                textAlign: TextAlign.center),
+                            const SizedBox(height: 12),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: <Widget>[
+                                FlatButton(
+                                  color: colors.pink,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(18.0),
+                                  ),
+                                  onPressed: () async {
+                                    Navigator.pop(context);
+                                    value.changeLoadingStare(true);
+                                    if (isORderOrReturn) {
+                                      if (value
+                                          .checkItemsBalancesBrforeLeaving()) {
                                         if (await sendTransFunction(
                                             widget.isAgentOrder, "confirmed")) {
                                           print("order sent");
@@ -669,86 +648,95 @@ class _OrderScreenState extends State<OrderScreen> {
                                         } else {
                                           showErrorSnakBar(context);
                                         }
+                                      } else {
+                                        showOverQuantitySnakBar(context);
                                       }
+                                    } else {
+                                      if (await sendTransFunction(
+                                          widget.isAgentOrder, "confirmed")) {
+                                        print("order sent");
+                                        Navigator.pop(context);
+                                      } else {
+                                        showErrorSnakBar(context);
+                                      }
+                                    }
 
+                                    value.changeLoadingStare(false);
+                                  },
+                                  child: Text(trans(context, 'other_confirm'),
+                                      style: styles.screenOrderDialoge),
+                                ),
+                                if (!widget.isAgentOrder)
+                                  FlatButton(
+                                    color: Colors.grey,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(18.0),
+                                    ),
+                                    onPressed: () async {
+                                      Navigator.pop(context);
+                                      value.changeLoadingStare(true);
+                                      // if (value
+                                      //     .checkItemsBalancesBrforeLeaving()) {
+                                      //   if (await sendTransFunction(
+                                      //       widget.isAgentOrder,
+                                      //       "confirmed")) {
+                                      //     Navigator.popAndPushNamed(
+                                      //         context, "/Payment_Screen",
+                                      //         arguments: <String, dynamic>{
+                                      //           "orderTotal": ben.totalOrders,
+                                      //           "returnTotal":
+                                      //               ben.totalReturns,
+                                      //           "cashTotal":
+                                      //               double.parse(ben.balance),
+                                      //         });
+                                      //   } else {
+                                      //     showErrorSnakBar(context);
+                                      //   }
+                                      // } else {
+                                      //   showOverQuantitySnakBar(context);
+                                      // }
                                       value.changeLoadingStare(false);
                                     },
-                                    child: Text(trans(context, 'other_confirm'),
+                                    child: Text(trans(context, 'confirm&pay'),
                                         style: styles.screenOrderDialoge),
-                                  ),
-                                  if (!widget.isAgentOrder)
-                                    FlatButton(
-                                      color: Colors.grey,
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(18.0),
-                                      ),
-                                      onPressed: () async {
-                                        Navigator.pop(context);
-                                        value.changeLoadingStare(true);
-                                        // if (value
-                                        //     .checkItemsBalancesBrforeLeaving()) {
-                                        //   if (await sendTransFunction(
-                                        //       widget.isAgentOrder,
-                                        //       "confirmed")) {
-                                        //     Navigator.popAndPushNamed(
-                                        //         context, "/Payment_Screen",
-                                        //         arguments: <String, dynamic>{
-                                        //           "orderTotal": ben.totalOrders,
-                                        //           "returnTotal":
-                                        //               ben.totalReturns,
-                                        //           "cashTotal":
-                                        //               double.parse(ben.balance),
-                                        //         });
-                                        //   } else {
-                                        //     showErrorSnakBar(context);
-                                        //   }
-                                        // } else {
-                                        //   showOverQuantitySnakBar(context);
-                                        // }
-                                        value.changeLoadingStare(false);
-                                      },
-                                      child: Text(trans(context, 'confirm&pay'),
-                                          style: styles.screenOrderDialoge),
-                                    )
-                                ],
-                              )
-                            ],
-                          ),
+                                  )
+                              ],
+                            )
+                          ],
                         ),
-                      );
-                    },
-                    child: Text(
-                        widget.isAgentOrder
-                            ? trans(context, "agent_transaction")
-                            : isORderOrReturn
-                                ? trans(context, "order")
-                                : trans(context, "make_return"),
-                        style: styles.mywhitestyle),
-                  ),
+                      ),
+                    );
+                  },
+                  child: Text(
+                      widget.isAgentOrder
+                          ? trans(context, "agent_transaction")
+                          : isORderOrReturn
+                              ? trans(context, "order")
+                              : trans(context, "make_return"),
+                      style: styles.mywhitestyle),
                 ),
-                SizedBox(width: SizeConfig.blockSizeHorizontal),
-                Container(
-                  child: RaisedButton(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12.0),
-                    ),
-                    color: colors.red,
-                    onPressed: () {
-                      cacelTransaction(true);
-                    },
-                    child: Text(trans(context, "cancel"),
-                        style: styles.mywhitestyle),
+              ),
+              SizedBox(width: SizeConfig.blockSizeHorizontal),
+              Container(
+                child: RaisedButton(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12.0),
                   ),
+                  color: colors.red,
+                  onPressed: () {
+                    cacelTransaction(true);
+                  },
+                  child: Text(trans(context, "cancel"),
+                      style: styles.mywhitestyle),
                 ),
-              ],
-            ),
-          )
-        ],
-      );
-    });
+              ),
+            ],
+          ),
+        )
+      ],
+    );
   }
 
   Widget loadingStarWidget() {
@@ -984,7 +972,6 @@ class _OrderScreenState extends State<OrderScreen> {
                   controller: priceController,
                   keyboardType:
                       const TextInputType.numberWithOptions(decimal: true)),
-
             )
           ],
         ),
