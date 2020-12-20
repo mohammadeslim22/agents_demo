@@ -479,7 +479,8 @@ class OrderListProvider with ChangeNotifier {
     await dio.get<dynamic>("items").then((Response<dynamic> value) async {
       itemsList = Items.fromJson(value.data).itemsList;
       await cachImages(itemsList);
-      removeOldImages(itemsList, olditems);
+      // if(olditems.isNotEmpty)
+      // removeOldImages(itemsList, olditems);
       data.setData("items", jsonEncode(value.data));
       itemsDataLoaded = true;
       indexedStack = 1;

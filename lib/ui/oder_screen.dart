@@ -246,8 +246,6 @@ class _OrderScreenState extends State<OrderScreen> {
                             Container()
                         ]),
                   )
-                      //   },
-                      // ),
                       ),
                   Container(
                     width: MediaQuery.of(context).size.width / 2,
@@ -333,7 +331,7 @@ class _OrderScreenState extends State<OrderScreen> {
                                   }).toList())
                               : Container(),
                         ),
-                        bottomTotal(orderProvider)
+                        bottomTotal(orderProvider,context)
                       ],
                     ),
                   ),
@@ -499,7 +497,7 @@ class _OrderScreenState extends State<OrderScreen> {
     );
   }
 
-  Widget bottomTotal(OrderListProvider value) {
+  Widget bottomTotal(OrderListProvider value,BuildContext context) {
     return Column(
       children: <Widget>[
         Card(
