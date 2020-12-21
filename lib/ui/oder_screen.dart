@@ -640,26 +640,28 @@ class _OrderScreenState extends State<OrderScreen> {
                                     onPressed: () async {
                                       Navigator.pop(context);
                                       value.changeLoadingStare(true);
-                                      // if (value
-                                      //     .checkItemsBalancesBrforeLeaving()) {
-                                      //   if (await sendTransFunction(
-                                      //       widget.isAgentOrder,
-                                      //       "confirmed")) {
-                                      //     Navigator.popAndPushNamed(
-                                      //         context, "/Payment_Screen",
-                                      //         arguments: <String, dynamic>{
-                                      //           "orderTotal": ben.totalOrders,
-                                      //           "returnTotal":
-                                      //               ben.totalReturns,
-                                      //           "cashTotal":
-                                      //               double.parse(ben.balance),
-                                      //         });
-                                      //   } else {
-                                      //     showErrorSnakBar(context);
-                                      //   }
-                                      // } else {
-                                      //   showOverQuantitySnakBar(context);
-                                      // }
+                                      if (isORderOrReturn) {
+                                        if (value
+                                            .checkItemsBalancesBrforeLeaving()) {
+                                          if (await sendTransFunction(
+                                              widget.isAgentOrder,
+                                              "confirmed")) {
+                                            Navigator.pop(context);
+                                          } else {
+                                            showErrorSnakBar(context);
+                                          }
+                                        } else {
+                                          showOverQuantitySnakBar(context);
+                                        }
+                                      } else {
+                                        if (await sendTransFunction(
+                                            widget.isAgentOrder, "confirmed")) {
+                                          Navigator.pop(context);
+                                        } else {
+                                          showErrorSnakBar(context);
+                                        }
+                                      }
+
                                       value.changeLoadingStare(false);
                                     },
                                     child: Text(trans(context, 'confirm&pay'),
