@@ -67,8 +67,10 @@ class _OrderScreenState extends State<OrderScreen> {
                       item.image);
                   orsderListProvider.selectedOptions.add(item.id);
                 })
-              // ignore: unnecessary_statements
-              : () {};
+              : !widget.isAgentOrder
+                  ? getIt<OrderListProvider>().incrementQuantity(item.id)
+                  : getIt<OrderListProvider>()
+                      .incrementQuantityForAgentOrder(item.id);
         },
         child: Column(
           children: <Widget>[
@@ -236,17 +238,12 @@ class _OrderScreenState extends State<OrderScreen> {
                                           .trim()
                                           .toLowerCase());
                                 }).map((SingleItem item) {
-                                  return !getIt<OrderListProvider>()
-                                          .selectedOptions
-                                          .contains(item.id)
-                                      ? dragableItem(item, orderProvider)
-                                      : childForDragging(item, orderProvider);
+                                  return childForDragging(item, orderProvider);
                                 }).toList())
                           else
                             Container()
                         ]),
-                  )
-                      ),
+                  )),
                   Container(
                     width: MediaQuery.of(context).size.width / 2,
                     child: Column(
@@ -293,7 +290,6 @@ class _OrderScreenState extends State<OrderScreen> {
                             ],
                           ),
                         ),
-                        if (indexedStackId == 1) dragHere() else Container(),
                         Expanded(
                           child: orderProvider.selectedOptions.isNotEmpty
                               ? GridView.count(
@@ -331,7 +327,7 @@ class _OrderScreenState extends State<OrderScreen> {
                                   }).toList())
                               : Container(),
                         ),
-                        bottomTotal(orderProvider,context)
+                        bottomTotal(orderProvider, context)
                       ],
                     ),
                   ),
@@ -343,33 +339,6 @@ class _OrderScreenState extends State<OrderScreen> {
         },
       ),
     );
-  }
-
-  Widget dragableItem(SingleItem item, OrderListProvider orderProvider) {
-    return Draggable<SingleItem>(
-        childWhenDragging: childForDragging(item, orderProvider),
-        onDragStarted: () {
-          setState(() {
-            indexedStackId = 1;
-            animatedHight = 160;
-          });
-        },
-        onDragEnd: (DraggableDetails t) {
-          setState(() {
-            indexedStackId = 0;
-            animatedHight = 0;
-          });
-        },
-        data: item,
-        feedback: Column(
-          children: <Widget>[
-            Material(
-                color: Colors.transparent,
-                textStyle: styles.smallItembluestyle,
-                child: Text(item.name)),
-          ],
-        ),
-        child: childForDragging(item, orderProvider));
   }
 
   Widget cartItem(SingleItemForSend item) {
@@ -393,8 +362,8 @@ class _OrderScreenState extends State<OrderScreen> {
                   child: Row(
                     children: <Widget>[
                       Container(
-                        height: 25,
-                        width: 25,
+                        height: SizeConfig.blockSizeVertical * 6,
+                        width: SizeConfig.blockSizeHorizontal * 6,
                         clipBehavior: Clip.hardEdge,
                         decoration: const BoxDecoration(
                             borderRadius:
@@ -406,8 +375,6 @@ class _OrderScreenState extends State<OrderScreen> {
                               AsyncSnapshot<FileInfo> snapshot) {
                             if (snapshot.hasData) {
                               return Container(
-                                  height: 40,
-                                  width: 60,
                                   child: Image.file(snapshot.data.file));
                             } else {
                               return const Icon(Icons.error);
@@ -425,7 +392,7 @@ class _OrderScreenState extends State<OrderScreen> {
                     children: <Widget>[
                       CircleAvatar(
                         backgroundColor: Colors.blue[700],
-                        radius: 12,
+                        radius: 16,
                         child: IconButton(
                           padding: EdgeInsets.zero,
                           icon: const Icon(Icons.add),
@@ -441,7 +408,7 @@ class _OrderScreenState extends State<OrderScreen> {
                       ),
                       InkWell(
                         child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 8),
+                          padding: const EdgeInsets.symmetric(horizontal: 16),
                           child: Text(item.queantity.toString(),
                               style: styles.mystyle),
                         ),
@@ -451,7 +418,7 @@ class _OrderScreenState extends State<OrderScreen> {
                       ),
                       CircleAvatar(
                         backgroundColor: Colors.blue[700],
-                        radius: 12,
+                        radius: 16,
                         child: IconButton(
                           padding: EdgeInsets.zero,
                           icon: const Icon(Icons.remove),
@@ -476,17 +443,17 @@ class _OrderScreenState extends State<OrderScreen> {
                 Expanded(
                     child: InkWell(
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8),
-                    child: Text(item.unitPrice,
-                        style: styles.mystyle, textAlign: TextAlign.center),
-                  ),
+                      padding: const EdgeInsets.symmetric(horizontal: 8),
+                      child: Text(item.unitPrice,
+                          style: styles.mystyle, textAlign: TextAlign.center)),
                   onTap: () {
                     showPriceDialog(item.id);
                   },
                 )),
                 Expanded(
                     child: Text(
-                        "${double.parse(item.unitPrice) * item.queantity}",
+                        (double.parse(item.unitPrice) * item.queantity)
+                            .toStringAsFixed(2),
                         style: styles.mystyle,
                         textAlign: TextAlign.end)),
               ],
@@ -497,7 +464,7 @@ class _OrderScreenState extends State<OrderScreen> {
     );
   }
 
-  Widget bottomTotal(OrderListProvider value,BuildContext context) {
+  Widget bottomTotal(OrderListProvider value, BuildContext context) {
     return Column(
       children: <Widget>[
         Card(
@@ -668,8 +635,8 @@ class _OrderScreenState extends State<OrderScreen> {
                                   FlatButton(
                                     color: Colors.grey,
                                     shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(18.0),
-                                    ),
+                                        borderRadius:
+                                            BorderRadius.circular(18.0)),
                                     onPressed: () async {
                                       Navigator.pop(context);
                                       value.changeLoadingStare(true);
@@ -819,64 +786,6 @@ class _OrderScreenState extends State<OrderScreen> {
             Animation<double> anim2) {
           return TransactionDeleteDialog(downCacel: downCacel, c: context);
         });
-  }
-
-  Widget dragHere() {
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 8),
-      color: Colors.grey[300],
-      child: Stack(
-        children: <Widget>[
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              const SizedBox(height: 36),
-              Center(
-                child: Text(trans(context, 'drage_here'),
-                    style: styles.dargHereStyle, textAlign: TextAlign.center),
-              ),
-            ],
-          ),
-          AnimatedContainer(
-            height: animatedHight,
-            duration: const Duration(milliseconds: 900),
-            child: DottedBorder(
-              color: colors.black,
-              borderType: BorderType.RRect,
-              strokeWidth: 2,
-              child: DragTarget<SingleItem>(
-                onWillAccept: (SingleItem data) {
-                  return true;
-                },
-                onAccept: (SingleItem value) {
-                  setState(() {
-                    getIt<OrderListProvider>().addItemToList(
-                        value.id,
-                        value.name,
-                        value.notes,
-                        value.queantity,
-                        value.unit,
-                        value.agentPrice,
-                        value.image);
-                    getIt<OrderListProvider>().selectedOptions.add(value.id);
-                    indexedStackId = 0;
-                    animatedHight = 0;
-                  });
-                },
-                onLeave: (dynamic value) {},
-                builder: (BuildContext context, List<SingleItem> candidateData,
-                    List<dynamic> rejectedData) {
-                  return Container(
-                      width: MediaQuery.of(context).size.width / 2,
-                      height: MediaQuery.of(context).size.width / 2,
-                      color: Colors.transparent);
-                },
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
   }
 
   TextEditingController quantityController = TextEditingController();

@@ -25,7 +25,7 @@ class OrderListProvider with ChangeNotifier {
   double sumTotal = 0;
   List<SingleItemForSend> get currentordersList => ordersList;
   ItemsCap dummyItemCap = ItemsCap(balanceCap: 99999999);
-  SingleItem dummySiglItem = SingleItem(balanceInventory: 99999999);
+  Balance dummySiglItem = Balance(balance: 99999999);
   int howManyscreensToPop;
   List<int> transactionTopAyIds = <int>[];
   double progress = 0.0;
@@ -114,21 +114,21 @@ class OrderListProvider with ChangeNotifier {
   }
 
   void incrementQuantity(int itemId) {
-    // final int quantity = ordersList.firstWhere((SingleItemForSend element) {
-    //   return element.id == itemId;
-    // }).queantity;
-//  if (checkValidation(itemId, quantity + 1)) {
-    ordersList.firstWhere((SingleItemForSend element) {
+    int quantity = ordersList.firstWhere((SingleItemForSend element) {
       return element.id == itemId;
-    }).queantity += 1;
-    sumTotal += double.parse(ordersList.firstWhere((SingleItemForSend element) {
-      return element.id == itemId;
-    }).unitPrice);
-    totalAfterDiscount = sumTotal * (1 + config.tax / 100) - discount;
-
-    // } else {
-    //   Vibration.vibrate(duration: 600);
-    // }
+    }).queantity;
+    if (checkValidation(itemId, ++quantity)) {
+      ordersList.firstWhere((SingleItemForSend element) {
+        return element.id == itemId;
+      }).queantity += 1;
+      sumTotal +=
+          double.parse(ordersList.firstWhere((SingleItemForSend element) {
+        return element.id == itemId;
+      }).unitPrice);
+      totalAfterDiscount = sumTotal * (1 + config.tax / 100) - discount;
+    } else {
+      Vibration.vibrate(duration: 600);
+    }
 
     notifyListeners();
   }
@@ -364,10 +364,8 @@ class OrderListProvider with ChangeNotifier {
       notifyListeners();
       return true;
     } else if (response.statusCode == 422) {
-   
       notifyListeners();
       return false;
-
     } else {
       notifyListeners();
       return false;
@@ -410,7 +408,6 @@ class OrderListProvider with ChangeNotifier {
     } else if (response.statusCode == 422) {
       notifyListeners();
       return false;
-
     } else {
       return false;
     }
@@ -573,26 +570,20 @@ class OrderListProvider with ChangeNotifier {
 
   bool checkValidation(int itemId, int quantity) {
     print(quantity);
-
+    print(itemsBalances.firstWhere((Balance element) {
+      return element.id == itemId;
+    }, orElse: () {
+      return dummySiglItem;
+    }).balance);
     print(itemId);
     if ((quantity <=
-            itemsList.firstWhere((SingleItem element) {
+            itemsBalances.firstWhere((Balance element) {
               return element.id == itemId;
             }, orElse: () {
               return dummySiglItem;
-            }).balanceInventory) &&
+            }).balance) &&
         quantity > 0) {
-      if (quantity <=
-          getIt<GlobalVars>().benInFocus.itemsCap.firstWhere(
-              (ItemsCap element) {
-            return element.itemId == itemId;
-          }, orElse: () {
-            return dummyItemCap;
-          }).balanceCap) {
-        return true;
-      } else {
-        return false;
-      }
+      return true;
     } else {
       return false;
     }
