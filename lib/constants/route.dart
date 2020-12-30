@@ -5,7 +5,7 @@ import 'package:agent_second/ui/auth/login_screen.dart';
 import 'package:agent_second/ui/ben_center.dart';
 import 'package:agent_second/ui/beneficiaries.dart';
 import 'package:agent_second/ui/home.dart';
-import 'package:agent_second/ui/oder_screen.dart';
+import 'package:agent_second/ui/order_screen.dart';
 import 'package:agent_second/ui/payment_screen.dart';
 import 'package:agent_second/ui/show_items.dart';
 import 'package:agent_second/util/bluetooth.dart';
