@@ -103,6 +103,7 @@ class _BeneficiaryCenterState extends State<BeneficiaryCenter> {
       child: const FlareActor("assets/images/empty.flr",
           alignment: Alignment.center, fit: BoxFit.fill, animation: "default"),
     );
+    getIt<GlobalVars>().updateBenBalance(ben.id);
     getIt<TransactionProvider>().pagewiseCollectionController =
         PagewiseLoadController<dynamic>(
             pageSize: 15,
@@ -229,7 +230,7 @@ class _BeneficiaryCenterState extends State<BeneficiaryCenter> {
                               Icon(Icons.email, color: colors.blue, size: 20),
                               const SizedBox(width: 8),
                               Text(
-                                ben.email.trim()!="null"?ben.email:"--",
+                                ben.email.trim() != "null" ? ben.email : "--",
                                 style: styles.underHeadgray,
                               )
                             ],
@@ -791,7 +792,11 @@ class _BeneficiaryCenterState extends State<BeneficiaryCenter> {
         ],
         child: FlatButton(
           padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-          color: getIt<TransactionProvider>().collectionTransColorIndecator % 2 == 0 ? Colors.blue[100] : Colors.transparent,
+          color:
+              getIt<TransactionProvider>().collectionTransColorIndecator % 2 ==
+                      0
+                  ? Colors.blue[100]
+                  : Colors.transparent,
           onPressed: () {},
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,

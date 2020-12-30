@@ -105,7 +105,18 @@ class GlobalVars with ChangeNotifier {
       }).balance = double.parse(balance ?? "0.0").toString();
     }
   }
-
+Future<void> updateBenBalance(int benId) async {
+    final Response<dynamic> response =
+        await dio.get<dynamic>("beneficiary_balance", queryParameters: <String, dynamic>{
+      "beneficiary_id": benId,
+    });
+    print(response);
+    if (response.statusCode == 200) {
+      setBalanceForBen(benId, response.data['balance'].toString());
+    } else {
+      Fluttertoast.showToast(msg: "حدث خطأ");
+    }
+  }
   void setDailyLog(
       int benId,
       String ben,
