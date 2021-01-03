@@ -26,13 +26,14 @@ class _AgentOrdersState extends State<AgentOrders>
   @override
   void initState() {
     super.initState();
-    getIt<TransactionProvider>().pagewiseAgentOrderController =
-        PagewiseLoadController<dynamic>(
-            pageSize: 15,
-            pageFuture: (int pageIndex) async {
-              return getIt<TransactionProvider>()
-                  .getAgentOrderTransactions(pageIndex, config.agentId);
-            });
+    //if (getIt<TransactionProvider>().agentTrans.transactions.isNotEmpty)
+      getIt<TransactionProvider>().pagewiseAgentOrderController =
+          PagewiseLoadController<dynamic>(
+              pageSize: 15,
+              pageFuture: (int pageIndex) async {
+                return getIt<TransactionProvider>()
+                    .getAgentOrderTransactions(pageIndex, config.agentId);
+              });
     container1width = widget.width;
     container2width = 0;
   }
@@ -118,14 +119,14 @@ class _AgentOrdersState extends State<AgentOrders>
         actionExtentRatio: 0.25,
         secondaryActions: <Widget>[
           IconSlideAction(
-            caption: 'Share',
+            caption: trans(context, 'Share'),
             color: colors.blue,
             icon: Icons.share,
             onTap: () {},
           ),
           if (entry.status == 'draft')
             IconSlideAction(
-              caption: 'Edit',
+              caption: trans(context, 'edit_pure'),
               color: colors.yellow,
               icon: Icons.edit,
               onTap: () {
@@ -140,7 +141,7 @@ class _AgentOrdersState extends State<AgentOrders>
             )
           else
             IconSlideAction(
-              caption: 'Reuse',
+              caption: trans(context, 'reuse'),
               color: colors.yellow,
               icon: Icons.refresh,
               onTap: () {
@@ -148,7 +149,7 @@ class _AgentOrdersState extends State<AgentOrders>
                 getIt<OrderListProvider>().bringOrderToOrderScreen(entry);
                 Navigator.pushNamed(context, "/Order_Screen",
                     arguments: <String, dynamic>{
-                      "ben":null,
+                      "ben": null,
                       "isORderOrReturn": false,
                       "isAgentOrder": true
                     });
@@ -156,11 +157,14 @@ class _AgentOrdersState extends State<AgentOrders>
             ),
           if (entry.status == 'draft')
             IconSlideAction(
-              caption: 'Delete',
+              caption: trans(context, 'delete'),
               color: colors.red,
               icon: Icons.delete,
               onTap: () {
-                // TODO(Mohammad): dio dlete request
+                getIt<OrderListProvider>().deleteAgentOrder(entry.id);
+                setState(() {
+                  
+                });
               },
             )
         ],
@@ -210,7 +214,7 @@ class _AgentOrdersState extends State<AgentOrders>
       width: container2width,
       child: Column(
         children: <Widget>[
-           OrderListCell(items:items)
+          OrderListCell(items: items)
           // Expanded(
           //   child: SingleChildScrollView(
           //       scrollDirection: Axis.vertical,

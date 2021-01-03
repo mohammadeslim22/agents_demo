@@ -10,6 +10,7 @@ import 'package:agent_second/util/service_locator.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:agent_second/models/Items.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:vibration/vibration.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 
@@ -364,10 +365,8 @@ class OrderListProvider with ChangeNotifier {
       notifyListeners();
       return true;
     } else if (response.statusCode == 422) {
-   
       notifyListeners();
       return false;
-
     } else {
       notifyListeners();
       return false;
@@ -410,7 +409,6 @@ class OrderListProvider with ChangeNotifier {
     } else if (response.statusCode == 422) {
       notifyListeners();
       return false;
-
     } else {
       return false;
     }
@@ -473,6 +471,18 @@ class OrderListProvider with ChangeNotifier {
 
       return 0;
     }
+  }
+
+  Future<void> deleteAgentOrder(int transId) async {
+    dio
+        .delete<dynamic>("stocktransactions/$transId")
+        .then((Response<dynamic> value) {
+      if (value.statusCode != 200) {
+        Fluttertoast.showToast(msg: "Delete Error");
+      } else {
+        getIt<TransactionProvider>().deleteAgentTrnsaction(transId);
+      }
+    });
   }
 
   Future<void> loadItems(List<SingleItem> olditems) async {

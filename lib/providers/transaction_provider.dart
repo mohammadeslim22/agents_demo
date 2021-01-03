@@ -14,7 +14,6 @@ class TransactionProvider with ChangeNotifier {
   Transactions benOrderTrans;
   Transactions benReturnTrans;
   Transactions agentTrans;
-  // Transaction transaction;
   Collections collection;
   FinanicalRecords finanicalRecords;
   bool transactionsDataLoaded = false;
@@ -39,10 +38,19 @@ class TransactionProvider with ChangeNotifier {
     returnTransColorIndecator++;
     notifyListeners();
   }
+
   void incrementCollection() {
     collectionTransColorIndecator++;
     notifyListeners();
   }
+
+  void deleteAgentTrnsaction(int id) {
+    agentTrans.transactions.removeWhere((Transaction element) {
+      return element.id == id;
+    });
+    notifyListeners();
+  }
+
   Future<void> deleteDradftTrans(int id) async {
     final Response<dynamic> response = await dio.post<dynamic>(
         "transaction/draft/delete",

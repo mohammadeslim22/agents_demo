@@ -67,8 +67,10 @@ class _OrderScreenState extends State<OrderScreen> {
                       item.image);
                   orsderListProvider.selectedOptions.add(item.id);
                 })
-              // ignore: unnecessary_statements
-              : () {};
+              : !widget.isAgentOrder
+                  ? getIt<OrderListProvider>().incrementQuantity(item.id)
+                  : getIt<OrderListProvider>()
+                      .incrementQuantityForAgentOrder(item.id);
         },
         child: Column(
           children: <Widget>[

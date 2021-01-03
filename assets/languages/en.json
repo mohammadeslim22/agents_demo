@@ -219,5 +219,9 @@
     "demo_or_qr":"This is Demo version, choose to ..",
     "go_demo":"Continue to Demo",
     "activate":"Activate App",
-    "no_tablet":"Your not Allowed to Use Tablet"
+    "no_tablet":"Your not Allowed to Use Tablet",
+    "edit_pure":"Edit",
+    "reuse":"Reuse",
+    "share":"Share",
+    "delete":"Delete"
 }
