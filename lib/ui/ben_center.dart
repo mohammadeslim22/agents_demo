@@ -104,7 +104,7 @@ class _BeneficiaryCenterState extends State<BeneficiaryCenter> {
             alignment: Alignment.center,
             fit: BoxFit.fill,
             animation: "default"));
-    // getIt<GlobalVars>().updateBenBalance(ben.id);
+    getIt<GlobalVars>().updateBenBalance(ben.id);
     getIt<TransactionProvider>().pagewiseCollectionController =
         PagewiseLoadController<dynamic>(
             pageSize: 15,

@@ -108,7 +108,7 @@ class GlobalVars with ChangeNotifier {
 
   Future<void> updateBenBalance(int benId) async {
     final Response<dynamic> response =
-        await dio.post<dynamic>("beneficiary_balance", data: <String, dynamic>{
+        await dio.get<dynamic>("beneficiary_balance", queryParameters: <String, dynamic>{
       "beneficiary_id": benId,
     });
     print(response);
