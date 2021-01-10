@@ -292,7 +292,9 @@ class _MyAppState extends State<Bluetooth> {
             transaction.amount - config.tax / 100 * transaction.amount;
 
         getIt<Auth>().bluetooth.printNewLine();
-        getIt<Auth>().bluetooth.printCustom("DISCOUNT 0.0", 1, 2);
+        getIt<Auth>()
+            .bluetooth
+            .printCustom("DISCOUNT ${transaction.discount ?? ""}", 1, 2);
         getIt<Auth>().bluetooth.printNewLine();
         getIt<Auth>().bluetooth.printCustom("SUB TOTAL $totalBeforTax", 1, 2);
         getIt<Auth>().bluetooth.printNewLine();
@@ -324,6 +326,8 @@ class _MyAppState extends State<Bluetooth> {
     double orderAmount = 0.0;
     double returnAmount = 0.0;
     double taxMony = 0.0;
+    double discount = 0.0;
+////////////////////////////
     // orderTransactions.forEach((Transaction element) {
     //   taxMony += element.tax;
 
@@ -337,7 +341,9 @@ class _MyAppState extends State<Bluetooth> {
     //         "$i  ${element.details[i].item}  ${element.details[i].quantity}   ${element.details[i].itemPrice}   ${element.details[i].total}");
     //   }
     //   orderAmount += element.amount;
-    //   print("new line");
+
+    //   discount += double.parse(element.discount ?? "0");
+    //   print("new line discount ${element.discount??"0"}");
     // });
     // print("RETURN");
     // returnTransactions.forEach((Transaction element) {
@@ -353,6 +359,8 @@ class _MyAppState extends State<Bluetooth> {
     // final double totalfterReturn = orderAmount - returnAmount;
     // print(
     //     "tax money ${taxMony.toStringAsFixed(2)}  total: ${totalfterReturn.toStringAsFixed(2)}");
+    /////////////////////////////////
+
     getIt<Auth>().bluetooth.isConnected.then((bool isConnected) {
       if (isConnected) {
         // getIt<Auth>().bluetooth.printImage("asstes/images/logo.png");
@@ -412,6 +420,7 @@ class _MyAppState extends State<Bluetooth> {
                 .printCustom("    ${transaction.details[i].barcode}", 1, 0);
           }
           orderAmount += element.amount;
+         discount += double.parse(element.discount ?? "0");
           getIt<Auth>().bluetooth.printNewLine();
         });
         getIt<Auth>().bluetooth.printNewLine();
@@ -438,7 +447,7 @@ class _MyAppState extends State<Bluetooth> {
         final double totalfterReturn = orderAmount - returnAmount;
 
         getIt<Auth>().bluetooth.printNewLine();
-        getIt<Auth>().bluetooth.printCustom("DISCOUNT: 0.0", 1, 2);
+        getIt<Auth>().bluetooth.printCustom("DISCOUNT: $discount", 1, 2);
         getIt<Auth>().bluetooth.printNewLine();
         getIt<Auth>().bluetooth.printCustom(
             "ORDER with Tax: ${orderAmount.toStringAsFixed(2)}", 1, 2);

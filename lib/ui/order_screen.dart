@@ -495,7 +495,8 @@ class _OrderScreenState extends State<OrderScreen> {
                 )),
                 Expanded(
                     child: Text(
-                        "${double.parse(item.unitPrice) * item.queantity}",
+                        (double.parse(item.unitPrice) * item.queantity)
+                            .toStringAsFixed(2),
                         style: styles.mystyle,
                         textAlign: TextAlign.end)),
               ],
@@ -805,16 +806,20 @@ class _OrderScreenState extends State<OrderScreen> {
 
   void showErrorSnakBar(BuildContext c) {
     final SnackBar snackBar = SnackBar(
-      content: Text(trans(c, "error_happened"), style: styles.angrywhitestyle),
-      duration: const Duration(milliseconds: 1700),
-      action: SnackBarAction(
-          label: trans(c, 'ok'),
-          onPressed: () {
-            Scaffold.of(c).hideCurrentSnackBar();
-          }),
-      backgroundColor: const Color(0xFF3B3B3B),
-    );
-    Scaffold.of(c).showSnackBar(snackBar);
+        content:
+            Text(trans(c, "error_happened"), style: styles.angrywhitestyle),
+        duration: const Duration(milliseconds: 1700),
+        action: SnackBarAction(
+            label: trans(c, 'ok'),
+            onPressed: () {
+              Scaffold.of(c).hideCurrentSnackBar();
+            }),
+        backgroundColor: const Color(0xFF3B3B3B));
+    try {
+      Scaffold.of(c).showSnackBar(snackBar);
+    } catch (err) {
+      print(err);
+    }
   }
 
   void cacelTransaction(bool downCacel) {
