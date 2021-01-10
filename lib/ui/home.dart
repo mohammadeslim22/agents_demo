@@ -9,6 +9,7 @@ import 'package:agent_second/util/service_locator.dart';
 import 'package:agent_second/util/size_config.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_pagewise/flutter_pagewise.dart';
 import 'package:provider/provider.dart';
 import 'package:agent_second/localization/trans.dart';
 import 'package:agent_second/constants/styles.dart';
@@ -86,6 +87,13 @@ class _DashBoardState extends State<DashBoard> {
       if (element.latitude != null && element.longitude != null)
         _addMarker(element);
     });
+    getIt<TransactionProvider>().pagewiseAgentOrderController =
+        PagewiseLoadController<dynamic>(
+            pageSize: 15,
+            pageFuture: (int pageIndex) async {
+              return getIt<TransactionProvider>()
+                  .getAgentOrderTransactions(pageIndex, config.agentId);
+            });
   }
 
   Future<void> _addMarker(Ben element) async {
@@ -503,9 +511,7 @@ class SplashScreen extends StatelessWidget {
       backgroundColor: colors.black,
       extendBody: true,
       body: const FlareActor("assets/images/LiquidDownloaddemo.flr",
-          alignment: Alignment.center,
-          fit: BoxFit.cover,
-          animation: "Demo"),
+          alignment: Alignment.center, fit: BoxFit.cover, animation: "Demo"),
     );
   }
 }

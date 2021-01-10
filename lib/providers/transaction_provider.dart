@@ -45,9 +45,15 @@ class TransactionProvider with ChangeNotifier {
   }
 
   void deleteAgentTrnsaction(int id) {
+    print("id coming $id");
     agentTrans.transactions.removeWhere((Transaction element) {
+      print("element.id  ${element.id} ");
+      if (element.id == id) {
+        print("kkokokokokoko");
+      }
       return element.id == id;
     });
+    print("id coming $id");
     notifyListeners();
   }
 

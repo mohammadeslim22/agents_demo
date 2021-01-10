@@ -27,13 +27,13 @@ class _AgentOrdersState extends State<AgentOrders>
   void initState() {
     super.initState();
     //if (getIt<TransactionProvider>().agentTrans.transactions.isNotEmpty)
-      getIt<TransactionProvider>().pagewiseAgentOrderController =
-          PagewiseLoadController<dynamic>(
-              pageSize: 15,
-              pageFuture: (int pageIndex) async {
-                return getIt<TransactionProvider>()
-                    .getAgentOrderTransactions(pageIndex, config.agentId);
-              });
+    // getIt<TransactionProvider>().pagewiseAgentOrderController =
+    //     PagewiseLoadController<dynamic>(
+    //         pageSize: 15,
+    //         pageFuture: (int pageIndex) async {
+    //           return getIt<TransactionProvider>()
+    //               .getAgentOrderTransactions(pageIndex, config.agentId);
+    //         });
     container1width = widget.width;
     container2width = 0;
   }
@@ -162,9 +162,6 @@ class _AgentOrdersState extends State<AgentOrders>
               icon: Icons.delete,
               onTap: () {
                 getIt<OrderListProvider>().deleteAgentOrder(entry.id);
-                setState(() {
-                  
-                });
               },
             )
         ],
