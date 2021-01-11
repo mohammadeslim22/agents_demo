@@ -68,6 +68,7 @@ class Transaction {
     }
     if (json['taxed'] != null) tax = double.parse(json['taxed'].toString());
     fromTranId = json['from_transaction_id'].toString();
+    if (json['discount'] != null) discount = json['discount'].toString();
   }
 
   dynamic toJson() {
@@ -110,6 +111,7 @@ class Transaction {
   double tax;
   List<MiniItems> details;
   String fromTranId;
+  String discount;
 }
 
 class MiniItems {
