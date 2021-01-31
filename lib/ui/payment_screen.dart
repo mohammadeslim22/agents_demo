@@ -39,7 +39,8 @@ class _PaymentScreenState extends State<PaymentScreen> {
     super.initState();
     _ben = getIt<GlobalVars>().getbenInFocus();
     if (widget.cashTotal > 0) {
-      paymentCashController.text = "${widget.cashTotal.truncate()}";
+      // paymentCashController.text = "${widget.cashTotal.truncate()}";
+      paymentCashController.text = "";
       paymentAmountController.text = "${widget.orderTotal.toStringAsFixed(2)}";
       if (widget.orderTotal != null)
         try {
@@ -51,13 +52,13 @@ class _PaymentScreenState extends State<PaymentScreen> {
         }
 
       paymentDeptController.text = "${widget.returnTotal.truncate()}";
-      discountController.text =
-          (widget.cashTotal - widget.cashTotal.truncate()).toStringAsFixed(2);
+      discountController.text = "";
+      //  (widget.cashTotal - widget.cashTotal.truncate()).toStringAsFixed(2);
     } else {
-      paymentCashController.text = "00.0";
+      paymentCashController.text = "";
       paymentAmountController.text = "00.0";
       paymentDeptController.text = "00.0";
-      discountController.text = "00.0";
+      discountController.text = "";
     }
   }
 
@@ -385,14 +386,22 @@ class _PaymentScreenState extends State<PaymentScreen> {
                         ),
                         color: colors.green,
                         onPressed: () async {
-                          if (double.parse(paymentCashController.text) > 0) {
+                          if (double.parse(paymentCashController.text.isEmpty
+                                  ? "0.0"
+                                  : paymentCashController.text) >
+                              0) {
                             showAWAITINGSENDOrderTruck();
                             await getIt<OrderListProvider>()
                                 .payMYOrdersAndReturnList(
                                     context,
                                     _ben.id,
-                                    double.parse(paymentCashController.text),
-                                    double.parse(discountController.text),
+                                    double.parse(
+                                        paymentCashController.text.isEmpty
+                                            ? "0.0"
+                                            : paymentCashController.text),
+                                    double.parse(discountController.text.isEmpty
+                                        ? "0.0"
+                                        : discountController.text),
                                     noteController.text.trim());
                             Navigator.pop(context);
                           } else {
