@@ -309,7 +309,7 @@ class _MyAppState extends State<Bluetooth> {
             .bluetooth
             .printCustom("DISCOUNT ${transaction.discount}", 1, 2);
         getIt<Auth>().bluetooth.printNewLine();
-        getIt<Auth>().bluetooth.printCustom("SUB TOTAL $totalBeforTax", 1, 2);
+        getIt<Auth>().bluetooth.printCustom("SUB TOTAL ${totalBeforTax.toStringAsFixed(2)}", 1, 2);
         getIt<Auth>().bluetooth.printNewLine();
         getIt<Auth>()
             .bluetooth

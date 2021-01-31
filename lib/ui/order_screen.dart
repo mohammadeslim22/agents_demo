@@ -9,7 +9,6 @@ import 'package:agent_second/util/service_locator.dart';
 import 'package:agent_second/util/size_config.dart';
 import 'package:agent_second/widgets/delete_tarnsaction_dialog.dart';
 import 'package:agent_second/widgets/text_form_input.dart';
-import 'package:dotted_border/dotted_border.dart';
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
@@ -41,6 +40,8 @@ class _OrderScreenState extends State<OrderScreen> {
   bool isORderOrReturn;
   double animatedHight = 0;
   int transId;
+  bool isRTL;
+
   final TextEditingController searchController = TextEditingController();
   Map<String, String> itemsBalances = <String, String>{};
   List<int> prices = <int>[];
@@ -68,7 +69,8 @@ class _OrderScreenState extends State<OrderScreen> {
                   orsderListProvider.selectedOptions.add(item.id);
                 })
               : !widget.isAgentOrder
-                  ? getIt<OrderListProvider>().incrementQuantity(item.id)
+                  ? getIt<OrderListProvider>()
+                      .incrementQuantity(item.id, isORderOrReturn)
                   : getIt<OrderListProvider>()
                       .incrementQuantityForAgentOrder(item.id);
         },
@@ -121,10 +123,11 @@ class _OrderScreenState extends State<OrderScreen> {
   }
 
   String totalAfterDiscount = "0.0";
+
   @override
   void initState() {
     super.initState();
-    discountController.text = "0.0";
+    discountController.text = "";
     isORderOrReturn = widget.isORderOrReturn;
     ben = widget.ben;
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -134,7 +137,7 @@ class _OrderScreenState extends State<OrderScreen> {
         getIt<OrderListProvider>().getItems();
       }
     });
-
+    
     transId = widget.transId;
   }
 
@@ -400,7 +403,7 @@ class _OrderScreenState extends State<OrderScreen> {
                           onPressed: () {
                             !widget.isAgentOrder
                                 ? getIt<OrderListProvider>()
-                                    .incrementQuantity(item.id)
+                                    .incrementQuantity(item.id, isORderOrReturn)
                                 : getIt<OrderListProvider>()
                                     .incrementQuantityForAgentOrder(item.id);
                           },
@@ -470,7 +473,7 @@ class _OrderScreenState extends State<OrderScreen> {
         Card(
           color: Colors.grey,
           child: Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
@@ -485,19 +488,25 @@ class _OrderScreenState extends State<OrderScreen> {
                   children: <Widget>[
                     Text(trans(context, 'total') + " ",
                         style: styles.mywhitestyle),
-                    Text(
-                        (value.sumTotal * (1 + config.tax / 100))
-                            .toStringAsFixed(2),
+                    Text((value.sumTotal).toStringAsFixed(2),
                         style: styles.mywhitestyle),
                   ],
                 ),
-                Row(
-                  children: <Widget>[
-                    Text(trans(context, 'cash_rquired') + " ",
-                        style: styles.mywhitestyle),
-                    Text(value.totalAfterDiscount.toStringAsFixed(2),
-                        style: styles.mywhitestyle),
-                  ],
+                InkWell(
+                  onTap: () => showTotalAdjustmentsDialoge(value),
+                  child: Row(
+                    children: <Widget>[
+                      Visibility(
+                          child: const Icon(Icons.adjust, color: Colors.blue),
+                          visible:
+                              value.fraction != 0.0 && value.fraction != 0.5),
+                      const SizedBox(width: 8),
+                      Text(trans(context, 'cash_rquired') + " ",
+                          style: value.mywhitestyle),
+                      Text(value.totalAfterDiscount.toStringAsFixed(2),
+                          style: value.mywhitestyle),
+                    ],
+                  ),
                 ),
               ],
             ),
@@ -902,6 +911,42 @@ class _OrderScreenState extends State<OrderScreen> {
               })
         ],
       ),
+    );
+  }
+
+  void showTotalAdjustmentsDialoge(OrderListProvider value) {
+    isRTL = Directionality.of(context) == TextDirection.rtl;
+    showGeneralDialog<dynamic>(
+      barrierLabel: "Label",
+      barrierDismissible: true,
+      barrierColor: Colors.black.withOpacity(0.5),
+      transitionDuration: const Duration(milliseconds: 700),
+      context: context,
+      pageBuilder: (BuildContext context, Animation<double> anim1,
+          Animation<double> anim2) {
+        return Align(
+          alignment:isRTL? Alignment.bottomLeft:Alignment.bottomRight,
+          child: Container(
+            width: 300,
+            child: value.calculateWidgetsToAdjustTotal(context),
+            margin: const EdgeInsets.only(
+                top: 50, left: 12, right: 12, bottom: 100),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(40),
+            ),
+          ),
+        );
+      },
+      transitionBuilder: (BuildContext context, Animation<double> anim1,
+          Animation<double> anim2, Widget child) {
+        return SlideTransition(
+          position:
+              Tween<Offset>(begin: const Offset(0, 1), end: const Offset(0, 0))
+                  .animate(anim1),
+          child: child,
+        );
+      },
     );
   }
 }
