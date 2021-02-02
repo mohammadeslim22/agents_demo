@@ -32,8 +32,8 @@ Future<void> main() async {
       baseUrl == null ||
       baseUrl.isEmpty ||
       baseUrl == "") {
-    config.baseUrl = "http://demo.agentsmanage.com/api/";
-    config.imageUrl = "http://demo.agentsmanage.com/image/";
+    config.baseUrl = "http://dev.agentsmanage.com/api/";
+    config.imageUrl = "http://dev.agentsmanage.com/image/";
     config.qrCodeScan = true;
   } else {
     config.baseUrl = "${baseUrl}api/";
