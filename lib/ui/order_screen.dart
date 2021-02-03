@@ -50,27 +50,26 @@ class _OrderScreenState extends State<OrderScreen> {
       shape: RoundedRectangleBorder(
           side: const BorderSide(width: 1, color: Colors.green),
           borderRadius: BorderRadius.circular(8.0)),
-      color: getIt<OrderListProvider>().selectedOptions.contains(item.id)
+      color: orsderListProvider.selectedOptions.contains(item.id)
           ? Colors.grey
           : colors.white,
       child: InkWell(
         onTap: () {
           !orsderListProvider.selectedOptions.contains(item.id)
               ? setState(() {
-                  getIt<OrderListProvider>().addItemToList(
+                  orsderListProvider.addItemToList(
                       item.id,
                       item.name,
                       item.notes,
                       item.queantity,
                       item.unit,
-                      item.agentPrice,
+                      item.unitPrice,
                       item.image);
                   orsderListProvider.selectedOptions.add(item.id);
                 })
               : !widget.isAgentOrder
-                  ? getIt<OrderListProvider>().incrementQuantity(item.id)
-                  : getIt<OrderListProvider>()
-                      .incrementQuantityForAgentOrder(item.id);
+                  ? orsderListProvider.incrementQuantity(item.id)
+                  : orsderListProvider.incrementQuantityForAgentOrder(item.id);
         },
         child: Column(
           children: <Widget>[
@@ -113,7 +112,7 @@ class _OrderScreenState extends State<OrderScreen> {
                   style: styles.smallItembluestyle,
                   textAlign: TextAlign.center),
             ),
-            Text(item.agentPrice, style: styles.mystyle),
+            Text(item.unitPrice, style: styles.mystyle),
           ],
         ),
       ),
@@ -801,7 +800,7 @@ class _OrderScreenState extends State<OrderScreen> {
           }),
       backgroundColor: const Color(0xFF3B3B3B),
     );
-    Scaffold.of(c).showSnackBar(snackBar);
+    // Scaffold.of(c).showSnackBar(snackBar);
   }
 
   void showErrorSnakBar(BuildContext c) {
