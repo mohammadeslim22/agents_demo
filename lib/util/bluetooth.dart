@@ -422,7 +422,7 @@ class _MyAppState extends State<Bluetooth> {
                 0);
             getIt<Auth>()
                 .bluetooth
-                .printCustom("    ${transaction.details[i].barcode}", 1, 0);
+                .printCustom("    ${element.details[i].barcode}", 1, 0);
           }
           orderAmount += element.amount;
           discount += double.parse(element.discount ?? "0");
@@ -444,7 +444,7 @@ class _MyAppState extends State<Bluetooth> {
                 0);
             getIt<Auth>()
                 .bluetooth
-                .printCustom("    ${transaction.details[i].barcode}", 1, 0);
+                .printCustom("    ${element.details[i].barcode}", 1, 0);
           }
           returnAmount += element.amount;
           getIt<Auth>().bluetooth.printNewLine();
