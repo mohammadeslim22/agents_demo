@@ -71,6 +71,7 @@ class Transaction {
     fromTranId = json['from_transaction_id'].toString();
     if (json['discount'] != null) 
     discount = json['discount'].toString();
+
   }
 
   dynamic toJson() {

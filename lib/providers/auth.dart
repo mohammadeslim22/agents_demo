@@ -29,7 +29,6 @@ class Auth with ChangeNotifier {
       if (value.statusCode == 422) {
         return value.data['errors'];
       }
-
       if (value.statusCode == 200) {
         if (value.data != "fail") {
           if (value.data['agent']['istable'] == 1) {
@@ -48,7 +47,9 @@ class Auth with ChangeNotifier {
             data.setData("trn", value.data['trn'].toString());
             config.companyName = value.data['company_name'].toString();
             config.address = value.data['settings']['address'].toString();
-            config.mobileNo = value.data['settings']['mobile'].toString();
+
+            config.mobileNo = value.data['phone'].toString();
+
             config.logo =
                 config.imageUrl + value.data['settings']['logo'].toString();
             print(config.logo);

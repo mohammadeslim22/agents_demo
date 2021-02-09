@@ -1,4 +1,4 @@
-  
+
 import 'package:agent_second/constants/colors.dart';
 import 'package:agent_second/constants/config.dart';
 import 'package:agent_second/constants/styles.dart';
@@ -138,7 +138,7 @@ class _OrderScreenState extends State<OrderScreen> {
         getIt<OrderListProvider>().getItems();
       }
     });
-    
+
     transId = widget.transId;
   }
 
@@ -926,7 +926,9 @@ class _OrderScreenState extends State<OrderScreen> {
       pageBuilder: (BuildContext context, Animation<double> anim1,
           Animation<double> anim2) {
         return Align(
+
           alignment:isRTL? Alignment.bottomLeft:Alignment.bottomRight,
+
           child: Container(
             width: 300,
             child: value.calculateWidgetsToAdjustTotal(context),
@@ -950,4 +952,8 @@ class _OrderScreenState extends State<OrderScreen> {
       },
     );
   }
+
 }
+
+}
+

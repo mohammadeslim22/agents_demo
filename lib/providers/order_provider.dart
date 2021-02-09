@@ -89,6 +89,7 @@ class OrderListProvider with ChangeNotifier {
   }
 
   void changePrice(int itemId, double price) {
+
     final Ben inFocus = getIt<GlobalVars>().getbenInFocus();
     if (inFocus.type == "normal") {
       if (double.parse(getPrice(itemId)) > price) {
@@ -109,7 +110,6 @@ class OrderListProvider with ChangeNotifier {
         getTotla();
         notifyListeners();
       }
-    }
   }
 
    void clearOrcerList() {
@@ -734,6 +734,7 @@ class OrderListProvider with ChangeNotifier {
       );
     }
   }
+
     Future<void> deleteAgentOrder(int transId) async {
     dio
         .delete<dynamic>("stocktransactions/$transId")
@@ -745,4 +746,5 @@ class OrderListProvider with ChangeNotifier {
       }
     });
   }
+
 }

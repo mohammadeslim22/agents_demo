@@ -64,7 +64,7 @@ class GlobalVars with ChangeNotifier {
   Future<void> loadCustomers() async {
     print("enter here 222");
     final Response<dynamic> response = await dio.get<dynamic>("beneficaries");
-     await data.setData("customers", jsonEncode(response.data));
+    await data.setData("customers", jsonEncode(response.data));
     getIt<GlobalVars>().setBens(BeneficiariesModel.fromJson(response.data));
     await Future<void>.delayed(const Duration(seconds: 3), () {});
     getUserData();
@@ -105,7 +105,9 @@ class GlobalVars with ChangeNotifier {
       }).balance = double.parse(balance ?? "0.0").toString();
     }
   }
+
 Future<void> updateBenBalance(int benId) async {
+
     final Response<dynamic> response =
         await dio.get<dynamic>("beneficiary_balance", queryParameters: <String, dynamic>{
       "beneficiary_id": benId,
@@ -117,6 +119,7 @@ Future<void> updateBenBalance(int benId) async {
       Fluttertoast.showToast(msg: "حدث خطأ");
     }
   }
+
   void setDailyLog(
       int benId,
       String ben,
