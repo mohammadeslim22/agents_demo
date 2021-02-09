@@ -86,21 +86,29 @@ class OrderListProvider with ChangeNotifier {
       notifyListeners();
     }
   }
-
   void changePrice(int itemId, double price) {
-    if (double.parse(getPrice(itemId)) > price) {
-      return;
-    }
-    if (config.editPrice == 1) {
-      ordersList.firstWhere((SingleItemForSend element) {
-        return element.id == itemId;
-      }).unitPrice = price.toStringAsFixed(2);
-      getTotla();
-      chngeColorOfTotalToAdjustDiscount();
-      notifyListeners();
+    final Ben inFocus = getIt<GlobalVars>().getbenInFocus();
+    if (inFocus.type == "normal") {
+      if (double.parse(getPrice(itemId)) > price) {
+        return;
+      }
+      if (config.editPrice == 1) {
+        ordersList.firstWhere((SingleItemForSend element) {
+          return element.id == itemId;
+        }).unitPrice = price.toStringAsFixed(2);
+        getTotla();
+        notifyListeners();
+      }
+    } else {
+      if (config.editPrice == 1) {
+        ordersList.firstWhere((SingleItemForSend element) {
+          return element.id == itemId;
+        }).unitPrice = price.toStringAsFixed(2);
+        getTotla();
+        notifyListeners();
+      }
     }
   }
-
   void clearOrcerList() {
     ordersList.clear();
     selectedOptions.clear();
