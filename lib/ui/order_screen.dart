@@ -1,3 +1,4 @@
+  
 import 'package:agent_second/constants/colors.dart';
 import 'package:agent_second/constants/config.dart';
 import 'package:agent_second/constants/styles.dart';
@@ -9,7 +10,6 @@ import 'package:agent_second/util/service_locator.dart';
 import 'package:agent_second/util/size_config.dart';
 import 'package:agent_second/widgets/delete_tarnsaction_dialog.dart';
 import 'package:agent_second/widgets/text_form_input.dart';
-import 'package:dotted_border/dotted_border.dart';
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
@@ -41,6 +41,8 @@ class _OrderScreenState extends State<OrderScreen> {
   bool isORderOrReturn;
   double animatedHight = 0;
   int transId;
+  bool isRTL;
+
   final TextEditingController searchController = TextEditingController();
   Map<String, String> itemsBalances = <String, String>{};
   List<int> prices = <int>[];
@@ -50,26 +52,28 @@ class _OrderScreenState extends State<OrderScreen> {
       shape: RoundedRectangleBorder(
           side: const BorderSide(width: 1, color: Colors.green),
           borderRadius: BorderRadius.circular(8.0)),
-      color: orsderListProvider.selectedOptions.contains(item.id)
+      color: getIt<OrderListProvider>().selectedOptions.contains(item.id)
           ? Colors.grey
           : colors.white,
       child: InkWell(
         onTap: () {
           !orsderListProvider.selectedOptions.contains(item.id)
               ? setState(() {
-                  orsderListProvider.addItemToList(
+                  getIt<OrderListProvider>().addItemToList(
                       item.id,
                       item.name,
                       item.notes,
                       item.queantity,
                       item.unit,
-                      item.unitPrice,
+                      item.agentPrice,
                       item.image);
                   orsderListProvider.selectedOptions.add(item.id);
                 })
               : !widget.isAgentOrder
-                  ? orsderListProvider.incrementQuantity(item.id)
-                  : orsderListProvider.incrementQuantityForAgentOrder(item.id);
+                  ? getIt<OrderListProvider>()
+                      .incrementQuantity(item.id, isORderOrReturn)
+                  : getIt<OrderListProvider>()
+                      .incrementQuantityForAgentOrder(item.id);
         },
         child: Column(
           children: <Widget>[
@@ -112,7 +116,7 @@ class _OrderScreenState extends State<OrderScreen> {
                   style: styles.smallItembluestyle,
                   textAlign: TextAlign.center),
             ),
-            Text(item.unitPrice, style: styles.mystyle),
+            Text(item.agentPrice, style: styles.mystyle),
           ],
         ),
       ),
@@ -120,10 +124,11 @@ class _OrderScreenState extends State<OrderScreen> {
   }
 
   String totalAfterDiscount = "0.0";
+
   @override
   void initState() {
     super.initState();
-    discountController.text = "0.0";
+    discountController.text = "";
     isORderOrReturn = widget.isORderOrReturn;
     ben = widget.ben;
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -133,7 +138,7 @@ class _OrderScreenState extends State<OrderScreen> {
         getIt<OrderListProvider>().getItems();
       }
     });
-
+    
     transId = widget.transId;
   }
 
@@ -185,77 +190,64 @@ class _OrderScreenState extends State<OrderScreen> {
         ],
       ),
       body: Consumer<OrderListProvider>(
-        builder: (BuildContext context, OrderListProvider value, Widget child) {
+        builder: (BuildContext context, OrderListProvider orderProvider,
+            Widget child) {
           return Stack(
             children: <Widget>[
               Row(
                 children: <Widget>[
                   Expanded(
-                    child: Consumer<OrderListProvider>(
-                      builder: (BuildContext context,
-                          OrderListProvider orderProvider, Widget child) {
-                        return Container(
-                          alignment: Alignment.topCenter,
-                          width: MediaQuery.of(context).size.width / 2,
-                          child: IndexedStack(
-                              index: orderProvider.indexedStack,
-                              children: <Widget>[
-                                Column(
-                                  children: <Widget>[
-                                    Container(
-                                      width:
-                                          SizeConfig.blockSizeHorizontal * 60,
-                                      height: SizeConfig.blockSizeVertical * 60,
-                                      child: FlareActor(
-                                          "assets/images/analysis_new.flr",
-                                          alignment: Alignment.center,
-                                          fit: BoxFit.cover,
-                                          isPaused:
-                                              orderProvider.itemsDataLoaded,
-                                          animation: "analysis"),
-                                    ),
-                                    SizedBox(
-                                        height:
-                                            SizeConfig.blockSizeVertical * 4.5),
-                                    Text(trans(context, "please_wait_loading"),
-                                        style: styles.plzWaitLoading)
-                                  ],
-                                ),
-                                if (orderProvider.itemsDataLoaded)
-                                  GridView.count(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 6, vertical: 12),
-                                      physics: const ClampingScrollPhysics(),
-                                      shrinkWrap: true,
-                                      primary: true,
-                                      crossAxisSpacing: 4,
-                                      mainAxisSpacing: 1,
-                                      crossAxisCount: 6,
-                                      childAspectRatio: .7,
-                                      addRepaintBoundaries: true,
-                                      children: orderProvider.itemsList
-                                          .where((SingleItem element) {
-                                        return element.name
-                                            .trim()
-                                            .toLowerCase()
-                                            .contains(searchController.text
-                                                .trim()
-                                                .toLowerCase());
-                                      }).map((SingleItem item) {
-                                        return !getIt<OrderListProvider>()
-                                                .selectedOptions
-                                                .contains(item.id)
-                                            ? dragableItem(item, orderProvider)
-                                            : childForDragging(
-                                                item, orderProvider);
-                                      }).toList())
-                                else
-                                  Container()
-                              ]),
-                        );
-                      },
-                    ),
-                  ),
+                      child: Container(
+                    alignment: Alignment.topCenter,
+                    width: MediaQuery.of(context).size.width / 2,
+                    child: IndexedStack(
+                        index: orderProvider.indexedStack,
+                        children: <Widget>[
+                          Column(
+                            children: <Widget>[
+                              Container(
+                                width: SizeConfig.blockSizeHorizontal * 60,
+                                height: SizeConfig.blockSizeVertical * 60,
+                                child: FlareActor(
+                                    "assets/images/analysis_new.flr",
+                                    alignment: Alignment.center,
+                                    fit: BoxFit.cover,
+                                    isPaused: orderProvider.itemsDataLoaded,
+                                    animation: "analysis"),
+                              ),
+                              SizedBox(
+                                  height: SizeConfig.blockSizeVertical * 4.5),
+                              Text(trans(context, "please_wait_loading"),
+                                  style: styles.plzWaitLoading)
+                            ],
+                          ),
+                          if (orderProvider.itemsDataLoaded)
+                            GridView.count(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 6, vertical: 12),
+                                physics: const ClampingScrollPhysics(),
+                                shrinkWrap: true,
+                                primary: true,
+                                crossAxisSpacing: 4,
+                                mainAxisSpacing: 1,
+                                crossAxisCount: 6,
+                                childAspectRatio: .7,
+                                addRepaintBoundaries: true,
+                                children: orderProvider.itemsList
+                                    .where((SingleItem element) {
+                                  return element.name
+                                      .trim()
+                                      .toLowerCase()
+                                      .contains(searchController.text
+                                          .trim()
+                                          .toLowerCase());
+                                }).map((SingleItem item) {
+                                  return childForDragging(item, orderProvider);
+                                }).toList())
+                          else
+                            Container()
+                        ]),
+                  )),
                   Container(
                     width: MediaQuery.of(context).size.width / 2,
                     child: Column(
@@ -302,9 +294,8 @@ class _OrderScreenState extends State<OrderScreen> {
                             ],
                           ),
                         ),
-                        if (indexedStackId == 1) dragHere() else Container(),
                         Expanded(
-                          child: value.selectedOptions.isNotEmpty
+                          child: orderProvider.selectedOptions.isNotEmpty
                               ? GridView.count(
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 6, vertical: 2),
@@ -316,7 +307,7 @@ class _OrderScreenState extends State<OrderScreen> {
                                   crossAxisCount: 1,
                                   childAspectRatio: 6,
                                   addRepaintBoundaries: true,
-                                  children: value.ordersList.reversed
+                                  children: orderProvider.ordersList.reversed
                                       .map((SingleItemForSend item) {
                                     return Slidable(
                                         actionPane:
@@ -329,8 +320,9 @@ class _OrderScreenState extends State<OrderScreen> {
                                             icon: Icons.delete,
                                             onTap: () {
                                               setState(() {
-                                                value.removeItemFromList(
-                                                    item.id);
+                                                orderProvider
+                                                    .removeItemFromList(
+                                                        item.id);
                                               });
                                             },
                                           ),
@@ -339,45 +331,18 @@ class _OrderScreenState extends State<OrderScreen> {
                                   }).toList())
                               : Container(),
                         ),
-                        bottomTotal(value)
+                        bottomTotal(orderProvider, context)
                       ],
                     ),
                   ),
                 ],
               ),
-              if (value.loadingStar) Center(child: loadingStarWidget()),
+              if (orderProvider.loadingStar) Center(child: loadingStarWidget()),
             ],
           );
         },
       ),
     );
-  }
-
-  Widget dragableItem(SingleItem item, OrderListProvider orderProvider) {
-    return Draggable<SingleItem>(
-        childWhenDragging: childForDragging(item, orderProvider),
-        onDragStarted: () {
-          setState(() {
-            indexedStackId = 1;
-            animatedHight = 160;
-          });
-        },
-        onDragEnd: (DraggableDetails t) {
-          setState(() {
-            indexedStackId = 0;
-            animatedHight = 0;
-          });
-        },
-        data: item,
-        feedback: Column(
-          children: <Widget>[
-            Material(
-                color: Colors.transparent,
-                textStyle: styles.smallItembluestyle,
-                child: Text(item.name)),
-          ],
-        ),
-        child: childForDragging(item, orderProvider));
   }
 
   Widget cartItem(SingleItemForSend item) {
@@ -401,8 +366,8 @@ class _OrderScreenState extends State<OrderScreen> {
                   child: Row(
                     children: <Widget>[
                       Container(
-                        height: 25,
-                        width: 25,
+                        height: SizeConfig.blockSizeVertical * 6,
+                        width: SizeConfig.blockSizeHorizontal * 6,
                         clipBehavior: Clip.hardEdge,
                         decoration: const BoxDecoration(
                             borderRadius:
@@ -414,8 +379,6 @@ class _OrderScreenState extends State<OrderScreen> {
                               AsyncSnapshot<FileInfo> snapshot) {
                             if (snapshot.hasData) {
                               return Container(
-                                  height: 40,
-                                  width: 60,
                                   child: Image.file(snapshot.data.file));
                             } else {
                               return const Icon(Icons.error);
@@ -433,7 +396,7 @@ class _OrderScreenState extends State<OrderScreen> {
                     children: <Widget>[
                       CircleAvatar(
                         backgroundColor: Colors.blue[700],
-                        radius: 12,
+                        radius: 16,
                         child: IconButton(
                           padding: EdgeInsets.zero,
                           icon: const Icon(Icons.add),
@@ -441,7 +404,7 @@ class _OrderScreenState extends State<OrderScreen> {
                           onPressed: () {
                             !widget.isAgentOrder
                                 ? getIt<OrderListProvider>()
-                                    .incrementQuantity(item.id)
+                                    .incrementQuantity(item.id, isORderOrReturn)
                                 : getIt<OrderListProvider>()
                                     .incrementQuantityForAgentOrder(item.id);
                           },
@@ -449,7 +412,7 @@ class _OrderScreenState extends State<OrderScreen> {
                       ),
                       InkWell(
                         child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 8),
+                          padding: const EdgeInsets.symmetric(horizontal: 16),
                           child: Text(item.queantity.toString(),
                               style: styles.mystyle),
                         ),
@@ -459,7 +422,7 @@ class _OrderScreenState extends State<OrderScreen> {
                       ),
                       CircleAvatar(
                         backgroundColor: Colors.blue[700],
-                        radius: 12,
+                        radius: 16,
                         child: IconButton(
                           padding: EdgeInsets.zero,
                           icon: const Icon(Icons.remove),
@@ -484,10 +447,9 @@ class _OrderScreenState extends State<OrderScreen> {
                 Expanded(
                     child: InkWell(
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8),
-                    child: Text(item.unitPrice,
-                        style: styles.mystyle, textAlign: TextAlign.center),
-                  ),
+                      padding: const EdgeInsets.symmetric(horizontal: 8),
+                      child: Text(item.unitPrice,
+                          style: styles.mystyle, textAlign: TextAlign.center)),
                   onTap: () {
                     showPriceDialog(item.id);
                   },
@@ -506,13 +468,13 @@ class _OrderScreenState extends State<OrderScreen> {
     );
   }
 
-  Widget bottomTotal(OrderListProvider value) {
+  Widget bottomTotal(OrderListProvider value, BuildContext context) {
     return Column(
       children: <Widget>[
         Card(
           color: Colors.grey,
           child: Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
@@ -527,19 +489,25 @@ class _OrderScreenState extends State<OrderScreen> {
                   children: <Widget>[
                     Text(trans(context, 'total') + " ",
                         style: styles.mywhitestyle),
-                    Text(
-                        (value.sumTotal * (1 + config.tax / 100))
-                            .toStringAsFixed(2),
+                    Text((value.sumTotal).toStringAsFixed(2),
                         style: styles.mywhitestyle),
                   ],
                 ),
-                Row(
-                  children: <Widget>[
-                    Text(trans(context, 'cash_rquired') + " ",
-                        style: styles.mywhitestyle),
-                    Text(value.totalAfterDiscount.toStringAsFixed(2),
-                        style: styles.mywhitestyle),
-                  ],
+                InkWell(
+                  onTap: () => showTotalAdjustmentsDialoge(value),
+                  child: Row(
+                    children: <Widget>[
+                      Visibility(
+                          child: const Icon(Icons.adjust, color: Colors.blue),
+                          visible:
+                              value.fraction != 0.0 && value.fraction != 0.5),
+                      const SizedBox(width: 8),
+                      Text(trans(context, 'cash_rquired') + " ",
+                          style: value.mywhitestyle),
+                      Text(value.totalAfterDiscount.toStringAsFixed(2),
+                          style: value.mywhitestyle),
+                    ],
+                  ),
                 ),
               ],
             ),
@@ -682,26 +650,28 @@ class _OrderScreenState extends State<OrderScreen> {
                                     onPressed: () async {
                                       Navigator.pop(context);
                                       value.changeLoadingStare(true);
-                                      // if (value
-                                      //     .checkItemsBalancesBrforeLeaving()) {
-                                      //   if (await sendTransFunction(
-                                      //       widget.isAgentOrder,
-                                      //       "confirmed")) {
-                                      //     Navigator.popAndPushNamed(
-                                      //         context, "/Payment_Screen",
-                                      //         arguments: <String, dynamic>{
-                                      //           "orderTotal": ben.totalOrders,
-                                      //           "returnTotal":
-                                      //               ben.totalReturns,
-                                      //           "cashTotal":
-                                      //               double.parse(ben.balance),
-                                      //         });
-                                      //   } else {
-                                      //     showErrorSnakBar(context);
-                                      //   }
-                                      // } else {
-                                      //   showOverQuantitySnakBar(context);
-                                      // }
+                                      if (isORderOrReturn) {
+                                        if (value
+                                            .checkItemsBalancesBrforeLeaving()) {
+                                          if (await sendTransFunction(
+                                              widget.isAgentOrder,
+                                              "confirmed")) {
+                                            Navigator.pop(context);
+                                          } else {
+                                            showErrorSnakBar(context);
+                                          }
+                                        } else {
+                                          showOverQuantitySnakBar(context);
+                                        }
+                                      } else {
+                                        if (await sendTransFunction(
+                                            widget.isAgentOrder, "confirmed")) {
+                                          Navigator.pop(context);
+                                        } else {
+                                          showErrorSnakBar(context);
+                                        }
+                                      }
+
                                       value.changeLoadingStare(false);
                                     },
                                     child: Text(trans(context, 'confirm&pay'),
@@ -800,25 +770,21 @@ class _OrderScreenState extends State<OrderScreen> {
           }),
       backgroundColor: const Color(0xFF3B3B3B),
     );
-    // Scaffold.of(c).showSnackBar(snackBar);
+    Scaffold.of(c).showSnackBar(snackBar);
   }
 
   void showErrorSnakBar(BuildContext c) {
     final SnackBar snackBar = SnackBar(
-        content:
-            Text(trans(c, "error_happened"), style: styles.angrywhitestyle),
-        duration: const Duration(milliseconds: 1700),
-        action: SnackBarAction(
-            label: trans(c, 'ok'),
-            onPressed: () {
-              Scaffold.of(c).hideCurrentSnackBar();
-            }),
-        backgroundColor: const Color(0xFF3B3B3B));
-    try {
-      Scaffold.of(c).showSnackBar(snackBar);
-    } catch (err) {
-      print(err);
-    }
+      content: Text(trans(c, "error_happened"), style: styles.angrywhitestyle),
+      duration: const Duration(milliseconds: 1700),
+      action: SnackBarAction(
+          label: trans(c, 'ok'),
+          onPressed: () {
+            Scaffold.of(c).hideCurrentSnackBar();
+          }),
+      backgroundColor: const Color(0xFF3B3B3B),
+    );
+    Scaffold.of(c).showSnackBar(snackBar);
   }
 
   void cacelTransaction(bool downCacel) {
@@ -832,64 +798,6 @@ class _OrderScreenState extends State<OrderScreen> {
             Animation<double> anim2) {
           return TransactionDeleteDialog(downCacel: downCacel, c: context);
         });
-  }
-
-  Widget dragHere() {
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 8),
-      color: Colors.grey[300],
-      child: Stack(
-        children: <Widget>[
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              const SizedBox(height: 36),
-              Center(
-                child: Text(trans(context, 'drage_here'),
-                    style: styles.dargHereStyle, textAlign: TextAlign.center),
-              ),
-            ],
-          ),
-          AnimatedContainer(
-            height: animatedHight,
-            duration: const Duration(milliseconds: 900),
-            child: DottedBorder(
-              color: colors.black,
-              borderType: BorderType.RRect,
-              strokeWidth: 2,
-              child: DragTarget<SingleItem>(
-                onWillAccept: (SingleItem data) {
-                  return true;
-                },
-                onAccept: (SingleItem value) {
-                  setState(() {
-                    getIt<OrderListProvider>().addItemToList(
-                        value.id,
-                        value.name,
-                        value.notes,
-                        value.queantity,
-                        value.unit,
-                        value.agentPrice,
-                        value.image);
-                    getIt<OrderListProvider>().selectedOptions.add(value.id);
-                    indexedStackId = 0;
-                    animatedHight = 0;
-                  });
-                },
-                onLeave: (dynamic value) {},
-                builder: (BuildContext context, List<SingleItem> candidateData,
-                    List<dynamic> rejectedData) {
-                  return Container(
-                      width: MediaQuery.of(context).size.width / 2,
-                      height: MediaQuery.of(context).size.width / 2,
-                      color: Colors.transparent);
-                },
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
   }
 
   TextEditingController quantityController = TextEditingController();
@@ -1004,6 +912,42 @@ class _OrderScreenState extends State<OrderScreen> {
               })
         ],
       ),
+    );
+  }
+
+  void showTotalAdjustmentsDialoge(OrderListProvider value) {
+    isRTL = Directionality.of(context) == TextDirection.rtl;
+    showGeneralDialog<dynamic>(
+      barrierLabel: "Label",
+      barrierDismissible: true,
+      barrierColor: Colors.black.withOpacity(0.5),
+      transitionDuration: const Duration(milliseconds: 700),
+      context: context,
+      pageBuilder: (BuildContext context, Animation<double> anim1,
+          Animation<double> anim2) {
+        return Align(
+          alignment:isRTL? Alignment.bottomLeft:Alignment.bottomRight,
+          child: Container(
+            width: 300,
+            child: value.calculateWidgetsToAdjustTotal(context),
+            margin: const EdgeInsets.only(
+                top: 50, left: 12, right: 12, bottom: 100),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(40),
+            ),
+          ),
+        );
+      },
+      transitionBuilder: (BuildContext context, Animation<double> anim1,
+          Animation<double> anim2, Widget child) {
+        return SlideTransition(
+          position:
+              Tween<Offset>(begin: const Offset(0, 1), end: const Offset(0, 0))
+                  .animate(anim1),
+          child: child,
+        );
+      },
     );
   }
 }

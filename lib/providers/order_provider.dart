@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:agent_second/constants/config.dart';
+import 'package:agent_second/localization/trans.dart';
 import 'package:agent_second/models/ben.dart';
 import 'package:agent_second/models/transactions.dart';
 import 'package:agent_second/providers/export.dart';
@@ -26,12 +27,21 @@ class OrderListProvider with ChangeNotifier {
   double sumTotal = 0;
   List<SingleItemForSend> get currentordersList => ordersList;
   ItemsCap dummyItemCap = ItemsCap(balanceCap: 99999999);
-  SingleItem dummySiglItem = SingleItem(balanceInventory: 99999999);
+  Balance dummySiglItem = Balance(balance: 99999999);
   int howManyscreensToPop;
   List<int> transactionTopAyIds = <int>[];
   double progress = 0.0;
   double discount = 0.0;
   double totalAfterDiscount = 0.0;
+  double fraction;
+  List<Widget> widgetsToAdjustTotal = <Widget>[];
+  TextStyle mywhitestyle = const TextStyle(
+    fontWeight: FontWeight.w100,
+    color: Colors.white,
+    fontSize: 14,
+    decoration: TextDecoration.none,
+  );
+
   String getUnitNme(int itemId, int unitId) {
     String name;
     name = itemsList
@@ -53,7 +63,8 @@ class OrderListProvider with ChangeNotifier {
 
   void setDiscount(double dis) {
     discount = dis;
-    totalAfterDiscount = sumTotal * (1 + config.tax / 100) - discount;
+    totalAfterDiscount = (sumTotal - discount) * (1 + config.tax / 100);
+    chngeColorOfTotalToAdjustDiscount();
     notifyListeners();
   }
 
@@ -71,7 +82,8 @@ class OrderListProvider with ChangeNotifier {
           unitPrice: unitPrice,
           image: image));
       sumTotal += double.parse(unitPrice);
-      totalAfterDiscount = sumTotal * (1 + config.tax / 100) - discount;
+      totalAfterDiscount = (sumTotal - discount) * (1 + config.tax / 100);
+      chngeColorOfTotalToAdjustDiscount();
       notifyListeners();
     }
   }
@@ -100,12 +112,13 @@ class OrderListProvider with ChangeNotifier {
     }
   }
 
-  void clearOrcerList() {
+   void clearOrcerList() {
     ordersList.clear();
     selectedOptions.clear();
     sumTotal = 0.0;
     totalAfterDiscount = 0.0;
     discount = 0;
+    chngeColorOfTotalToAdjustDiscount();
     notifyListeners();
   }
 
@@ -125,23 +138,35 @@ class OrderListProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void incrementQuantity(int itemId) {
-    // final int quantity = ordersList.firstWhere((SingleItemForSend element) {
-    //   return element.id == itemId;
-    // }).queantity;
-//  if (checkValidation(itemId, quantity + 1)) {
-    ordersList.firstWhere((SingleItemForSend element) {
-      return element.id == itemId;
-    }).queantity += 1;
-    sumTotal += double.parse(ordersList.firstWhere((SingleItemForSend element) {
-      return element.id == itemId;
-    }).unitPrice);
-    totalAfterDiscount = sumTotal * (1 + config.tax / 100) - discount;
+  void incrementQuantity(int itemId, bool isOrder) {
+    if (isOrder) {
+      int quantity = ordersList.firstWhere((SingleItemForSend element) {
+        return element.id == itemId;
+      }).queantity;
+      if (checkValidation(itemId, ++quantity)) {
+        ordersList.firstWhere((SingleItemForSend element) {
+          return element.id == itemId;
+        }).queantity += 1;
+        sumTotal +=
+            double.parse(ordersList.firstWhere((SingleItemForSend element) {
+          return element.id == itemId;
+        }).unitPrice);
+        totalAfterDiscount = (sumTotal - discount) * (1 + config.tax / 100);
+      } else {
+        Vibration.vibrate(duration: 600);
+      }
+    } else {
+      ordersList.firstWhere((SingleItemForSend element) {
+        return element.id == itemId;
+      }).queantity += 1;
+      sumTotal +=
+          double.parse(ordersList.firstWhere((SingleItemForSend element) {
+        return element.id == itemId;
+      }).unitPrice);
+      totalAfterDiscount = (sumTotal - discount) * (1 + config.tax / 100);
+    }
 
-    // } else {
-    //   Vibration.vibrate(duration: 600);
-    // }
-
+    chngeColorOfTotalToAdjustDiscount();
     notifyListeners();
   }
 
@@ -157,12 +182,12 @@ class OrderListProvider with ChangeNotifier {
     sumTotal += double.parse(ordersList.firstWhere((SingleItemForSend element) {
       return element.id == itemId;
     }).unitPrice);
-    totalAfterDiscount = sumTotal * (1 + config.tax / 100) - discount;
+    totalAfterDiscount = (sumTotal - discount) * (1 + config.tax / 100);
 
     // } else {
     //   Vibration.vibrate(duration: 600);
     // }
-
+    chngeColorOfTotalToAdjustDiscount();
     notifyListeners();
   }
 
@@ -190,7 +215,7 @@ class OrderListProvider with ChangeNotifier {
     } else {
       Vibration.vibrate(duration: 600);
     }
-
+    chngeColorOfTotalToAdjustDiscount();
     notifyListeners();
   }
 
@@ -207,10 +232,11 @@ class OrderListProvider with ChangeNotifier {
           double.parse(ordersList.firstWhere((SingleItemForSend element) {
         return element.id == itemId;
       }).unitPrice);
-      totalAfterDiscount = sumTotal * (1 + config.tax / 100) - discount;
+      totalAfterDiscount = (sumTotal - discount) * (1 + config.tax / 100);
     } else {
       Vibration.vibrate(duration: 600);
     }
+    chngeColorOfTotalToAdjustDiscount();
     notifyListeners();
   }
 
@@ -233,15 +259,16 @@ class OrderListProvider with ChangeNotifier {
   double getTotla() {
     void sumtoTotal(double price) {
       sumTotal += price;
-      totalAfterDiscount = sumTotal * (1 + config.tax / 100) - discount;
+      totalAfterDiscount = (sumTotal - discount) * (1 + config.tax / 100);
     }
 
     sumTotal = 0.0;
-    totalAfterDiscount = sumTotal * (1 + config.tax / 100) - discount;
+    totalAfterDiscount = (sumTotal - discount) * (1 + config.tax / 100);
     // ignore: avoid_function_literals_in_foreach_calls
     ordersList.forEach((SingleItemForSend element) {
       sumtoTotal(double.parse(element.unitPrice) * element.queantity);
     });
+    chngeColorOfTotalToAdjustDiscount();
     return sumTotal;
   }
 
@@ -259,7 +286,7 @@ class OrderListProvider with ChangeNotifier {
   void bringOrderToOrderScreen(Transaction transaction) {
     clearOrcerList();
     sumTotal = transaction.amount.toDouble();
-    totalAfterDiscount = sumTotal * (1 + config.tax / 100) - discount;
+    totalAfterDiscount = (sumTotal - discount) * (1 + config.tax / 100);
     transaction.details.forEach((MiniItems element) {
       selectedOptions.add(element.itemId);
       ordersList.add(SingleItemForSend(
@@ -269,6 +296,7 @@ class OrderListProvider with ChangeNotifier {
           unit: element.unit,
           unitPrice: element.itemPrice.toString()));
     });
+    chngeColorOfTotalToAdjustDiscount();
     notifyListeners();
   }
 
@@ -484,22 +512,11 @@ class OrderListProvider with ChangeNotifier {
     }
   }
 
-  Future<void> deleteAgentOrder(int transId) async {
-    dio
-        .delete<dynamic>("stocktransactions/$transId")
-        .then((Response<dynamic> value) {
-      if (value.statusCode != 200) {
-        Fluttertoast.showToast(msg: "Delete Error");
-      } else {
-        getIt<TransactionProvider>().deleteAgentTrnsaction(transId);
-      }
-    });
-  }
-
   Future<void> loadItems(List<SingleItem> olditems) async {
     await dio.get<dynamic>("items").then((Response<dynamic> value) async {
       itemsList = Items.fromJson(value.data).itemsList;
       await cachImages(itemsList);
+      // if(olditems.isNotEmpty)
       // removeOldImages(itemsList, olditems);
       data.setData("items", jsonEncode(value.data));
       itemsDataLoaded = true;
@@ -593,26 +610,20 @@ class OrderListProvider with ChangeNotifier {
 
   bool checkValidation(int itemId, int quantity) {
     print(quantity);
-
+    print(itemsBalances.firstWhere((Balance element) {
+      return element.id == itemId;
+    }, orElse: () {
+      return dummySiglItem;
+    }).balance);
     print(itemId);
     if ((quantity <=
-            itemsList.firstWhere((SingleItem element) {
+            itemsBalances.firstWhere((Balance element) {
               return element.id == itemId;
             }, orElse: () {
               return dummySiglItem;
-            }).balanceInventory) &&
+            }).balance) &&
         quantity > 0) {
-      if (quantity <=
-          getIt<GlobalVars>().benInFocus.itemsCap.firstWhere(
-              (ItemsCap element) {
-            return element.itemId == itemId;
-          }, orElse: () {
-            return dummyItemCap;
-          }).balanceCap) {
-        return true;
-      } else {
-        return false;
-      }
+      return true;
     } else {
       return false;
     }
@@ -622,5 +633,116 @@ class OrderListProvider with ChangeNotifier {
   void changeLoadingStare(bool state) {
     loadingStar = state;
     notifyListeners();
+  }
+
+  void chngeColorOfTotalToAdjustDiscount() {
+    fraction = sumTotal - sumTotal.truncate();
+    fraction.toStringAsFixed(2);
+    if (fraction == 0.0 || fraction == 0.5) {
+      mywhitestyle = mywhitestyle.apply(color: Colors.white);
+    } else {
+      mywhitestyle = mywhitestyle.apply(color: Colors.blue);
+    }
+  }
+
+  Widget calculateWidgetsToAdjustTotal(BuildContext context) {
+    final double coiceOne =
+        sumTotal - sumTotal.truncate() / (1 + config.tax / 100);
+
+    // final double coiceOne = totalAfterDiscount - totalAfterDiscount.truncate();
+    // final double temp = totalAfterDiscount - 0.5;
+
+    // final double coiceTwo = totalAfterDiscount - temp;
+    // final double totalwithHald = totalAfterDiscount.truncate() + 0.5;
+    coiceOne.toStringAsFixed(2);
+    // coiceTwo.toStringAsFixed(2);
+
+    if (fraction > 0.5) {
+      final double coiceTwo =
+          sumTotal - (sumTotal.truncate() + 0.5) / (1 + config.tax / 100);
+
+      final Widget res = Material(
+          child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+            RaisedButton(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    Text(trans(context, "total") + " ${sumTotal.truncate()}",
+                        style: mywhitestyle),
+                    Text(
+                        trans(context, "discount") +
+                            " ${coiceOne.toStringAsFixed(2)}",
+                        style: mywhitestyle)
+                  ],
+                ),
+                onPressed: () {
+                  discount = double.parse(coiceOne.toStringAsFixed(2));
+                  totalAfterDiscount = sumTotal.floorToDouble();
+                  mywhitestyle = mywhitestyle.apply(color: Colors.white);
+                  notifyListeners();
+                }),
+            RaisedButton(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    Text(
+                        trans(context, "total") +
+                            " ${sumTotal.truncate() + 0.5}",
+                        style: mywhitestyle),
+                    Text(
+                        trans(context, "discount") +
+                            " ${coiceTwo.toStringAsFixed(2)}",
+                        style: mywhitestyle)
+                  ],
+                ),
+                onPressed: () {
+                  discount = double.parse(coiceTwo.toStringAsFixed(2));
+                  totalAfterDiscount = sumTotal.floorToDouble() + 0.5;
+                  mywhitestyle = mywhitestyle.apply(color: Colors.white);
+                  notifyListeners();
+                }),
+
+            // Text("$coiceOne", style: mywhitestyle),
+          ]));
+      return res;
+    } else {
+      return Material(
+        child: RaisedButton(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                Text(trans(context, "total") + " ${sumTotal.truncate()}",
+                    style: mywhitestyle),
+                Text(
+                    trans(context, "discount") +
+                        " ${coiceOne.toStringAsFixed(2)}",
+                    style: mywhitestyle)
+              ],
+            ),
+            onPressed: () {
+              discount = double.parse(coiceOne.toStringAsFixed(2));
+              totalAfterDiscount = sumTotal.floorToDouble();
+              mywhitestyle = mywhitestyle.apply(color: Colors.white);
+              notifyListeners();
+            }),
+      );
+    }
+  }
+    Future<void> deleteAgentOrder(int transId) async {
+    dio
+        .delete<dynamic>("stocktransactions/$transId")
+        .then((Response<dynamic> value) {
+      if (value.statusCode != 200) {
+        Fluttertoast.showToast(msg: "Delete Error");
+      } else {
+        getIt<TransactionProvider>().deleteAgentTrnsaction(transId);
+      }
+    });
   }
 }
