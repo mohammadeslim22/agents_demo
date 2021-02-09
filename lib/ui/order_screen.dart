@@ -58,7 +58,7 @@ class _OrderScreenState extends State<OrderScreen> {
         onTap: () {
           !orsderListProvider.selectedOptions.contains(item.id)
               ? setState(() {
-                  getIt<OrderListProvider>().addItemToList(
+                  orsderListProvider.addItemToList(
                       item.id,
                       item.name,
                       item.notes,
@@ -69,10 +69,9 @@ class _OrderScreenState extends State<OrderScreen> {
                   orsderListProvider.selectedOptions.add(item.id);
                 })
               : !widget.isAgentOrder
-                  ? getIt<OrderListProvider>()
-                      .incrementQuantity(item.id, isORderOrReturn)
-                  : getIt<OrderListProvider>()
-                      .incrementQuantityForAgentOrder(item.id);
+                  ? orsderListProvider.incrementQuantity(
+                      item.id, isORderOrReturn)
+                  : orsderListProvider.incrementQuantityForAgentOrder(item.id);
         },
         child: Column(
           children: <Widget>[
@@ -115,7 +114,7 @@ class _OrderScreenState extends State<OrderScreen> {
                   style: styles.smallItembluestyle,
                   textAlign: TextAlign.center),
             ),
-            Text(item.agentPrice, style: styles.mystyle),
+            Text(item.unitPrice, style: styles.mystyle),
           ],
         ),
       ),
@@ -137,7 +136,7 @@ class _OrderScreenState extends State<OrderScreen> {
         getIt<OrderListProvider>().getItems();
       }
     });
-    
+
     transId = widget.transId;
   }
 
@@ -925,7 +924,7 @@ class _OrderScreenState extends State<OrderScreen> {
       pageBuilder: (BuildContext context, Animation<double> anim1,
           Animation<double> anim2) {
         return Align(
-          alignment:isRTL? Alignment.bottomLeft:Alignment.bottomRight,
+          alignment: isRTL ? Alignment.bottomLeft : Alignment.bottomRight,
           child: Container(
             width: 300,
             child: value.calculateWidgetsToAdjustTotal(context),
