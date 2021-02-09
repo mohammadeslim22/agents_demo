@@ -40,7 +40,8 @@ class Transaction {
       this.createdAt,
       this.tax,
       this.details,
-      this.fromTranId});
+      this.fromTranId,
+      this.discount});
 
   Transaction.fromJson(dynamic json) {
     id = json['id'] as int;
@@ -68,7 +69,9 @@ class Transaction {
     }
     if (json['taxed'] != null) tax = double.parse(json['taxed'].toString());
     fromTranId = json['from_transaction_id'].toString();
-    if (json['discount'] != null) discount = json['discount'].toString();
+    if (json['discount'] != null) 
+    discount = json['discount'].toString();
+
   }
 
   dynamic toJson() {

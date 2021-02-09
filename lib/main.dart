@@ -36,10 +36,11 @@ Future<void> main() async {
     config.imageUrl = "http://demo.agentsmanage.com/image/";
     config.qrCodeScan = true;
   } else {
-    config.baseUrl = "${baseUrl}api/";
-    config.imageUrl = "${baseUrl}image/";
+    config.baseUrl = "$baseUrl/api/";
+    config.imageUrl = "$baseUrl/image/";
     config.qrCodeScan = false;
   }
+  print("  ${config.baseUrl } config.baseUrl");
   runApp(
     MultiProvider(
       providers: <ChangeNotifierProvider<ChangeNotifier>>[
@@ -104,6 +105,6 @@ class MyApp extends StatelessWidget {
         },
         theme: mainThemeData(),
         onGenerateRoute: onGenerateRoute,
-        home: config.qrCodeScan ? const Splash() :  const LoginScreen());
+        home: config.qrCodeScan ? const Splash() : const LoginScreen());
   }
 }

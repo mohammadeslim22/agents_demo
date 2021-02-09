@@ -11,6 +11,7 @@ import 'package:agent_second/util/service_locator.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:agent_second/models/Items.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:vibration/vibration.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 
@@ -88,20 +89,30 @@ class OrderListProvider with ChangeNotifier {
   }
 
   void changePrice(int itemId, double price) {
-    if (double.parse(getPrice(itemId)) > price) {
-      return;
-    }
-    if (config.editPrice == 1) {
-      ordersList.firstWhere((SingleItemForSend element) {
-        return element.id == itemId;
-      }).unitPrice = price.toStringAsFixed(2);
-      getTotla();
-      chngeColorOfTotalToAdjustDiscount();
-      notifyListeners();
-    }
+
+    final Ben inFocus = getIt<GlobalVars>().getbenInFocus();
+    if (inFocus.type == "normal") {
+      if (double.parse(getPrice(itemId)) > price) {
+        return;
+      }
+      if (config.editPrice == 1) {
+        ordersList.firstWhere((SingleItemForSend element) {
+          return element.id == itemId;
+        }).unitPrice = price.toStringAsFixed(2);
+        getTotla();
+        notifyListeners();
+      }
+    } else {
+      if (config.editPrice == 1) {
+        ordersList.firstWhere((SingleItemForSend element) {
+          return element.id == itemId;
+        }).unitPrice = price.toStringAsFixed(2);
+        getTotla();
+        notifyListeners();
+      }
   }
 
-  void clearOrcerList() {
+   void clearOrcerList() {
     ordersList.clear();
     selectedOptions.clear();
     sumTotal = 0.0;
@@ -723,4 +734,17 @@ class OrderListProvider with ChangeNotifier {
       );
     }
   }
+
+    Future<void> deleteAgentOrder(int transId) async {
+    dio
+        .delete<dynamic>("stocktransactions/$transId")
+        .then((Response<dynamic> value) {
+      if (value.statusCode != 200) {
+        Fluttertoast.showToast(msg: "Delete Error");
+      } else {
+        getIt<TransactionProvider>().deleteAgentTrnsaction(transId);
+      }
+    });
+  }
+
 }

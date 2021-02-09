@@ -28,7 +28,7 @@ double latTosend;
 double longTosend;
 
 Future<void> dioDefaults() async {
-   location.getLocation().then((LocationData value) {
+  location.getLocation().then((LocationData value) {
     latTosend = value.latitude;
     longTosend = value.longitude;
   });
@@ -37,6 +37,7 @@ Future<void> dioDefaults() async {
   dio.interceptors
       .add(InterceptorsWrapper(onRequest: (RequestOptions options) async {
     // Do something before request is sent
+    print(config.baseUrl);
     options.queryParameters.addAll(<String, String>{
       'latitude': latTosend.toString() ?? "0.0",
       'longitude': longTosend.toString() ?? "0.0"
@@ -47,7 +48,7 @@ Future<void> dioDefaults() async {
     // If you want to reject the request with a error message,
     // you can return a `DioError` object or return `dio.reject(errMsg)`
   }, onResponse: (Response<dynamic> response) async {
-    print("status code: ${response.statusCode}");
+    print("status code for ${response.request.path}: ${response.statusCode}");
     if (response.statusCode == 200) {
       print("response : ${response.data}");
       //  Fluttertoast.showToast(msg: "response.statusCode ${response.statusCode}  ${response.data}",toastLength: Toast.LENGTH_SHORT);
@@ -57,7 +58,7 @@ Future<void> dioDefaults() async {
     }
     return response; // continue
   }, onError: (DioError e) async {
-      Fluttertoast.showToast(msg: "Error Happened");
+    Fluttertoast.showToast(msg: "Error Happened");
     print(e.message);
     // Do something with response error
     return e; //continue

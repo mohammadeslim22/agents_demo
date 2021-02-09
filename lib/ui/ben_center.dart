@@ -37,7 +37,7 @@ class BeneficiaryCenter extends StatefulWidget {
 class _BeneficiaryCenterState extends State<BeneficiaryCenter> {
   Ben ben;
   List<MiniItems> items;
-  Transaction transaction;
+  Transaction transaction = Transaction();
   bool billIsOn = true;
   Collections collection;
   int indexedStack;
@@ -98,12 +98,13 @@ class _BeneficiaryCenterState extends State<BeneficiaryCenter> {
     billIsOn = true;
     indexedStack = 0;
     noItemFound = Container(
-        width: 300,
-        height: 250,
-        child: const FlareActor("assets/images/empty.flr",
-            alignment: Alignment.center,
-            fit: BoxFit.fill,
-            animation: "default"));
+
+      width: 300,
+      height: 250,
+      child: const FlareActor("assets/images/empty.flr",
+          alignment: Alignment.center, fit: BoxFit.fill, animation: "default"),
+    );
+
     getIt<GlobalVars>().updateBenBalance(ben.id);
     getIt<TransactionProvider>().pagewiseCollectionController =
         PagewiseLoadController<dynamic>(
@@ -138,37 +139,37 @@ class _BeneficiaryCenterState extends State<BeneficiaryCenter> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: <Widget>[
-            Consumer<GlobalVars>(
-              builder: (BuildContext context, GlobalVars value, Widget child) {
-                return Row(
-                  children: <Widget>[
-                    Text(trans(context, 'total_between_order_return') + "  ",
-                        style: styles.littleangrywhitestyle),
-                    Text((double.parse(ben.balance)).toString(),
-                        style: styles.angrywhitestyle),
-                    const SizedBox(width: 24),
-                    Text(trans(context, 'total_orders_confirmed') + "  ",
-                        style: styles.littleangrywhitestyle),
-                    Text(ben.totalOrders.toStringAsFixed(2),
-                        style: styles.angrywhitestyle),
-                    const SizedBox(width: 24),
-                    Text(trans(context, 'total_return_confirmed') + "  ",
-                        style: styles.littleangrywhitestyle),
-                    Text(ben.totalReturns.toStringAsFixed(2),
-                        style: styles.angrywhitestyle),
-                  ],
-                );
-              },
-            ),
-            Text(trans(context, "ben_center"), style: styles.appBar),
-          ],
-        ),
-        centerTitle: true,
-        automaticallyImplyLeading: true,
-      ),
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: <Widget>[
+              Consumer<GlobalVars>(
+                builder:
+                    (BuildContext context, GlobalVars value, Widget child) {
+                  return Row(
+                    children: <Widget>[
+                      Text(trans(context, 'total_between_order_return') + "  ",
+                          style: styles.littleangrywhitestyle),
+                      Text((double.parse(ben.balance)).toString(),
+                          style: styles.angrywhitestyle),
+                      const SizedBox(width: 24),
+                      Text(trans(context, 'total_orders_confirmed') + "  ",
+                          style: styles.littleangrywhitestyle),
+                      Text(ben.totalOrders.toStringAsFixed(2),
+                          style: styles.angrywhitestyle),
+                      const SizedBox(width: 24),
+                      Text(trans(context, 'total_return_confirmed') + "  ",
+                          style: styles.littleangrywhitestyle),
+                      Text(ben.totalReturns.toStringAsFixed(2),
+                          style: styles.angrywhitestyle),
+                    ],
+                  );
+                },
+              ),
+              Text(trans(context, "ben_center"), style: styles.appBar),
+            ],
+          ),
+          centerTitle: true,
+          automaticallyImplyLeading: true),
       body: SafeArea(
         child: Row(
           children: <Widget>[
@@ -258,28 +259,24 @@ class _BeneficiaryCenterState extends State<BeneficiaryCenter> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: <Widget>[
-                        Container(
-                          child: RaisedButton(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12.0),
-                            ),
-                            color: colors.blue,
-                            onPressed: () {
-                              getIt<OrderListProvider>().clearOrcerList();
-                              Navigator.pushNamed(context, "/Order_Screen",
-                                  arguments: <String, dynamic>{
-                                    "ben": ben,
-                                    "isORderOrReturn": true,
-                                    "isAgentOrder": false
-                                  });
-                            },
-                            child: Text(trans(context, "order"),
-                                style: styles.mywhitestyle),
-                          ),
+                        RaisedButton(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12.0)),
+                          color: colors.blue,
+                          onPressed: () {
+                            getIt<OrderListProvider>().clearOrcerList();
+                            Navigator.pushNamed(context, "/Order_Screen",
+                                arguments: <String, dynamic>{
+                                  "ben": ben,
+                                  "isORderOrReturn": true,
+                                  "isAgentOrder": false
+                                });
+                          },
+                          child: Text(trans(context, "order"),
+                              style: styles.mywhitestyle),
                         ),
                         const SizedBox(width: 16),
-                        Container(
-                          child: RaisedButton(
+                        RaisedButton(
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(12.0),
                             ),
@@ -294,28 +291,23 @@ class _BeneficiaryCenterState extends State<BeneficiaryCenter> {
                                   });
                             },
                             child: Text(trans(context, "return"),
-                                style: styles.mywhitestyle),
-                          ),
-                        ),
+                                style: styles.mywhitestyle)),
                         const SizedBox(width: 16),
-                        Container(
-                          child: RaisedButton(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12.0),
-                            ),
-                            color: colors.green,
-                            onPressed: () {
-                              getIt<OrderListProvider>().setScreensToPop(2);
-                              Navigator.pushNamed(context, "/Payment_Screen",
-                                  arguments: <String, dynamic>{
-                                    "orderTotal": ben.totalOrders,
-                                    "returnTotal": ben.totalReturns,
-                                    "cashTotal": double.parse(ben.balance),
-                                  });
-                            },
-                            child: Text(trans(context, "collection"),
-                                style: styles.mywhitestyle),
-                          ),
+                        RaisedButton(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12.0)),
+                          color: colors.green,
+                          onPressed: () {
+                            getIt<OrderListProvider>().setScreensToPop(2);
+                            Navigator.pushNamed(context, "/Payment_Screen",
+                                arguments: <String, dynamic>{
+                                  "orderTotal": ben.totalOrders,
+                                  "returnTotal": ben.totalReturns,
+                                  "cashTotal": double.parse(ben.balance),
+                                });
+                          },
+                          child: Text(trans(context, "collection"),
+                              style: styles.mywhitestyle),
                         )
                       ],
                     ),
@@ -383,16 +375,15 @@ class _BeneficiaryCenterState extends State<BeneficiaryCenter> {
                                 ? Colors.yellow[100]
                                 : Colors.transparent),
                         child: FlatButton(
-                          padding: EdgeInsets.zero,
-                          onPressed: () {
-                            setState(() {
-                              indexedStack = 2;
-                            });
-                          },
-                          child: SvgPicture.asset(
-                              "assets/images/collection_icon.svg",
-                              width: 40),
-                        ),
+                            padding: EdgeInsets.zero,
+                            onPressed: () {
+                              setState(() {
+                                indexedStack = 2;
+                              });
+                            },
+                            child: SvgPicture.asset(
+                                "assets/images/collection_icon.svg",
+                                width: 40)),
                       ),
                     ],
                   ),
@@ -401,37 +392,32 @@ class _BeneficiaryCenterState extends State<BeneficiaryCenter> {
                           border: Border.all(color: Colors.grey),
                           color: Colors.blue[400]),
                       child: Padding(
-                        padding: const EdgeInsets.fromLTRB(16, 0, 4, 4),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            Expanded(
-                                child: Text(trans(context, "#"),
-                                    style: styles.mystyle,
-                                    textAlign: TextAlign.start)),
-                            Expanded(
-                              flex: 2,
-                              child: Text(trans(context, "agent"),
-                                  style: styles.mystyle,
-                                  textAlign: TextAlign.start),
-                            ),
-                            Expanded(
-                                flex: 2,
-                                child: Text(trans(context, "date"),
-                                    style: styles.mystyle,
-                                    textAlign: TextAlign.center)),
-                            Expanded(
-                              flex: 1,
-                              child: Container(),
-                            ),
-                            Expanded(
-                                child: Text(trans(context, "total"),
-                                    style: styles.mystyle,
-                                    textAlign: TextAlign.end))
-                          ],
-                        ),
-                      )),
+                          padding: const EdgeInsets.fromLTRB(16, 0, 4, 4),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              Expanded(
+                                  child: Text(trans(context, "#"),
+                                      style: styles.mystyle,
+                                      textAlign: TextAlign.start)),
+                              Expanded(
+                                  flex: 2,
+                                  child: Text(trans(context, "agent"),
+                                      style: styles.mystyle,
+                                      textAlign: TextAlign.start)),
+                              Expanded(
+                                  flex: 2,
+                                  child: Text(trans(context, "date"),
+                                      style: styles.mystyle,
+                                      textAlign: TextAlign.center)),
+                              Expanded(flex: 1, child: Container()),
+                              Expanded(
+                                  child: Text(trans(context, "total"),
+                                      style: styles.mystyle,
+                                      textAlign: TextAlign.end))
+                            ],
+                          ))),
                   Expanded(
                     child: SmartRefresher(
                       enablePullDown: true,
@@ -551,90 +537,23 @@ class _BeneficiaryCenterState extends State<BeneficiaryCenter> {
                 ],
               ),
             ),
-            if (billIsOn)
-              Expanded(
-                child: Stack(
-                  children: <Widget>[
-                    GoogleMap(
-                      onMapCreated: _onMapCreated,
-                      padding: const EdgeInsets.only(bottom: 6),
-                      mapType: MapType.normal,
-                      markers: Set<Marker>.of(markers.values),
-                      initialCameraPosition: CameraPosition(
-                        target: LatLng(lat, long),
-                        zoom: 11,
-                      ),
-                      onCameraMove: (CameraPosition pos) {},
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 8.0, bottom: 69),
-                      child: Align(
-                        alignment: Alignment.bottomLeft,
-                        child: Container(
-                          width: 40,
-                          height: 40,
-                          child: Material(
-                            color: colors.white,
-                            borderRadius: BorderRadius.circular(6),
-                            child: InkWell(
-                              borderRadius: BorderRadius.circular(6),
-                              onTap: () {},
-                              child: GestureDetector(
-                                child: const Center(
-                                  child: Icon(
-                                    Icons.my_location,
-                                    color: Color.fromARGB(1023, 150, 150, 150),
-                                  ),
-                                ),
-                                onTap: () async {
-                                  serviceEnabled =
-                                      await location.serviceEnabled();
-                                  if (!serviceEnabled) {
-                                    serviceEnabled =
-                                        await location.requestService();
-                                    if (!serviceEnabled) {
-                                    } else {
-                                      permissionGranted =
-                                          await location.hasPermission();
-                                      if (permissionGranted ==
-                                          PermissionStatus.denied) {
-                                        permissionGranted =
-                                            await location.requestPermission();
-                                        if (permissionGranted ==
-                                            PermissionStatus.granted) {
-                                          _animateToUser();
-                                        }
-                                      } else {
-                                        _animateToUser();
-                                      }
-                                    }
-                                  } else {
-                                    permissionGranted =
-                                        await location.hasPermission();
-                                    if (permissionGranted ==
-                                        PermissionStatus.denied) {
-                                      permissionGranted =
-                                          await location.requestPermission();
-                                      if (permissionGranted ==
-                                          PermissionStatus.granted) {
-                                        _animateToUser();
-                                      }
-                                    } else {
-                                      _animateToUser();
-                                    }
-                                  }
-                                },
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
+            Visibility(
+                child: Expanded(
+                  child: Stack(
+                    children: <Widget>[
+                      GoogleMap(
+                          onMapCreated: _onMapCreated,
+                          padding: const EdgeInsets.only(bottom: 6),
+                          markers: Set<Marker>.of(markers.values),
+                          initialCameraPosition: CameraPosition(
+                              target: LatLng(lat, long), zoom: 11),
+                          myLocationEnabled: true,
+                          myLocationButtonEnabled: true),
+                    ],
+                  ),
                 ),
-              )
-            else
-              Expanded(child: bill(items)),
+                visible: billIsOn,
+                replacement: Expanded(child: bill(items))),
           ],
         ),
       ),
@@ -757,11 +676,10 @@ class _BeneficiaryCenterState extends State<BeneficiaryCenter> {
                     child: Text(entry.transDate,
                         style: styles.mystyle, textAlign: TextAlign.center)),
                 Expanded(
-                  flex: 1,
-                  child: (entry.status == 'draft')
-                      ? const Icon(Icons.edit, color: Colors.amber)
-                      : Container(),
-                ),
+                    flex: 1,
+                    child: (entry.status == 'draft')
+                        ? const Icon(Icons.edit, color: Colors.amber)
+                        : Container()),
                 Expanded(
                     child: Text(entry.amount.toString(),
                         style: styles.mystyle, textAlign: TextAlign.end))
@@ -848,7 +766,8 @@ class _BeneficiaryCenterState extends State<BeneficiaryCenter> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
-                          Text(transaction.transDate, style: styles.mystyle),
+                          Text(transaction.transDate ?? "",
+                              style: styles.mystyle),
                         ],
                       )
                     ],
@@ -856,37 +775,32 @@ class _BeneficiaryCenterState extends State<BeneficiaryCenter> {
                 ],
               ),
             ),
-            if (!billIsOn)
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 0),
-                width: SizeConfig.blockSizeHorizontal * 10,
-                height: SizeConfig.blockSizeVertical * 10,
-                child: Column(
-                  children: <Widget>[
-                    Expanded(
-                      flex: 3,
-                      child: FlatButton(
-                        padding: EdgeInsets.zero,
-                        onPressed: () {
-                          setState(() {
-                            billIsOn = !billIsOn;
-                          });
-                        },
-                        child: const FlareActor("assets/images/maps.flr",
-                            alignment: Alignment.center,
-                            fit: BoxFit.cover,
-                            animation: "anim"),
-                      ),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 0),
+              width: SizeConfig.blockSizeHorizontal * 10,
+              height: SizeConfig.blockSizeVertical * 10,
+              child: Column(
+                children: <Widget>[
+                  Expanded(
+                    flex: 3,
+                    child: FlatButton(
+                      padding: EdgeInsets.zero,
+                      onPressed: () {
+                        setState(() {
+                          billIsOn = !billIsOn;
+                        });
+                      },
+                      child: const FlareActor("assets/images/maps.flr",
+                          alignment: Alignment.center,
+                          fit: BoxFit.cover,
+                          animation: "anim"),
                     ),
-                    Text(
-                      trans(context, "back_to_map"),
-                      style: TextStyle(color: colors.black, fontSize: 7),
-                    )
-                  ],
-                ),
-              )
-            else
-              Container(),
+                  ),
+                  Text(trans(context, "back_to_map"),
+                      style: TextStyle(color: colors.black, fontSize: 7))
+                ],
+              ),
+            )
           ],
         ),
         OrderListCell(items: items),

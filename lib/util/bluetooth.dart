@@ -307,8 +307,8 @@ class _MyAppState extends State<Bluetooth> {
 
         getIt<Auth>().bluetooth.printNewLine();
         getIt<Auth>()
-            .bluetooth
-            .printCustom("DISCOUNT ${transaction.discount}", 1, 2);
+            .bluetooth.printCustom("DISCOUNT ${transaction.discount}", 1, 2);
+
         getIt<Auth>().bluetooth.printNewLine();
         getIt<Auth>().bluetooth.printCustom("SUB TOTAL ${totalBeforTax.toStringAsFixed(2)}", 1, 2);
         getIt<Auth>().bluetooth.printNewLine();
@@ -340,6 +340,7 @@ class _MyAppState extends State<Bluetooth> {
     double returnAmount = 0.0;
     double taxMony = 0.0;
     double discount = 0.0;
+
     // orderTransactions.forEach((Transaction element) {
     //   taxMony += element.tax;
 
@@ -353,7 +354,9 @@ class _MyAppState extends State<Bluetooth> {
     //         "$i  ${element.details[i].item}  ${element.details[i].quantity}   ${element.details[i].itemPrice}   ${element.details[i].total}");
     //   }
     //   orderAmount += element.amount;
-    //   print("new line");
+
+    //   discount += double.parse(element.discount ?? "0");
+    //   print("new line discount ${element.discount??"0"}");
     // });
     // print("RETURN");
     // returnTransactions.forEach((Transaction element) {
@@ -369,6 +372,8 @@ class _MyAppState extends State<Bluetooth> {
     // final double totalfterReturn = orderAmount - returnAmount;
     // print(
     //     "tax money ${taxMony.toStringAsFixed(2)}  total: ${totalfterReturn.toStringAsFixed(2)}");
+    /////////////////////////////////
+
     getIt<Auth>().bluetooth.isConnected.then((bool isConnected) {
       if (isConnected) {
 
@@ -425,10 +430,11 @@ class _MyAppState extends State<Bluetooth> {
                 0);
             getIt<Auth>()
                 .bluetooth
-                .printCustom("    ${transaction.details[i].barcode}", 1, 0);
+                .printCustom("    ${element.details[i].barcode}", 1, 0);
           }
           orderAmount += element.amount;
-          discount += double.parse(element.discount ?? "0");
+         discount += double.parse(element.discount ?? "0");
+
           getIt<Auth>().bluetooth.printNewLine();
         });
         getIt<Auth>().bluetooth.printNewLine();
@@ -447,7 +453,7 @@ class _MyAppState extends State<Bluetooth> {
                 0);
             getIt<Auth>()
                 .bluetooth
-                .printCustom("    ${transaction.details[i].barcode}", 1, 0);
+                .printCustom("    ${element.details[i].barcode}", 1, 0);
           }
           returnAmount += element.amount;
           getIt<Auth>().bluetooth.printNewLine();

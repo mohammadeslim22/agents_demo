@@ -22,8 +22,7 @@ class Splash extends StatelessWidget {
       body: Center(
         child: Card(
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(120.0),
-          ),
+              borderRadius: BorderRadius.circular(120.0)),
           child: Container(
             padding: const EdgeInsets.symmetric(vertical: 8),
             decoration: BoxDecoration(
@@ -39,6 +38,7 @@ class Splash extends StatelessWidget {
                   builder: (BuildContext context,
                       AsyncSnapshot<Response<dynamic>> snapshot) {
                     if (snapshot.hasData) {
+                      print(snapshot.data);
                       return Center(
                         child: CircleAvatar(
                           radius: SizeConfig.screenWidth * .07,
@@ -48,7 +48,7 @@ class Splash extends StatelessWidget {
                         ),
                       );
                     } else {
-                      return const Icon(Icons.error);
+                      return const Icon(Icons.desktop_mac);
                     }
                   },
                 ),
@@ -63,7 +63,8 @@ class Splash extends StatelessWidget {
                             vertical: SizeConfig.blockSizeVertical * 4),
                         autofocus: true,
                         onPressed: () {
-                          Navigator.popAndPushNamed(context, "/login");
+                          Navigator.pushNamedAndRemoveUntil(context, "/login",
+                              (Route<dynamic> route) => false);
                         },
                         child: Text(trans(context, "go_demo"),
                             style: styles.underHeadred),
@@ -80,8 +81,8 @@ class Splash extends StatelessWidget {
                           try {
                             Fluttertoast.showToast(msg: result.rawContent);
                             await data.setData("baseUrl", result.rawContent);
-                            config.baseUrl = "${result.rawContent}api/";
-                            config.imageUrl = "${result.rawContent}image/";
+                            config.baseUrl = "${result.rawContent}/api/";
+                            config.imageUrl = "${result.rawContent}/image/";
                             Navigator.popAndPushNamed(context, "/login");
                           } catch (e) {
                             Fluttertoast.showToast(

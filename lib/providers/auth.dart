@@ -52,6 +52,7 @@ class Auth with ChangeNotifier {
 
             config.logo =
                 config.imageUrl + value.data['settings']['logo'].toString();
+            print(config.logo);
             config.trn = value.data['trn'].toString();
             config.tax = double.parse(value.data['tax'].toString());
             data.setData("agent_email", value.data['email'].toString());
