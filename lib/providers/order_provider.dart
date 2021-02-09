@@ -77,15 +77,26 @@ class OrderListProvider with ChangeNotifier {
   }
 
   void changePrice(int itemId, double price) {
-    if (double.parse(getPrice(itemId)) > price) {
-      return;
-    }
-    if (config.editPrice == 1) {
-      ordersList.firstWhere((SingleItemForSend element) {
-        return element.id == itemId;
-      }).unitPrice = price.toStringAsFixed(2);
-      getTotla();
-      notifyListeners();
+    final Ben inFocus = getIt<GlobalVars>().getbenInFocus();
+    if (inFocus.type == "normal") {
+      if (double.parse(getPrice(itemId)) > price) {
+        return;
+      }
+      if (config.editPrice == 1) {
+        ordersList.firstWhere((SingleItemForSend element) {
+          return element.id == itemId;
+        }).unitPrice = price.toStringAsFixed(2);
+        getTotla();
+        notifyListeners();
+      }
+    } else {
+      if (config.editPrice == 1) {
+        ordersList.firstWhere((SingleItemForSend element) {
+          return element.id == itemId;
+        }).unitPrice = price.toStringAsFixed(2);
+        getTotla();
+        notifyListeners();
+      }
     }
   }
 
@@ -489,7 +500,7 @@ class OrderListProvider with ChangeNotifier {
     await dio.get<dynamic>("items").then((Response<dynamic> value) async {
       itemsList = Items.fromJson(value.data).itemsList;
       await cachImages(itemsList);
-      removeOldImages(itemsList, olditems);
+      // removeOldImages(itemsList, olditems);
       data.setData("items", jsonEncode(value.data));
       itemsDataLoaded = true;
       indexedStack = 1;

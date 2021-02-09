@@ -37,6 +37,7 @@ Future<void> dioDefaults() async {
   dio.interceptors
       .add(InterceptorsWrapper(onRequest: (RequestOptions options) async {
     // Do something before request is sent
+    print(config.baseUrl);
     options.queryParameters.addAll(<String, String>{
       'latitude': latTosend.toString() ?? "0.0",
       'longitude': longTosend.toString() ?? "0.0"

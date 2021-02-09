@@ -46,11 +46,13 @@ class Ben {
       this.balance,
       this.totalOrders,
       this.totalReturns,
-      this.trn});
+      this.trn,
+      this.type});
 
   Ben.fromJson(dynamic json) {
     id = json['id'] as int;
     name = json['name'].toString();
+    type = json['type'].toString();
     commercialRecord = json['commercial_record'].toString();
     if (json['city'] != null) {
       city = <City>[];
@@ -138,6 +140,7 @@ class Ben {
   double totalOrders = 0.0;
   double totalReturns = 0.0;
   String trn;
+  String type;
 }
 
 class City {

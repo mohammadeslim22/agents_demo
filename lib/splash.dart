@@ -38,6 +38,7 @@ class Splash extends StatelessWidget {
                   builder: (BuildContext context,
                       AsyncSnapshot<Response<dynamic>> snapshot) {
                     if (snapshot.hasData) {
+                      print(snapshot.data);
                       return Center(
                         child: CircleAvatar(
                           radius: SizeConfig.screenWidth * .07,
@@ -62,8 +63,8 @@ class Splash extends StatelessWidget {
                             vertical: SizeConfig.blockSizeVertical * 4),
                         autofocus: true,
                         onPressed: () {
-
-                          Navigator.pushNamedAndRemoveUntil(context, "/login", (Route<dynamic> route) => false);
+                          Navigator.pushNamedAndRemoveUntil(context, "/login",
+                              (Route<dynamic> route) => false);
                         },
                         child: Text(trans(context, "go_demo"),
                             style: styles.underHeadred),
@@ -80,8 +81,8 @@ class Splash extends StatelessWidget {
                           try {
                             Fluttertoast.showToast(msg: result.rawContent);
                             await data.setData("baseUrl", result.rawContent);
-                            config.baseUrl = "${result.rawContent}api/";
-                            config.imageUrl = "${result.rawContent}image/";
+                            config.baseUrl = "${result.rawContent}/api/";
+                            config.imageUrl = "${result.rawContent}/image/";
                             Navigator.popAndPushNamed(context, "/login");
                           } catch (e) {
                             Fluttertoast.showToast(

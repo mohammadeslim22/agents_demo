@@ -1,5 +1,4 @@
 import 'package:agent_second/constants/colors.dart';
-import 'package:agent_second/constants/config.dart';
 import 'package:agent_second/constants/styles.dart';
 import 'package:agent_second/localization/trans.dart';
 import 'package:agent_second/models/transactions.dart';

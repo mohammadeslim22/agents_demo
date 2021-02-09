@@ -55,8 +55,10 @@ class _LoginScreenState extends State<LoginScreen>
   }
 
   bool _obscureText = false;
-  final TextEditingController usernameController = TextEditingController(text: kReleaseMode ? '' : 'ahmed');
-  final TextEditingController passwordController = TextEditingController(text: kReleaseMode ? '' : '123456');
+  final TextEditingController usernameController =
+      TextEditingController(text: kReleaseMode ? '' : 'ahmed');
+  final TextEditingController passwordController =
+      TextEditingController(text: kReleaseMode ? '' : '123456');
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final FocusNode focus1 = FocusNode();
   final FocusNode focus2 = FocusNode();
@@ -239,8 +241,7 @@ class _LoginScreenState extends State<LoginScreen>
                                   child: CircleAvatar(
                                     radius: SizeConfig.screenWidth * .08,
                                     backgroundImage: CachedNetworkImageProvider(
-                                      config.imageUrl + "${snapshot.data}",
-                                    ),
+                                        config.imageUrl + "${snapshot.data}"),
                                   ),
                                 );
                               } else {
