@@ -48,7 +48,7 @@ Future<void> dioDefaults() async {
     // If you want to reject the request with a error message,
     // you can return a `DioError` object or return `dio.reject(errMsg)`
   }, onResponse: (Response<dynamic> response) async {
-    print("status code for ${response.request.path}: ${response.statusCode}");
+    print("status code for ${response.request.baseUrl}: ${response.statusCode}");
     if (response.statusCode == 200) {
       print("response : ${response.data}");
       //  Fluttertoast.showToast(msg: "response.statusCode ${response.statusCode}  ${response.data}",toastLength: Toast.LENGTH_SHORT);

@@ -22,8 +22,8 @@ class Config {
   double lat = 0.0;
   double long = 0.0;
   String token = "";
-  String companyName;
-  double tax;
+  String companyName= "Demo System";
+  double tax=0.0;
   String trn;
   String address;
   String mobileNo;
@@ -31,7 +31,7 @@ class Config {
   String logo;
   bool dontloadCustomers = false;
   bool dontloadItems = false;
-  int editPrice;
+  String editPrice;
   bool qrCodeScan;
 }
 

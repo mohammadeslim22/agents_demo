@@ -237,6 +237,10 @@ class _LoginScreenState extends State<LoginScreen>
                             builder: (BuildContext context,
                                 AsyncSnapshot<Response<dynamic>> snapshot) {
                               if (snapshot.hasData) {
+                                    print(snapshot.data);
+                                config.logo =
+                                    config.imageUrl + "${snapshot.data}";
+                                    print(config.logo);
                                 return Center(
                                   child: CircleAvatar(
                                     radius: SizeConfig.screenWidth * .08,
@@ -267,7 +271,6 @@ class _LoginScreenState extends State<LoginScreen>
           ),
         ));
   }
-
   Future<void> checkInternetConnection(MyCounter bolc) async {
     try {
       final List<InternetAddress> result =

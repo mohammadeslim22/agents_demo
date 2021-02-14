@@ -22,6 +22,10 @@ class GlobalVars with ChangeNotifier {
   String returnTotal = "0.00";
   String collectionscount = "0";
   String collectionTotal = "0.00";
+
+  String baseUrl = config.baseUrl;
+  String imageUrl = config.imageUrl;
+
   List<int> benReached = <int>[];
   bool bensIsOpen = false;
   static DateTime timeSinceLoginn = DateTime(2020);
@@ -35,6 +39,14 @@ class GlobalVars with ChangeNotifier {
 
   Ben getbenInFocus() {
     return benInFocus;
+  }
+
+  void setBaseUrls(String url) {
+    baseUrl = "$url/api/";
+    imageUrl = "$url/image/";
+    print(baseUrl);
+    print(imageUrl);
+    notifyListeners();
   }
 
   Future<BeneficiariesModel> getBenData() async {
@@ -64,7 +76,7 @@ class GlobalVars with ChangeNotifier {
   Future<void> loadCustomers() async {
     print("enter here 222");
     final Response<dynamic> response = await dio.get<dynamic>("beneficaries");
-     await data.setData("customers", jsonEncode(response.data));
+    await data.setData("customers", jsonEncode(response.data));
     getIt<GlobalVars>().setBens(BeneficiariesModel.fromJson(response.data));
     await Future<void>.delayed(const Duration(seconds: 3), () {});
     getUserData();
@@ -105,9 +117,10 @@ class GlobalVars with ChangeNotifier {
       }).balance = double.parse(balance ?? "0.0").toString();
     }
   }
-Future<void> updateBenBalance(int benId) async {
-    final Response<dynamic> response =
-        await dio.get<dynamic>("beneficiary_balance", queryParameters: <String, dynamic>{
+
+  Future<void> updateBenBalance(int benId) async {
+    final Response<dynamic> response = await dio
+        .get<dynamic>("beneficiary_balance", queryParameters: <String, dynamic>{
       "beneficiary_id": benId,
     });
     print(response);
@@ -117,6 +130,7 @@ Future<void> updateBenBalance(int benId) async {
       Fluttertoast.showToast(msg: "حدث خطأ");
     }
   }
+
   void setDailyLog(
       int benId,
       String ben,

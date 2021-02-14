@@ -591,7 +591,6 @@ class _BeneficiaryCenterState extends State<BeneficiaryCenter> {
               icon: Icons.edit,
               onTap: () {
                 getIt<OrderListProvider>().setScreensToPop(2);
-
                 getIt<OrderListProvider>().bringOrderToOrderScreen(entry);
                 Navigator.pushNamed(context, "/Order_Screen",
                     arguments: <String, dynamic>{
@@ -607,13 +606,14 @@ class _BeneficiaryCenterState extends State<BeneficiaryCenter> {
               color: colors.yellow,
               icon: Icons.refresh,
               onTap: () {
+                print("why the hell it is not working ");
                 getIt<OrderListProvider>().setScreensToPop(2);
                 getIt<OrderListProvider>().bringOrderToOrderScreen(entry);
                 Navigator.pushNamed(context, "/Order_Screen",
                     arguments: <String, dynamic>{
                       "ben": ben,
                       "isORderOrReturn": entry.type == "order",
-                      "transId": int.parse(entry.fromTranId)
+                      "transId": int.parse(entry.fromTranId??"0")
                     });
               },
             ),

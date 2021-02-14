@@ -94,7 +94,7 @@ class OrderListProvider with ChangeNotifier {
       if (double.parse(getPrice(itemId)) > price) {
         return;
       }
-      if (config.editPrice == 1) {
+      if (config.editPrice == "1") {
         ordersList.firstWhere((SingleItemForSend element) {
           return element.id == itemId;
         }).unitPrice = price.toStringAsFixed(2);
@@ -102,7 +102,7 @@ class OrderListProvider with ChangeNotifier {
         notifyListeners();
       }
     } else {
-      if (config.editPrice == 1) {
+      if (config.editPrice == "1") {
         ordersList.firstWhere((SingleItemForSend element) {
           return element.id == itemId;
         }).unitPrice = price.toStringAsFixed(2);

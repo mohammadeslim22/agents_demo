@@ -20,6 +20,8 @@ import 'package:agent_second/providers/global_variables.dart';
 class Auth with ChangeNotifier {
   Future<dynamic> login(
       String usernametext, String passwordText, BuildContext context) async {
+    print("config.base url fucken ${config.baseUrl}");
+
     SystemChannels.textInput.invokeMethod<String>('TextInput.hide');
 
     await dio.post<dynamic>("login", data: <String, dynamic>{
@@ -46,16 +48,20 @@ class Auth with ChangeNotifier {
             data.setData("agent_name", value.data['username'].toString());
             data.setData("tax", value.data['tax'].toString());
             data.setData("trn", value.data['trn'].toString());
-            config.companyName = value.data['company_name'].toString();
+            if (value.data['company_name'] != null)
+              config.companyName = value.data['company_name'].toString();
+
             config.address = value.data['settings']['address'].toString();
             config.mobileNo = value.data['settings']['mobile'].toString();
-            config.logo =
-                config.imageUrl + value.data['settings']['logo'].toString();
+            if (value.data['settings']['logo'] != null)
+              config.logo =
+                  config.imageUrl + value.data['settings']['logo'].toString();
             print(config.logo);
             config.trn = value.data['trn'].toString();
-            config.tax = double.parse(value.data['tax'].toString());
+            if (value.data['tax'] != null)
+              config.tax = double.parse(value.data['tax'].toString());
             data.setData("agent_email", value.data['email'].toString());
-            config.editPrice = value.data['settings']['edit_price'] as int;
+            config.editPrice = value.data['settings']['edit_price'].toString();
             final String customersLastDate =
                 await data.getData("beneficiaries_updated_at");
             final String itemsLastupDate =

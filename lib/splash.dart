@@ -38,6 +38,7 @@ class Splash extends StatelessWidget {
                   builder: (BuildContext context,
                       AsyncSnapshot<Response<dynamic>> snapshot) {
                     if (snapshot.hasData) {
+                      config.logo = config.imageUrl + "${snapshot.data}";
                       print(snapshot.data);
                       return Center(
                         child: CircleAvatar(
@@ -52,6 +53,10 @@ class Splash extends StatelessWidget {
                     }
                   },
                 ),
+                // CircleAvatar(
+                //     radius: SizeConfig.screenWidth * .07,
+                //     child: Image.asset("assets/images/demo_logo.png")),
+
                 Text(trans(context, "demo_or_qr"), style: styles.thirtyblack),
                 const Spacer(),
                 const Divider(thickness: 2, color: Colors.grey),
@@ -81,6 +86,7 @@ class Splash extends StatelessWidget {
                           try {
                             Fluttertoast.showToast(msg: result.rawContent);
                             await data.setData("baseUrl", result.rawContent);
+                            dio.options.baseUrl = "${result.rawContent}/api/";
                             config.baseUrl = "${result.rawContent}/api/";
                             config.imageUrl = "${result.rawContent}/image/";
                             Navigator.popAndPushNamed(context, "/login");

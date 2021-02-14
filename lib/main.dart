@@ -35,13 +35,15 @@ Future<void> main() async {
       baseUrl == "") {
     config.baseUrl = "http://demo.agentsmanage.com/api/";
     config.imageUrl = "http://demo.agentsmanage.com/image/";
+    dio.options.baseUrl = "http://demo.agentsmanage.com/api/";
     config.qrCodeScan = true;
   } else {
+    dio.options.baseUrl = "$baseUrl/api/";
     config.baseUrl = "$baseUrl/api/";
     config.imageUrl = "$baseUrl/image/";
     config.qrCodeScan = false;
   }
-  print("  ${config.baseUrl } config.baseUrl");
+  print("  ${config.baseUrl} config.baseUrl");
   runApp(
     MultiProvider(
       providers: <ChangeNotifierProvider<ChangeNotifier>>[

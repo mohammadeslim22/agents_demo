@@ -150,7 +150,7 @@ class _OrderScreenState extends State<OrderScreen> {
         backgroundColor: !widget.isAgentOrder
             ? isORderOrReturn ? colors.blue : colors.red
             : colors.blue,
-        title: Text(trans(context, "altariq"), style: styles.appBar),
+        title: Text(config.companyName, style: styles.appBar),
         centerTitle: true,
         actions: <Widget>[
           IconButton(
