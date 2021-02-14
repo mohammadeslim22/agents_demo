@@ -98,11 +98,13 @@ class _BeneficiaryCenterState extends State<BeneficiaryCenter> {
     billIsOn = true;
     indexedStack = 0;
     noItemFound = Container(
+
       width: 300,
       height: 250,
       child: const FlareActor("assets/images/empty.flr",
           alignment: Alignment.center, fit: BoxFit.fill, animation: "default"),
     );
+
     getIt<GlobalVars>().updateBenBalance(ben.id);
     getIt<TransactionProvider>().pagewiseCollectionController =
         PagewiseLoadController<dynamic>(
@@ -326,7 +328,7 @@ class _BeneficiaryCenterState extends State<BeneficiaryCenter> {
                                     ? colors.green
                                     : colors.trans),
                             color: indexedStack == 0
-                                ? Colors.green[100]
+                                ? Colors.white
                                 : Colors.transparent),
                         child: FlatButton(
                             padding: EdgeInsets.zero,
@@ -335,8 +337,8 @@ class _BeneficiaryCenterState extends State<BeneficiaryCenter> {
                                 indexedStack = 0;
                               });
                             },
-                            child: SvgPicture.asset(
-                                "assets/images/order_icon.svg")),
+                            child:
+                                SvgPicture.asset("assets/images/invoice.svg")),
                       ),
                       Container(
                         width: SizeConfig.blockSizeHorizontal * 5,

@@ -19,7 +19,7 @@ class GlobalDrawer extends StatefulWidget {
 }
 
 class _GlobalDrawerState extends State<GlobalDrawer> {
-  String agentName;
+  String agentName="";
 
   void restoreData() {
     data.getData("agent_name").then((String value) {

@@ -31,7 +31,6 @@ class Auth with ChangeNotifier {
       if (value.statusCode == 422) {
         return value.data['errors'];
       }
-
       if (value.statusCode == 200) {
         if (value.data != "fail") {
           if (value.data['agent']['istable'] == 1) {
@@ -56,6 +55,7 @@ class Auth with ChangeNotifier {
             if (value.data['settings']['logo'] != null)
               config.logo =
                   config.imageUrl + value.data['settings']['logo'].toString();
+
             print(config.logo);
             config.trn = value.data['trn'].toString();
             if (value.data['tax'] != null)

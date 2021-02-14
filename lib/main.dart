@@ -18,7 +18,6 @@ import 'localization/localization_delegate.dart';
 import 'util/service_locator.dart';
 import 'package:agent_second/providers/order_provider.dart';
 
-//responsive
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   setupLocator();
