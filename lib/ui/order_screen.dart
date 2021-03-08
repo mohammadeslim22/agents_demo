@@ -59,7 +59,7 @@ class _OrderScreenState extends State<OrderScreen> {
         onTap: () {
           !orsderListProvider.selectedOptions.contains(item.id)
               ? setState(() {
-                  getIt<OrderListProvider>().addItemToList(
+                  orsderListProvider.addItemToList(
                       item.id,
                       item.name,
                       item.notes,
@@ -70,9 +70,9 @@ class _OrderScreenState extends State<OrderScreen> {
                   orsderListProvider.selectedOptions.add(item.id);
                 })
               : !widget.isAgentOrder
-                  ? getIt<OrderListProvider>()
+                  ? orsderListProvider
                       .incrementQuantity(item.id, isORderOrReturn)
-                  : getIt<OrderListProvider>()
+                  : orsderListProvider
                       .incrementQuantityForAgentOrder(item.id);
         },
         child: Column(

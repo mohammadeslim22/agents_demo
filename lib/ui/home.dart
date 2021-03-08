@@ -80,6 +80,8 @@ class _DashBoardState extends State<DashBoard> {
     location.onLocationChanged.listen((LocationData currentLocation) {
       latTosend = currentLocation.latitude;
       longTosend = currentLocation.longitude;
+      config.lat=currentLocation.latitude;
+      config.long=currentLocation.longitude;
       print(
           "hola hola lat ${currentLocation.latitude} hola hola long ${currentLocation.longitude}");
     });

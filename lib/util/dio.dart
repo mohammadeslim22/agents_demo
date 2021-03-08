@@ -24,8 +24,8 @@ Response<dynamic> response;
 
 Dio dio = Dio(options);
 Location location = Location();
-double latTosend;
-double longTosend;
+double latTosend=config.lat;
+double longTosend=config.long;
 
 Future<void> dioDefaults() async {
   location.getLocation().then((LocationData value) {

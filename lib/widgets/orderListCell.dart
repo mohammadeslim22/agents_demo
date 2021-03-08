@@ -1,3 +1,4 @@
+import 'package:agent_second/constants/colors.dart';
 import 'package:agent_second/util/size_config.dart';
 import 'package:flutter/material.dart';
 import 'package:agent_second/models/transactions.dart';
@@ -42,12 +43,12 @@ class OrderListCell extends StatelessWidget {
               ],
               rows: items.map((MiniItems e) {
                 return DataRow(cells: <DataCell>[
-                  DataCell(Text(e.itemId.toString())),
-                  DataCell(Text(e.item)),
-                  DataCell(Text(e.quantity.toString())),
-                  DataCell(Text(e.unit.toString())),
-                  DataCell(Text(e.itemPrice.toString())),
-                  DataCell(Text(e.total.toString()))
+                  DataCell(Text(e.itemId.toString(),style: TextStyle(color: colors.black))),
+                  DataCell(Text(e.item,style: TextStyle(color: colors.black))),
+                  DataCell(Text(e.quantity.toString(),style: TextStyle(color: colors.black))),
+                  DataCell(Text(e.unit.toString(),style: TextStyle(color: colors.black))),
+                  DataCell(Text(e.itemPrice.toString(),style: TextStyle(color: colors.black))),
+                  DataCell(Text(e.total.toString(),style: TextStyle(color: colors.black)))
                 ]);
               }).toList(),
             )));

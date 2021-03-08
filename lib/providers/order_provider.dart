@@ -112,7 +112,7 @@ class OrderListProvider with ChangeNotifier {
     }
   }
 
-   void clearOrcerList() {
+  void clearOrcerList() {
     ordersList.clear();
     selectedOptions.clear();
     sumTotal = 0.0;
@@ -380,7 +380,7 @@ class OrderListProvider with ChangeNotifier {
         print('progress receive: $count');
       },
     );
-
+    print("response yoyoyoyoyoyo: ${response.data}");
     if (response.statusCode == 200) {
       clearOrcerList();
       setDayLog(response, benId);
@@ -734,7 +734,8 @@ class OrderListProvider with ChangeNotifier {
       );
     }
   }
-    Future<void> deleteAgentOrder(int transId) async {
+
+  Future<void> deleteAgentOrder(int transId) async {
     dio
         .delete<dynamic>("stocktransactions/$transId")
         .then((Response<dynamic> value) {

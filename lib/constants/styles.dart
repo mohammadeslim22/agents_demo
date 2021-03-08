@@ -15,7 +15,7 @@ class Styles {
       fontSize: SizeConfig.blockSizeHorizontal*1.35,
       height: 1.2);
   TextStyle bill = TextStyle(
-      fontStyle: FontStyle.italic, fontSize: SizeConfig.blockSizeHorizontal*1.35);
+      fontStyle: FontStyle.italic,color: colors.black, fontSize: SizeConfig.blockSizeHorizontal*1.35);
   TextStyle balanceInventory = const TextStyle(
       fontWeight: FontWeight.w100,
       color: Colors.red,
