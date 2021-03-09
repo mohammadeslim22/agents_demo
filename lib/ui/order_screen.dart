@@ -65,7 +65,7 @@ class _OrderScreenState extends State<OrderScreen> {
                       item.notes,
                       item.queantity,
                       item.unit,
-                      item.agentPrice,
+                      item.unitPrice,
                       item.image);
                   orsderListProvider.selectedOptions.add(item.id);
                 })
@@ -116,7 +116,7 @@ class _OrderScreenState extends State<OrderScreen> {
                   style: styles.smallItembluestyle,
                   textAlign: TextAlign.center),
             ),
-            Text(item.agentPrice, style: styles.mystyle),
+            Text(item.unitPrice, style: styles.mystyle),
           ],
         ),
       ),
