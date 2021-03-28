@@ -29,7 +29,6 @@ class _BeneficiariesState extends State<Beneficiaries> {
     final GlobalVars globalVarsProv =
         Provider.of<GlobalVars>(context, listen: false);
     beneficiaries = globalVarsProv.beneficiaries;
-    
   }
 
   @override
@@ -118,6 +117,15 @@ class _BeneficiariesState extends State<Beneficiaries> {
                                     children: <Widget>[
                                       Expanded(
                                         child: Text(item.name,
+                                            style: styles.beneficiresNmae),
+                                      ),
+                                    ],
+                                  ),
+                                  if(item.customerId != null)
+                                  Row(
+                                    children: <Widget>[
+                                      Expanded(
+                                        child: Text(item.customerId,
                                             style: styles.beneficiresNmae),
                                       ),
                                     ],
