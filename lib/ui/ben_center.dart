@@ -14,7 +14,7 @@ import 'package:animated_card/animated_card.dart';
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_mailer/flutter_mailer.dart';
+// import 'package:flutter_mailer/flutter_mailer.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -696,7 +696,7 @@ class _BeneficiaryCenterState extends State<BeneficiaryCenter> {
             color: colors.blue,
             icon: Icons.share,
             onTap: () {
-              sendMail(transaction);
+              // sendMail(transaction);
             },
           ),
           IconSlideAction(
@@ -838,12 +838,12 @@ class _BeneficiaryCenterState extends State<BeneficiaryCenter> {
     );
   }
 
-  Future<void> sendMail(Transaction t) async {
-    final MailOptions mailOptions = MailOptions(
-        subject: 'Transaction for ben ${ben.name}',
-        recipients: <String>[ben.email],
-        isHTML: true,
-        body: t.toString());
-    await FlutterMailer.send(mailOptions);
-  }
+  // Future<void> sendMail(Transaction t) async {
+  //   final MailOptions mailOptions = MailOptions(
+  //       subject: 'Transaction for ben ${ben.name}',
+  //       recipients: <String>[ben.email],
+  //       isHTML: true,
+  //       body: t.toString());
+  //   await FlutterMailer.send(mailOptions);
+  // }
 }
