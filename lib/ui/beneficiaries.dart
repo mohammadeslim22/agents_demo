@@ -122,6 +122,15 @@ class _BeneficiariesState extends State<Beneficiaries> {
                                       ),
                                     ],
                                   ),
+                                   if(item.customerId != null)
+                                  Row(
+                                    children: <Widget>[
+                                      Expanded(
+                                        child: Text(item.customerId,
+                                            style: styles.beneficiresNmae),
+                                      ),
+                                    ],
+                                  ),
                                   Row(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
