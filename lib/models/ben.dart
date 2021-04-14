@@ -104,6 +104,8 @@ class Ben {
     trn = json['trn'].toString();
     if (json['customer_id'] != null) {
       customerId = json['customer_id'].toString();
+    } else {
+      customerId = "";
     }
 
     // totalOrders =double.parse(json['total_confirmed'].toString());

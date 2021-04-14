@@ -24,8 +24,8 @@ Response<dynamic> response;
 
 Dio dio = Dio(options);
 Location location = Location();
-double latTosend=config.lat;
-double longTosend=config.long;
+double latTosend = config.lat;
+double longTosend = config.long;
 
 Future<void> dioDefaults() async {
   location.getLocation().then((LocationData value) {
@@ -48,7 +48,8 @@ Future<void> dioDefaults() async {
     // If you want to reject the request with a error message,
     // you can return a `DioError` object or return `dio.reject(errMsg)`
   }, onResponse: (Response<dynamic> response) async {
-    print("status code for ${response.request.baseUrl}: ${response.statusCode}");
+    print(
+        "status code: ${response.statusCode}  endpoint : ${response.request.path}");
     if (response.statusCode == 200) {
       print("response : ${response.data}");
       //  Fluttertoast.showToast(msg: "response.statusCode ${response.statusCode}  ${response.data}",toastLength: Toast.LENGTH_SHORT);

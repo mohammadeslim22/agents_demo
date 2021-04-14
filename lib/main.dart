@@ -33,15 +33,17 @@ Future<void> main() async {
       baseUrl == null ||
       baseUrl.isEmpty ||
       baseUrl == "") {
-    config.baseUrl = "http://demo.agentsmanage.com/api/";
-    config.imageUrl = "http://demo.agentsmanage.com/image/";
-    dio.options.baseUrl = "http://demo.agentsmanage.com/api/";
+    config.baseUrl = "https://demo.agentsmanage.com/api/";
+    config.imageUrl = "https://demo.agentsmanage.com/image/";
+    dio.options.baseUrl = "https://demo.agentsmanage.com/api/";
     config.qrCodeScan = true;
+    print(" dio.options.baseUrl  ${dio.options.baseUrl}");
   } else {
     dio.options.baseUrl = "$baseUrl/api/";
     config.baseUrl = "$baseUrl/api/";
     config.imageUrl = "$baseUrl/image/";
     config.qrCodeScan = false;
+    print(" dio.saved.baseUrl  ${dio.options.baseUrl}");
   }
   print("  ${config.baseUrl} config.baseUrl");
   runApp(

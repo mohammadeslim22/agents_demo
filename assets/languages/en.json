@@ -223,5 +223,6 @@
     "edit_pure":"Edit",
     "reuse":"Reuse",
     "share":"Share",
-    "delete":"Delete"
+    "delete":"Delete",
+    "customer_id":"Customer Id"
 }

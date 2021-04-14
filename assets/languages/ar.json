@@ -120,5 +120,6 @@
     "edit_pure":"تعديل",
     "reuse":"استخدام",
     "share":"مشاركة",
-    "delete":"حذف"
+    "delete":"حذف",
+    "customer_id":"مفتاح الزبون"
 }
