@@ -33,9 +33,9 @@ Future<void> main() async {
       baseUrl == null ||
       baseUrl.isEmpty ||
       baseUrl == "") {
-    config.baseUrl = "https://demo.agentsmanage.com/api/";
-    config.imageUrl = "https://demo.agentsmanage.com/image/";
-    dio.options.baseUrl = "https://demo.agentsmanage.com/api/";
+    config.baseUrl = "https://demo1.agentsmanage.com/api/";
+    config.imageUrl = "https://demo1.agentsmanage.com/image/";
+    dio.options.baseUrl = "https://demo1.agentsmanage.com/api/";
     config.qrCodeScan = true;
     print(" dio.options.baseUrl  ${dio.options.baseUrl}");
   } else {

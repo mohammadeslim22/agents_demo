@@ -10,8 +10,8 @@ class Config {
 
   static final Config _config = Config._internal();
 
-  String baseUrl = "https://demo.agentsmanage.com/api/";
-  String imageUrl = "https://demo.agentsmanage.com/image/";
+  String baseUrl = "https://demo1.agentsmanage.com/api/";
+  String imageUrl = "https://demo1.agentsmanage.com/image/";
   int agentId;
   bool looded = false;
   final TextEditingController locationController = TextEditingController();
