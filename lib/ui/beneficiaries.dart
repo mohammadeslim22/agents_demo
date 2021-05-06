@@ -43,7 +43,7 @@ class _BeneficiariesState extends State<Beneficiaries> {
             margin: const EdgeInsets.fromLTRB(0, 2, 0, 0),
             width: 240,
             child: TextFormInput(
-              text: trans(context, 'customer_id'),
+              text: trans(context, 'customer_name'),
               cController: searchController,
               prefixIcon: Icons.search,
               kt: TextInputType.emailAddress,
@@ -70,7 +70,7 @@ class _BeneficiariesState extends State<Beneficiaries> {
           childAspectRatio: 2,
           addRepaintBoundaries: true,
           children: globalVarsProv.beneficiaries.data.where((Ben element) {
-            return element.customerId
+            return element.name
                 .trim()
                 .toLowerCase()
                 .contains(searchController.text.trim().toLowerCase());

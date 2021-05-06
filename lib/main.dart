@@ -33,9 +33,9 @@ Future<void> main() async {
       baseUrl == null ||
       baseUrl.isEmpty ||
       baseUrl == "") {
-    config.baseUrl = "https://demo1.agentsmanage.com/api/";
-    config.imageUrl = "https://demo1.agentsmanage.com/image/";
-    dio.options.baseUrl = "https://demo1.agentsmanage.com/api/";
+    config.baseUrl = "https://demo.agentsmanage.com/api/";
+    config.imageUrl = "https://demo.agentsmanage.com/image/";
+    dio.options.baseUrl = "https://demo.agentsmanage.com/api/";
     config.qrCodeScan = true;
     print(" dio.options.baseUrl  ${dio.options.baseUrl}");
   } else {
@@ -49,21 +49,12 @@ Future<void> main() async {
   runApp(
     MultiProvider(
       providers: <ChangeNotifierProvider<ChangeNotifier>>[
-        ChangeNotifierProvider<Auth>(
-          create: (_) => Auth(),
-        ),
-        ChangeNotifierProvider<Language>(
-          create: (_) => Language(),
-        ),
-        ChangeNotifierProvider<MyCounter>(
-          create: (_) => MyCounter(),
-        ),
-        ChangeNotifierProvider<GlobalVars>.value(
-          value: getIt<GlobalVars>(),
-        ),
+        ChangeNotifierProvider<Auth>(create: (_) => Auth()),
+        ChangeNotifierProvider<Language>(create: (_) => Language()),
+        ChangeNotifierProvider<MyCounter>(create: (_) => MyCounter()),
+        ChangeNotifierProvider<GlobalVars>.value(value: getIt<GlobalVars>()),
         ChangeNotifierProvider<OrderListProvider>.value(
-          value: getIt<OrderListProvider>(),
-        ),
+            value: getIt<OrderListProvider>()),
       ],
       child: MyApp(),
     ),

@@ -1,4 +1,3 @@
-  
 import 'package:agent_second/constants/colors.dart';
 import 'package:agent_second/constants/config.dart';
 import 'package:agent_second/constants/styles.dart';
@@ -52,7 +51,7 @@ class _OrderScreenState extends State<OrderScreen> {
       shape: RoundedRectangleBorder(
           side: const BorderSide(width: 1, color: Colors.green),
           borderRadius: BorderRadius.circular(8.0)),
-      color: getIt<OrderListProvider>().selectedOptions.contains(item.id)
+      color: orsderListProvider.selectedOptions.contains(item.id)
           ? Colors.grey
           : colors.white,
       child: InkWell(
@@ -70,10 +69,9 @@ class _OrderScreenState extends State<OrderScreen> {
                   orsderListProvider.selectedOptions.add(item.id);
                 })
               : !widget.isAgentOrder
-                  ? orsderListProvider
-                      .incrementQuantity(item.id, isORderOrReturn)
-                  : orsderListProvider
-                      .incrementQuantityForAgentOrder(item.id);
+                  ? orsderListProvider.incrementQuantity(
+                      item.id, isORderOrReturn)
+                  : orsderListProvider.incrementQuantityForAgentOrder(item.id);
         },
         child: Column(
           children: <Widget>[
@@ -138,7 +136,7 @@ class _OrderScreenState extends State<OrderScreen> {
         getIt<OrderListProvider>().getItems();
       }
     });
-    
+
     transId = widget.transId;
   }
 
@@ -148,7 +146,9 @@ class _OrderScreenState extends State<OrderScreen> {
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
         backgroundColor: !widget.isAgentOrder
-            ? isORderOrReturn ? colors.blue : colors.red
+            ? isORderOrReturn
+                ? colors.blue
+                : colors.red
             : colors.blue,
         title: Text(config.companyName, style: styles.appBar),
         centerTitle: true,
@@ -926,7 +926,7 @@ class _OrderScreenState extends State<OrderScreen> {
       pageBuilder: (BuildContext context, Animation<double> anim1,
           Animation<double> anim2) {
         return Align(
-          alignment:isRTL? Alignment.bottomLeft:Alignment.bottomRight,
+          alignment: isRTL ? Alignment.bottomLeft : Alignment.bottomRight,
           child: Container(
             width: 300,
             child: value.calculateWidgetsToAdjustTotal(context),
