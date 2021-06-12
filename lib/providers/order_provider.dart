@@ -86,6 +86,7 @@ class OrderListProvider with ChangeNotifier {
       notifyListeners();
     }
   }
+
   void changePrice(int itemId, double price) {
     final Ben inFocus = getIt<GlobalVars>().getbenInFocus();
     if (inFocus.type == "normal") {
@@ -109,6 +110,7 @@ class OrderListProvider with ChangeNotifier {
       }
     }
   }
+
   void clearOrcerList() {
     ordersList.clear();
     selectedOptions.clear();
@@ -337,8 +339,15 @@ class OrderListProvider with ChangeNotifier {
     }
   }
 
-  Future<bool> sendOrder(int benId, double ammoutn, double discount,
-      int shortage, String type, String status, int fromTransactionId) async {
+  Future<bool> sendOrder(
+      int benId,
+      double ammoutn,
+      double discount,
+      int shortage,
+      String type,
+      String status,
+      int fromTransactionId,
+      int paid) async {
     final List<int> itemsId = <int>[];
     final List<int> itemsQuantity = <int>[];
     final List<double> itemsPrice = <double>[];
@@ -366,7 +375,8 @@ class OrderListProvider with ChangeNotifier {
         "item_price": itemsPrice,
         "quantity": itemsQuantity,
         "unit": itemsUnit,
-        "from_transaction_id": fromTransactionId
+        "from_transaction_id": fromTransactionId,
+        "payment_type": paid
       },
       onSendProgress: (int count, int total) {
         progress = count.toDouble() / total.toDouble() / 2.0;
@@ -377,7 +387,7 @@ class OrderListProvider with ChangeNotifier {
         print('progress receive: $count');
       },
     );
-
+    print("res order $response");
     if (response.statusCode == 200) {
       clearOrcerList();
       setDayLog(response, benId);

@@ -28,7 +28,7 @@ double latTosend;
 double longTosend;
 
 Future<void> dioDefaults() async {
-   location.getLocation().then((LocationData value) {
+  location.getLocation().then((LocationData value) {
     latTosend = value.latitude;
     longTosend = value.longitude;
   });
@@ -38,8 +38,8 @@ Future<void> dioDefaults() async {
       .add(InterceptorsWrapper(onRequest: (RequestOptions options) async {
     // Do something before request is sent
     options.queryParameters.addAll(<String, String>{
-      'latitude': latTosend.toString() ?? "0.0",
-      'longitude': longTosend.toString() ?? "0.0"
+      'latitude': getIt<GlobalVars>().lat.toString() ?? "0.0",
+      'longitude': getIt<GlobalVars>().long.toString() ?? "0.0"
     });
     return options;
     // If you want to resolve the request with some custom data，
@@ -57,7 +57,7 @@ Future<void> dioDefaults() async {
     }
     return response; // continue
   }, onError: (DioError e) async {
-      Fluttertoast.showToast(msg: "Error Happened");
+    Fluttertoast.showToast(msg: "Error Happened");
     print(e.message);
     // Do something with response error
     return e; //continue

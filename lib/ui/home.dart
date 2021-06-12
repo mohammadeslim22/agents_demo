@@ -81,6 +81,8 @@ class _DashBoardState extends State<DashBoard> {
       longTosend = currentLocation.longitude;
       print(
           "hola hola lat ${currentLocation.latitude} hola hola long ${currentLocation.longitude}");
+      getIt<GlobalVars>()
+          .setLatLong(currentLocation.latitude, currentLocation.longitude);
     });
     getIt<GlobalVars>().beneficiaries.data.forEach((Ben element) {
       if (element.latitude != null && element.longitude != null)
@@ -503,9 +505,7 @@ class SplashScreen extends StatelessWidget {
       backgroundColor: colors.black,
       extendBody: true,
       body: const FlareActor("assets/images/LiquidDownloaddemo.flr",
-          alignment: Alignment.center,
-          fit: BoxFit.cover,
-          animation: "Demo"),
+          alignment: Alignment.center, fit: BoxFit.cover, animation: "Demo"),
     );
   }
 }

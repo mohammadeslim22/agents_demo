@@ -215,9 +215,11 @@
     "net_total": "NET TOTAL",
     "salesman": "Sales Man",
     "signature": "Signature",
-    "please_wait_loading":"Please wait one moment, Loading...",
-    "demo_or_qr":"This is Demo version, choose to ..",
-    "go_demo":"Continue to Demo",
-    "activate":"Activate App",
-    "no_tablet":"Your not Allowed to Use Tablet"
+    "please_wait_loading": "Please wait one moment, Loading...",
+    "demo_or_qr": "This is Demo version, choose to ..",
+    "go_demo": "Continue to Demo",
+    "activate": "Activate App",
+    "no_tablet": "Your not Allowed to Use Tablet",
+    "cash": "Cash",
+    "credit": "Credit"
 }

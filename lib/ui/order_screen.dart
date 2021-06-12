@@ -13,10 +13,12 @@ import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:agent_second/providers/order_provider.dart';
 import 'package:giffy_dialog/giffy_dialog.dart';
 import 'package:liquid_progress_indicator/liquid_progress_indicator.dart';
+import 'package:animated_toggle_switch/animated_toggle_switch.dart';
 
 class OrderScreen extends StatefulWidget {
   const OrderScreen(
@@ -41,7 +43,7 @@ class _OrderScreenState extends State<OrderScreen> {
   double animatedHight = 0;
   int transId;
   bool isRTL;
-
+  int paid = 0;
   final TextEditingController searchController = TextEditingController();
   Map<String, String> itemsBalances = <String, String>{};
   List<int> prices = <int>[];
@@ -140,13 +142,25 @@ class _OrderScreenState extends State<OrderScreen> {
     transId = widget.transId;
   }
 
+  Widget customIconBuilder(int i, Size size, bool active) {
+    if (i.isEven) {
+      return Icon(Icons.reset_tv,
+          size: 24, color: paid == 1 ? Colors.grey[600] : colors.white);
+    } else {
+      return Icon(Icons.add_shopping_cart_outlined,
+          size: 24, color: paid == 1 ? colors.white : Colors.grey[600]);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
         backgroundColor: !widget.isAgentOrder
-            ? isORderOrReturn ? colors.blue : colors.red
+            ? isORderOrReturn
+                ? colors.blue
+                : colors.red
             : colors.blue,
         title: Text(trans(context, "altariq"), style: styles.appBar),
         centerTitle: true,
@@ -184,6 +198,28 @@ class _OrderScreenState extends State<OrderScreen> {
                 ),
               ),
             ],
+          ),
+          Container(
+            padding: EdgeInsets.zero,
+            margin: const EdgeInsets.all(10),
+            child: AnimatedToggleSwitch<int>.rolling(
+              dif: 20,
+              height: 36,
+              selectedIconRadius: 16,
+              innerColor: colors.white,
+              iconRadius: 16,
+              indicatorSize: const Size.fromRadius(16),
+              current: paid,
+              values: const <int>[0, 1],
+              onChanged: (int i) => setState(() {
+                paid = i;
+                Fluttertoast.showToast(
+                    msg: paid == 0
+                        ? trans(context, "cash")
+                        : trans(context, "credit"));
+              }),
+              iconBuilder: customIconBuilder,
+            ),
           ),
         ],
       ),
@@ -752,7 +788,8 @@ class _OrderScreenState extends State<OrderScreen> {
           0,
           isORderOrReturn ? "order" : "return",
           status,
-          transId);
+          transId,
+          paid);
     }
   }
 

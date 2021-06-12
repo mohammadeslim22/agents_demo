@@ -24,10 +24,20 @@ class GlobalVars with ChangeNotifier {
   String collectionTotal = "0.00";
   List<int> benReached = <int>[];
   bool bensIsOpen = false;
+
+  double lat = 0.0;
+  double long = 0.0;
   static DateTime timeSinceLoginn = DateTime(2020);
   String timeSinceLogin = DateFormat.Hm().format(timeSinceLoginn);
   static DateTime timeSinceLastTranss = DateTime(2020);
   String timeSinceLastTrans = DateFormat.Hm().format(timeSinceLoginn);
+
+  void setLatLong(double latitude, double longitude) {
+    lat = latitude;
+    long = longitude;
+    notifyListeners();
+  }
+
   void setBenInFocus(Ben ben) {
     benInFocus = ben;
     notifyListeners();
@@ -107,8 +117,8 @@ class GlobalVars with ChangeNotifier {
   }
 
   Future<void> updateBenBalance(int benId) async {
-    final Response<dynamic> response =
-        await dio.get<dynamic>("beneficiary_balance", queryParameters: <String, dynamic>{
+    final Response<dynamic> response = await dio
+        .get<dynamic>("beneficiary_balance", queryParameters: <String, dynamic>{
       "beneficiary_id": benId,
     });
     print(response);
