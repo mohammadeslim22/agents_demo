@@ -111,8 +111,9 @@ class TransactionProvider with ChangeNotifier {
       int page, int benId) async {
     transactionsDataLoaded = false;
     final Response<dynamic> response = await dio.get<dynamic>(
-        "financial_transactions/$benId",
+        "financial_transactions",
         queryParameters: <String, dynamic>{
+          "ben_id":benId,
           "page": page + 1,
         });
     finanicalRecords = FinanicalRecords.fromJson(response.data);

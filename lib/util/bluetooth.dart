@@ -246,14 +246,14 @@ class _MyAppState extends State<Bluetooth> {
         getIt<Auth>().bluetooth.printCustom(config.address, 1, 1);
         getIt<Auth>()
             .bluetooth
-            .printCustom("Tel:072226355 ,Mob: 0544117087", 1, 1);
+            .printCustom("Tel: 072283789 ,Mob: 0544451031", 1, 1);
         getIt<Auth>().bluetooth.printNewLine();
         getIt<Auth>().bluetooth.printCustom("TRN : ${config.trn}", 1, 1);
         getIt<Auth>().bluetooth.printNewLine();
-        getIt<Auth>().bluetooth.printLeftRight(
+        getIt<Auth>().bluetooth.printCustom(
             "TAX INVOICE  ${transaction.agent.substring(0, 2)}  / #${transaction.id}",
-            "",
-            0);
+            1,
+            1);
         getIt<Auth>().bluetooth.printNewLine();
         getIt<Auth>().bluetooth.printNewLine();
         getIt<Auth>()
@@ -307,12 +307,15 @@ class _MyAppState extends State<Bluetooth> {
         getIt<Auth>().bluetooth.printNewLine();
         getIt<Auth>().bluetooth.printNewLine();
         getIt<Auth>().bluetooth.printNewLine();
-        getIt<Auth>().bluetooth.printLeftRight("Salesman:${transaction.agent}",
-            "     Car No:${config.verchilId}", 0);
-        getIt<Auth>().bluetooth.printLeftRight("SIGNATURE", "", 0);
+
         getIt<Auth>()
             .bluetooth
-            .printLeftRight("mobile No: ${config.mobileNo}", "", 0);
+            .printCustom("Salesman:${transaction.agent}", 0, 0);
+        getIt<Auth>()
+            .bluetooth
+            .printCustom("mobile No: ${config.mobileNo}", 0, 2);
+        getIt<Auth>().bluetooth.printCustom("SIGNATURE", 0, 0);
+        getIt<Auth>().bluetooth.printCustom("Car No:${config.verchilId}", 0, 2);
 
         getIt<Auth>().bluetooth.paperCut();
       } else {
@@ -373,14 +376,14 @@ class _MyAppState extends State<Bluetooth> {
             .printCustom(config.address ?? "DEMO ADDRESS", 1, 1);
         getIt<Auth>()
             .bluetooth
-            .printCustom("Tel: 2865899 ,Mob: 05993337775", 1, 1);
+            .printCustom("Tel: 072283789 ,Mob: 0544451031", 1, 1);
         getIt<Auth>().bluetooth.printNewLine();
         getIt<Auth>().bluetooth.printCustom("TRN : ${config.trn}", 1, 1);
         getIt<Auth>().bluetooth.printNewLine();
-        getIt<Auth>().bluetooth.printLeftRight(
+        getIt<Auth>().bluetooth.printCustom(
             "TAX INVOICE  ${transaction.agent.substring(0, 2)}  / #${transaction.id}",
-            "",
-            0);
+            1,
+            1);
         getIt<Auth>().bluetooth.printNewLine();
         getIt<Auth>().bluetooth.printNewLine();
         getIt<Auth>()
@@ -420,7 +423,7 @@ class _MyAppState extends State<Bluetooth> {
                 .printCustom("    ${element.details[i].barcode}", 1, 0);
           }
           orderAmount += element.amount;
-         discount += double.parse(element.discount ?? "0");
+          discount += double.parse(element.discount ?? "0");
           getIt<Auth>().bluetooth.printNewLine();
         });
         getIt<Auth>().bluetooth.printNewLine();
@@ -464,12 +467,14 @@ class _MyAppState extends State<Bluetooth> {
         getIt<Auth>().bluetooth.printNewLine();
         getIt<Auth>().bluetooth.printNewLine();
         getIt<Auth>().bluetooth.printNewLine();
-        getIt<Auth>().bluetooth.printLeftRight("Salesman:${transaction.agent}",
-            "    Car No:${config.verchilId}", 0);
-        getIt<Auth>().bluetooth.printLeftRight("SIGNATURE", "", 0);
         getIt<Auth>()
             .bluetooth
-            .printLeftRight("mobile No: ${config.mobileNo}", "", 0);
+            .printCustom("Salesman:${transaction.agent}", 0, 0);
+        getIt<Auth>()
+            .bluetooth
+            .printCustom("mobile No: ${config.mobileNo}", 0, 2);
+        getIt<Auth>().bluetooth.printCustom("SIGNATURE", 0, 0);
+        getIt<Auth>().bluetooth.printCustom("Car No:${config.verchilId}", 0, 2);
 
         getIt<Auth>().bluetooth.paperCut();
       } else {

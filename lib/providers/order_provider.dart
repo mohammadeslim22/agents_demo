@@ -341,7 +341,7 @@ class OrderListProvider with ChangeNotifier {
   }
 
   Future<bool> sendOrder(int benId, double ammoutn, double discount,
-      int shortage, String type, String status, int fromTransactionId) async {
+      int shortage, String type, String status, int fromTransactionId,int paid) async {
     final List<int> itemsId = <int>[];
     final List<int> itemsQuantity = <int>[];
     final List<double> itemsPrice = <double>[];

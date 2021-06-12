@@ -41,7 +41,7 @@ class _OrderScreenState extends State<OrderScreen> {
   double animatedHight = 0;
   int transId;
   bool isRTL;
-
+  int paid = 0;
   final TextEditingController searchController = TextEditingController();
   Map<String, String> itemsBalances = <String, String>{};
   List<int> prices = <int>[];
@@ -754,7 +754,7 @@ class _OrderScreenState extends State<OrderScreen> {
           0,
           isORderOrReturn ? "order" : "return",
           status,
-          transId);
+          transId,paid);
     }
   }
 

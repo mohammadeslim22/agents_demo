@@ -18,6 +18,12 @@ import 'package:provider/provider.dart';
 import 'package:agent_second/providers/global_variables.dart';
 
 class Auth with ChangeNotifier {
+  String agentName ="";
+  String agentMobile ="";
+  // String agentName ="";
+  // String agentName ="";
+
+
   Future<dynamic> login(
       String usernametext, String passwordText, BuildContext context) async {
     print("config.base url fucken ${config.baseUrl}");
@@ -48,11 +54,14 @@ class Auth with ChangeNotifier {
             data.setData("agent_name", value.data['username'].toString());
             data.setData("tax", value.data['tax'].toString());
             data.setData("trn", value.data['trn'].toString());
+            data.setData(
+                "mobileNo", value.data['phone'].toString());
+
             if (value.data['company_name'] != null)
               config.companyName = value.data['company_name'].toString();
 
             config.address = value.data['settings']['address'].toString();
-            config.mobileNo = value.data['settings']['mobile'].toString();
+            config.mobileNo = value.data['phone'].toString();
             if (value.data['settings']['logo'] != null)
               config.logo =
                   config.imageUrl + value.data['settings']['logo'].toString();
